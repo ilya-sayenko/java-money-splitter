@@ -1,8 +1,8 @@
 package io;
 
 import exception.InputDataException;
-import io.entities.Expense;
 import io.data.InputData;
+import io.entities.Expense;
 import io.entities.Participant;
 
 import java.io.BufferedReader;
