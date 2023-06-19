@@ -3,9 +3,9 @@ package io;
 import io.data.OutputData;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.BufferedWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,8 +14,8 @@ public class DataWriter {
 
     private static final String DELIMITER = ",";
 
-    public void writeData(OutputData data, OutputStream outputStream) {
-        PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream));
+    public void writeData(OutputData data, Writer writer) {
+        PrintWriter printWriter = new PrintWriter(new BufferedWriter(writer));
         List<String> participants = data.getParticipants();
 
         printWriter.println(participants.stream().map(p -> DELIMITER + p).collect(Collectors.joining()));

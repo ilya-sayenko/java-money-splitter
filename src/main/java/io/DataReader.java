@@ -1,11 +1,13 @@
 package io;
 
 import exception.InputDataException;
-import io.entities.Expense;
 import io.data.InputData;
+import io.entities.Expense;
 import io.entities.Participant;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,11 +17,11 @@ import java.util.stream.Collectors;
 public class DataReader {
     public static final String DELIMITER = ",";
 
-    public InputData readData(InputStream inputStream) throws InputDataException {
+    public InputData readData(Reader reader) throws InputDataException {
         List<Participant> participants = new ArrayList<>();
         List<Expense> expenses = new ArrayList<>();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+        try (BufferedReader bufferedReader = new BufferedReader(reader)) {
             String[] header = bufferedReader.readLine().split(DELIMITER);
             participants = Arrays.asList(header).subList(2, header.length)
                     .stream()
