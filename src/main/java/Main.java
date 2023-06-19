@@ -29,7 +29,7 @@ public class Main {
             dataWriter.writeData(outputData, new FileWriter(outPath.toFile(), StandardCharsets.UTF_8));
         } catch (FileNotFoundException ex) {
             System.out.println("File not found");
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException ex) {
             System.out.println("Invalid arguments, expected --input and --output");
         }
     }
