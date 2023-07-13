@@ -1,15 +1,16 @@
-package org.example.moneysplitter.core.entities;
+package org.example.moneysplitter.core.model;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Value;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
-@Value
+@Getter
 @Builder
 public class Spending {
-    Participant payer;
+    String payer;
     String product;
-    Map<Participant, BigDecimal> proportions;
+    Map<String, BigDecimal> proportions;
 }

@@ -2,8 +2,7 @@ package org.example.moneysplitter.console.io;
 
 import org.example.moneysplitter.console.exception.InputDataException;
 import org.example.moneysplitter.core.data.InputData;
-import org.example.moneysplitter.core.entities.Spending;
-import org.example.moneysplitter.core.entities.Participant;
+import org.example.moneysplitter.core.model.Spending;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +15,7 @@ public class DataReader {
     public static final String DELIMITER = ",";
 
     public InputData readData(Reader reader) throws InputDataException {
-        List<Participant> participants = new ArrayList<>();
+        List<String> participants = new ArrayList<>();
         List<Spending> spendings = new ArrayList<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(reader)) {
@@ -24,7 +23,6 @@ public class DataReader {
             participants = Arrays.asList(header).subList(2, header.length)
                     .stream()
                     .map(String::trim)
-                    .map(s -> Participant.builder().name(s).build())
                     .collect(Collectors.toList());
 
             while (bufferedReader.ready()) {
@@ -33,12 +31,12 @@ public class DataReader {
                     String payerName = line[0].trim();
                     String product = line[1].trim();
 
-                    Participant payer = participants.stream()
-                            .filter(p -> p.getName().equals(payerName))
+                    String payer = participants.stream()
+                            .filter(p -> p.equals(payerName))
                             .findFirst()
                             .orElseThrow(() -> new InputDataException("Payer " + payerName + " not found"));
 
-                    Map<Participant, BigDecimal> proportions = new HashMap<>();
+                    Map<String, BigDecimal> proportions = new HashMap<>();
 
                     for (int i = 2; i < line.length; i++) {
                         proportions.put(participants.get(i - 2), new BigDecimal(line[i].isBlank() ? "0" : line[i]));

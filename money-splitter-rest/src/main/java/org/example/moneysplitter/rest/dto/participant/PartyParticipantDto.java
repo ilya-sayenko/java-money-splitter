@@ -1,11 +1,14 @@
 package org.example.moneysplitter.rest.dto.participant;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Value;
 
-@Value
+import java.util.UUID;
+
+@Getter
 @Builder
 public class PartyParticipantDto {
-    String id;
+    UUID id;
     String name;
 }

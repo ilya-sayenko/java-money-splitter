@@ -1,10 +1,9 @@
 package org.example.moneysplitter.rest.dto.party;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.Getter;
+import lombok.Setter;
 
-@Value
-@Builder
+@Getter
 public class CreatePartyRequestDto {
     String name;
     String description;

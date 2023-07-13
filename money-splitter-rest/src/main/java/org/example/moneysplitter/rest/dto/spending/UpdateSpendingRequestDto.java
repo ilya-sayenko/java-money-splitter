@@ -1,11 +1,22 @@
 package org.example.moneysplitter.rest.dto.spending;
 
-import lombok.Value;
+import lombok.Getter;
 
-@Value
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.UUID;
+
+@Getter
 public class UpdateSpendingRequestDto {
-    String id;
-    String name;
-    String amount;
-    String split;
+    private UUID id;
+    private UUID payerId;
+    private String name;
+    private BigDecimal amount;
+    private Split split;
+
+    @Getter
+    public static class Split {
+        private String splitType;
+        private Map<UUID, BigDecimal> participants;
+    }
 }

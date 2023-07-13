@@ -21,12 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class DataWriterTest {
     private DataReader dataReader;
     private DataWriter dataWriter;
-    private MoneySplitter moneySplitter;
-
 
     @BeforeEach
     public void initialize() {
-        moneySplitter = new MoneySplitter();
         dataReader = new DataReader();
         dataWriter = new DataWriter();
     }
@@ -38,8 +35,7 @@ class DataWriterTest {
         Path outPath = Paths.get("src/test/resources/tmp/output_test.csv");
 
         InputData inputData = dataReader.readData(new FileReader(path.toFile(), StandardCharsets.UTF_8));
-        OutputData outputData = moneySplitter.split(inputData);
-
+        OutputData outputData = MoneySplitter.split(inputData);
         dataWriter.writeData(outputData, new FileWriter(outPath.toFile(), StandardCharsets.UTF_8));
 
         assertTrue(FileUtils.contentEquals(expPath.toFile(), outPath.toFile()));

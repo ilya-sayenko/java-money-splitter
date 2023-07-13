@@ -2,7 +2,6 @@ package org.example.moneysplitter.console.io;
 
 import org.example.moneysplitter.core.data.OutputData;
 import org.apache.commons.lang3.tuple.Pair;
-import org.example.moneysplitter.core.entities.Participant;
 
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
@@ -17,12 +16,11 @@ public class DataWriter {
 
     public void writeData(OutputData data, Writer writer) {
         PrintWriter printWriter = new PrintWriter(new BufferedWriter(writer));
-//        List<String> participants = data.getParticipants().stream().map(Participant::getName).collect(Collectors.toList());
-        List<Participant> participants = data.getParticipants();
+        List<String> participants = data.getParticipants();
 
-        printWriter.println(participants.stream().map(p -> DELIMITER + p.getName()).collect(Collectors.joining()));
-        for (Participant leftKey : participants) {
-            printWriter.print(leftKey.getName());
+        printWriter.println(participants.stream().map(p -> DELIMITER + p).collect(Collectors.joining()));
+        for (String leftKey : participants) {
+            printWriter.print(leftKey);
             printWriter.print(DELIMITER);
 
             String transactionsRow = participants.stream()

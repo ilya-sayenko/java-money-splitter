@@ -18,12 +18,11 @@ public class Main {
 
             DataReader dataReader = new DataReader();
             DataWriter dataWriter = new DataWriter();
-            MoneySplitter moneySplitter = new MoneySplitter();
 
             FileReader fileReader = new FileReader(path.toFile(), StandardCharsets.UTF_8);
 
             InputData inputData = dataReader.readData(fileReader);
-            OutputData outputData = moneySplitter.split(inputData);
+            OutputData outputData = MoneySplitter.split(inputData);
 
             dataWriter.writeData(outputData, new OutputStreamWriter(System.out));
             dataWriter.writeData(outputData, new FileWriter(outPath.toFile(), StandardCharsets.UTF_8));

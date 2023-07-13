@@ -1,13 +1,16 @@
 package org.example.moneysplitter.core.data;
 
-import lombok.Value;
-import org.example.moneysplitter.core.entities.Spending;
-import org.example.moneysplitter.core.entities.Participant;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import org.example.moneysplitter.core.model.Spending;
 
 import java.util.List;
 
-@Value
+@Getter
+@AllArgsConstructor
+@Builder
 public class InputData {
-    List<Participant> participants;
-    List<Spending> spendings;
+    private List<String> participants;
+    private List<Spending> spendings;
 }

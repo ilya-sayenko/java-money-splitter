@@ -1,8 +1,8 @@
 package org.example.moneysplitter.rest.dto.transaction;
 
-import lombok.Value;
+import lombok.Getter;
 
-@Value
+@Getter
 public class UpdateTransactionStatusRequestDto {
     String status;
 }

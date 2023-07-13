@@ -3,8 +3,7 @@ package util;
 import org.example.moneysplitter.core.data.InputData;
 import org.example.moneysplitter.core.data.OutputData;
 import org.apache.commons.lang3.tuple.Pair;
-import org.example.moneysplitter.core.entities.Spending;
-import org.example.moneysplitter.core.entities.Participant;
+import org.example.moneysplitter.core.model.Spending;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -12,28 +11,23 @@ import java.util.List;
 import java.util.Map;
 
 public class TestData {
-    public static List<Participant> getExpectedParticipants() {
-        return List.of(
-                Participant.builder().name("Pasha").build(),
-                Participant.builder().name("Vasya").build(),
-                Participant.builder().name("Petya").build(),
-                Participant.builder().name("Dasha").build()
-        );
+    public static List<String> getExpectedParticipants() {
+        return List.of("Pasha", "Vasya", "Petya", "Dasha");
     }
 
     public static InputData getExpectedInputData() {
-        List<Participant> participants = getExpectedParticipants();
+        List<String> participants = getExpectedParticipants();
         return new InputData(participants, getExpectedSpendings(participants));
     }
 
     public static OutputData getExpectedOutputData() {
-        List<Participant> participants = getExpectedParticipants();
+        List<String> participants = getExpectedParticipants();
         return new OutputData(
                 getExpectedParticipants(),
                 getExpectedTransactions(participants));
     }
 
-    public static List<Spending> getExpectedSpendings(List<Participant> participants) {
+    public static List<Spending> getExpectedSpendings(List<String> participants) {
         return List.of(
                 Spending.builder()
                         .payer(participants.get(0))
@@ -89,8 +83,8 @@ public class TestData {
         );
     }
 
-    public static Map<Pair<Participant, Participant>, BigDecimal> getExpectedTransactions(List<Participant> participants) {
-        Map<Pair<Participant, Participant>, BigDecimal> expectedTransactions = new HashMap<>();
+    public static Map<Pair<String, String>, BigDecimal> getExpectedTransactions(List<String> participants) {
+        Map<Pair<String, String>, BigDecimal> expectedTransactions = new HashMap<>();
 
         expectedTransactions.put(Pair.of(participants.get(2), participants.get(1)), BigDecimal.valueOf(100));
         expectedTransactions.put(Pair.of(participants.get(3), participants.get(1)), BigDecimal.valueOf(200));

@@ -3,9 +3,8 @@ package org.example.moneysplitter.core.splitter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.example.moneysplitter.core.data.InputData;
 import org.example.moneysplitter.core.data.OutputData;
-import org.example.moneysplitter.core.entities.Balance;
-import org.example.moneysplitter.core.entities.Spending;
-import org.example.moneysplitter.core.entities.Participant;
+import org.example.moneysplitter.core.model.Balance;
+import org.example.moneysplitter.core.model.Spending;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -15,19 +14,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MoneySplitter {
-    public OutputData split(InputData inputData) {
+    public static OutputData split(InputData inputData) {
         List<Balance> balances = calculateBalances(inputData);
-        Map<Pair<Participant, Participant>, BigDecimal> transactions = calculateTransactions(balances);
+        Map<Pair<String, String>, BigDecimal> transactions = calculateTransactions(balances);
 
         return new OutputData(inputData.getParticipants(), transactions);
     }
 
-    private List<Balance> calculateBalances(InputData inputData) {
-        List<Participant> participants = inputData.getParticipants();
+    private static List<Balance> calculateBalances(InputData inputData) {
+        List<String> participants = inputData.getParticipants();
         List<Spending> spendings = inputData.getSpendings();
 
-        Map<Participant, BigDecimal> incomes = new HashMap<>();
-        Map<Participant, BigDecimal> outcomes = new HashMap<>();
+        Map<String, BigDecimal> incomes = new HashMap<>();
+        Map<String, BigDecimal> outcomes = new HashMap<>();
 
         participants.forEach(participant -> {
             incomes.put(participant, BigDecimal.ZERO);
@@ -35,7 +34,7 @@ public class MoneySplitter {
         });
 
         for (Spending spending : spendings) {
-            Participant payer = spending.getPayer();
+            String payer = spending.getPayer();
 
             spending.getProportions().forEach((participant, value) -> {
                 incomes.computeIfPresent(participant, (p, v) -> v.add(value));
@@ -52,7 +51,7 @@ public class MoneySplitter {
                 .collect(Collectors.toList());
     }
 
-    private Map<Pair<Participant, Participant>, BigDecimal> calculateTransactions(List<Balance> balances) {
+    private static Map<Pair<String, String>, BigDecimal> calculateTransactions(List<Balance> balances) {
         List<Balance> destinations = balances.stream()
                 .filter(b -> b.getValue().signum() > 0)
                 .sorted(Comparator.comparing(Balance::getValue).reversed())
@@ -67,7 +66,7 @@ public class MoneySplitter {
         int destinationsIndex = 0;
         int sourcesIndex = 0;
 
-        Map<Pair<Participant, Participant>, BigDecimal> transactions = new HashMap<>();
+        Map<Pair<String, String>, BigDecimal> transactions = new HashMap<>();
 
         while (destinationsIndex < destinations.size() && sourcesIndex < sources.size()) {
             Balance destination = destinations.get(destinationsIndex);
