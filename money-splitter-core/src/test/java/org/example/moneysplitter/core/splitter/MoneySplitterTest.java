@@ -5,9 +5,7 @@ import org.example.moneysplitter.core.data.OutputData;
 import org.junit.jupiter.api.Test;
 import util.TestData;
 
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MoneySplitterTest {
 
