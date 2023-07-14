@@ -20,13 +20,15 @@ public class SpendingMapper {
         UpdateSpendingRequestDto.Split requestSplit = request.getSplit();
         switch (requestSplit.getSplitType()) {
             case "AMOUNT":
-                proportions = requestSplit.getParticipants().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> new PartySpending.Portion(BigDecimal.ONE, e.getValue())));
-//                requestSplit.getParticipants().forEach((key, value) -> proportions.put(key, new PartySpending.Portion(BigDecimal.ONE, value)));
+                proportions = requestSplit.getParticipants().entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, e -> new PartySpending.Portion(BigDecimal.ONE, e.getValue())));
                 break;
 
             case "PARTITION":
-                proportions = requestSplit.getParticipants().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> new PartySpending.Portion(e.getValue(), BigDecimal.ZERO)));
-//                requestSplit.getParticipants().forEach((key, value) -> proportions.put(key, new PartySpending.Portion(value, BigDecimal.ZERO)));
+                proportions = requestSplit.getParticipants().entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, e -> new PartySpending.Portion(e.getValue(), BigDecimal.ZERO)));
                 break;
         }
 

@@ -1,12 +1,9 @@
 package org.example.moneysplitter.rest.mapper;
 
 import lombok.experimental.UtilityClass;
-import org.apache.commons.collections4.CollectionUtils;
-import org.example.moneysplitter.rest.dto.party.PartyDto;
 import org.example.moneysplitter.rest.dao.postgresql.entity.PartyEntity;
+import org.example.moneysplitter.rest.dto.party.PartyDto;
 import org.example.moneysplitter.rest.model.Party;
-
-import java.util.stream.Collectors;
 
 @UtilityClass
 public class PartyMapper {
