@@ -19,8 +19,6 @@ public interface PartyService {
 
     PartySpending saveSpending(PartySpending spending);
 
-    PartyParticipant findParticipantById(UUID id);
-
     List<PartySpending> findSpendingsByPartyId(UUID partyId);
 
     void deleteSpending(UUID partyId, UUID spendingId);

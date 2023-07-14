@@ -1,4 +1,4 @@
-package io;
+package org.example.moneysplitter.console.io;
 
 import org.apache.commons.io.FileUtils;
 import org.example.moneysplitter.console.io.DataReader;

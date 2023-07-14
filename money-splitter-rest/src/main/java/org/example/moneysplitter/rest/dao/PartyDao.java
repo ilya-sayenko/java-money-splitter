@@ -15,7 +15,7 @@ public interface PartyDao {
 
     Party save(Party party);
 
-    PartyParticipant updateParticipant(PartyParticipant participant);
+    boolean existsParticipantById(UUID participantId);
 
     PartyParticipant saveParticipant(PartyParticipant participant);
 
@@ -29,6 +29,8 @@ public interface PartyDao {
 
     List<PartySpending> findSpendingsByPartyId(UUID partyId);
 
+    boolean existsSpendingsByParticipantId(UUID participantId);
+
     void deleteSpendingById(UUID spendingId);
 
     Optional<BigDecimal> findSpendingAmountById(UUID spendingId);
@@ -41,7 +43,7 @@ public interface PartyDao {
 
     void deleteTransactionsByPartyId(UUID partyId);
 
-    List<PartyTransaction> getTransactionsByPartyId(UUID partyId);
+    List<PartyTransaction> findTransactionsByPartyId(UUID partyId);
 
     void updateTransactionStatus(UUID partyId, UUID transactionId, PartyTransaction.Status status);
 }

@@ -45,17 +45,8 @@ public class PartyPostgresDao implements PartyDao {
     }
 
     @Override
-    public PartyParticipant updateParticipant(PartyParticipant participant) {
-        PartyParticipantEntity participantEntity = PartyParticipantEntity
-                .builder()
-                .id(participant.getId())
-                .name(participant.getName())
-                .party(partyRepository.getReferenceById(participant.getPartyId()))
-                .build();
-
-        participantRepository.save(participantEntity);
-
-        return ParticipantMapper.fromEntity(participantEntity);
+    public boolean existsParticipantById(UUID participantId) {
+        return participantRepository.existsById(participantId);
     }
 
     @Override
@@ -137,6 +128,11 @@ public class PartyPostgresDao implements PartyDao {
     }
 
     @Override
+    public boolean existsSpendingsByParticipantId(UUID participantId) {
+        return spendingRepository.existsByPayerId(participantId);
+    }
+
+    @Override
     public void deleteSpendingById(UUID spendingId) {
         proportionRepository.deleteBySpendingId(spendingId);
         spendingRepository.deleteById(spendingId);
@@ -180,7 +176,7 @@ public class PartyPostgresDao implements PartyDao {
     }
 
     @Override
-    public List<PartyTransaction> getTransactionsByPartyId(UUID partyId) {
+    public List<PartyTransaction> findTransactionsByPartyId(UUID partyId) {
         return transactionRepository.findByPartyId(partyId)
                 .stream()
                 .map(e -> PartyTransaction
@@ -188,6 +184,9 @@ public class PartyPostgresDao implements PartyDao {
                         .id(e.getId())
                         .partyId(partyId)
                         .payerId(e.getPayer().getId())
+                        .payeeId(e.getPayee().getId())
+                        .amount(e.getAmount())
+                        .status(PartyTransaction.Status.valueOf(e.getStatus().name()))
                         .build())
                 .collect(Collectors.toList());
     }

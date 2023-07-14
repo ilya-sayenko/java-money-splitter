@@ -20,8 +20,10 @@ import org.example.moneysplitter.rest.model.PartyTransaction;
 import org.example.moneysplitter.rest.service.PartyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/parties")
 @RequiredArgsConstructor
+@Validated
 public class PartyController {
     private final PartyService partyService;
 
@@ -39,7 +42,7 @@ public class PartyController {
     }
 
     @PostMapping
-    public PartyDto createParty(@RequestBody CreatePartyRequestDto partyRequestDto) {
+    public PartyDto createParty(@Valid @RequestBody CreatePartyRequestDto partyRequestDto) {
         Party party = Party
                 .builder()
                 .name(partyRequestDto.getName())
@@ -53,7 +56,7 @@ public class PartyController {
     @PutMapping(value = "/{partyId}/participants")
     public ResponseEntity<PartyParticipantDto> putParticipant(
             @PathVariable UUID partyId,
-            @RequestBody UpdatePartyParticipantRequestDto participantDto
+            @Valid @RequestBody UpdatePartyParticipantRequestDto participantDto
     ) {
         PartyParticipant participant = PartyParticipant
                 .builder()
@@ -64,15 +67,12 @@ public class PartyController {
 
         PartyParticipant savedParticipant = partyService.saveParticipant(participant);
 
-        HttpStatus status = HttpStatus.OK;
-
-//        if (participantDto.getId() == null) {
-//            status = HttpStatus.CREATED;
-//        } else if (participantDto.getId().equals(savedParticipant.getId())) {
-//            status = HttpStatus.OK;
-//        } else {
-//            status = HttpStatus.CREATED;
-//        }
+        HttpStatus status;
+        if (participantDto.getId() == null) {
+            status = HttpStatus.CREATED;
+        } else {
+            status = HttpStatus.OK;
+        }
 
         return ResponseEntity
                 .status(status)
@@ -101,7 +101,6 @@ public class PartyController {
             @RequestBody UpdateSpendingRequestDto request
     ) {
         PartySpending spending = SpendingMapper.fromRequestDto(request).withPartyId(partyId);
-
         return SpendingMapper.toDto(partyService.saveSpending(spending));
     }
 
@@ -111,7 +110,6 @@ public class PartyController {
             @PathVariable UUID spendingId
     ) {
         partyService.deleteSpending(partyId, spendingId);
-
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

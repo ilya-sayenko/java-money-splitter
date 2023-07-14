@@ -14,4 +14,6 @@ public interface SpendingRepository extends JpaRepository<SpendingEntity, UUID> 
 
     @Query("select s.amount from SpendingEntity s where s.id = :id")
     Optional<BigDecimal> findAmountById(UUID id);
+
+    boolean existsByPayerId(UUID payerId);
 }

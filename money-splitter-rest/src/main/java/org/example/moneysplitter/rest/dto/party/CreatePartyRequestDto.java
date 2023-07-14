@@ -1,10 +1,12 @@
 package org.example.moneysplitter.rest.dto.party;
 
 import lombok.Getter;
-import lombok.Setter;
+
+import javax.validation.constraints.NotBlank;
 
 @Getter
 public class CreatePartyRequestDto {
+    @NotBlank
     String name;
     String description;
 }

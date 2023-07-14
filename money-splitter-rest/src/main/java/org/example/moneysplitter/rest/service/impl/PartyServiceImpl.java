@@ -40,11 +40,19 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public PartyParticipant saveParticipant(PartyParticipant participant) {
+        if (participant.getId() != null && !partyDao.existsParticipantById(participant.getId())) {
+            throw new ParticipantNotFoundException();
+        }
+
         return partyDao.saveParticipant(participant);
     }
 
     @Override
     public void deleteParticipant(UUID partyId, UUID participantId) {
+        if (partyDao.existsSpendingsByParticipantId(participantId)) {
+            throw new IncorrectDataException("Participant has spending");
+        }
+
         partyDao.deleteParticipant(partyId, participantId);
     }
 
@@ -52,7 +60,7 @@ public class PartyServiceImpl implements PartyService {
     @Transactional
     public PartySpending saveSpending(PartySpending spending) {
         if (!isCorrectSplit(spending)) {
-            throw new IncorrectDataException();
+            throw new IncorrectDataException("Incorrect spending");
         }
 
         Map<UUID, PartySpending.Portion> proportions = calculateProportions(spending);
@@ -72,11 +80,6 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public PartyParticipant findParticipantById(UUID id) {
-        return partyDao.findParticipantById(id).orElseThrow(ParticipantNotFoundException::new);
-    }
-
-    @Override
     public List<PartySpending> findSpendingsByPartyId(UUID partyId) {
         return partyDao.findSpendingsByPartyId(partyId);
     }
@@ -90,7 +93,7 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     public List<PartyTransaction> findTransactionsByPartyId(UUID partyId) {
-        return partyDao.getTransactionsByPartyId(partyId);
+        return partyDao.findTransactionsByPartyId(partyId);
     }
 
     @Override
