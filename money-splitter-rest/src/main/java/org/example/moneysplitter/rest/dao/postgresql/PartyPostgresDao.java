@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class PartyPostgresDao implements PartyDao {
     private final PartyRepository partyRepository;
+    private final PartyMapper partyMapper;
     private final PartyParticipantRepository participantRepository;
     private final SpendingRepository spendingRepository;
     private final ProportionRepository proportionRepository;
@@ -33,15 +34,15 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public Optional<Party> findById(UUID id) {
-        return partyRepository.findById(id).map(PartyMapper::fromEntity);
+        return partyRepository.findById(id).map(partyMapper::fromEntity);
     }
 
     @Override
     public Party save(Party party) {
-        PartyEntity partyEntity = PartyMapper.toEntity(party);
+        PartyEntity partyEntity = partyMapper.toEntity(party);
         partyRepository.save(partyEntity);
 
-        return PartyMapper.fromEntity(partyEntity);
+        return partyMapper.fromEntity(partyEntity);
     }
 
     @Override

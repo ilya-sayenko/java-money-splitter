@@ -9,10 +9,7 @@ import org.example.moneysplitter.rest.dto.party.PartyDto;
 import org.example.moneysplitter.rest.dto.spending.UpdateSpendingRequestDto;
 import org.example.moneysplitter.rest.dto.transaction.TransactionDto;
 import org.example.moneysplitter.rest.dto.transaction.UpdateTransactionStatusRequestDto;
-import org.example.moneysplitter.rest.mapper.ParticipantMapper;
-import org.example.moneysplitter.rest.mapper.PartyMapper;
-import org.example.moneysplitter.rest.mapper.SpendingMapper;
-import org.example.moneysplitter.rest.mapper.TransactionMapper;
+import org.example.moneysplitter.rest.mapper.*;
 import org.example.moneysplitter.rest.model.Party;
 import org.example.moneysplitter.rest.model.PartyParticipant;
 import org.example.moneysplitter.rest.model.PartySpending;
@@ -24,7 +21,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,22 +31,17 @@ import java.util.stream.Collectors;
 @Validated
 public class PartyController {
     private final PartyService partyService;
+    private final PartyMapper partyMapper;
 
     @GetMapping(value = "/{partyId}")
     public PartyDto getPartyById(@PathVariable UUID partyId) {
-        return PartyMapper.toDto(partyService.findById(partyId));
+        return partyMapper.toDto(partyService.findById(partyId));
     }
 
     @PostMapping
     public PartyDto createParty(@Valid @RequestBody CreatePartyRequestDto partyRequestDto) {
-        Party party = Party
-                .builder()
-                .name(partyRequestDto.getName())
-                .description(partyRequestDto.getDescription())
-                .totalAmount(BigDecimal.ZERO)
-                .build();
-
-        return PartyMapper.toDto(partyService.save(party));
+        Party party = partyMapper.fromCreateRequest(partyRequestDto);
+        return partyMapper.toDto(partyService.save(party));
     }
 
     @PutMapping(value = "/{partyId}/participants")
@@ -80,11 +71,12 @@ public class PartyController {
     }
 
     @DeleteMapping(value = "/{partyId}/participants/{participantId}")
-    public void deleteParticipant(
+    public ResponseEntity<Void> deleteParticipant(
             @PathVariable UUID partyId,
             @PathVariable UUID participantId
     ) {
         partyService.deleteParticipant(partyId, participantId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping(value = "/{partyId}/spendings")

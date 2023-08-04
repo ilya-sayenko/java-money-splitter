@@ -1,8 +1,6 @@
 package org.example.moneysplitter.console.io;
 
 import org.apache.commons.io.FileUtils;
-import org.example.moneysplitter.console.io.DataReader;
-import org.example.moneysplitter.console.io.DataWriter;
 import org.example.moneysplitter.core.data.InputData;
 import org.example.moneysplitter.core.data.OutputData;
 import org.example.moneysplitter.core.splitter.MoneySplitter;
