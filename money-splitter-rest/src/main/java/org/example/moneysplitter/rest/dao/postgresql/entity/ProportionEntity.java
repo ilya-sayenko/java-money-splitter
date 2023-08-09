@@ -27,7 +27,7 @@ public class ProportionEntity {
 
     @ManyToOne
     @JoinColumn(name = "prnt_prnt_id")
-    private PartyParticipantEntity payer;
+    private ParticipantEntity payer;
 
     @Column(name = "proportion")
     private BigDecimal proportion;

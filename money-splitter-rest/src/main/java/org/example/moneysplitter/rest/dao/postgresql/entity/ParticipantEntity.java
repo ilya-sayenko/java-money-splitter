@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "participants")
-public class PartyParticipantEntity {
+public class ParticipantEntity {
     @Id
     @Column(name = "prnt_id")
     @GeneratedValue(generator = "uuid-hibernate-generator")
@@ -22,7 +22,6 @@ public class PartyParticipantEntity {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "party_party_id")
-    private PartyEntity party;
+    @Column(name = "party_party_id")
+    private UUID partyId;
 }

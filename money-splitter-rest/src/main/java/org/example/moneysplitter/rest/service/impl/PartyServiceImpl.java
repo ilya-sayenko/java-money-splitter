@@ -7,7 +7,6 @@ import org.example.moneysplitter.core.model.Spending;
 import org.example.moneysplitter.core.splitter.MoneySplitter;
 import org.example.moneysplitter.rest.dao.PartyDao;
 import org.example.moneysplitter.rest.exception.IncorrectDataException;
-import org.example.moneysplitter.rest.exception.ParticipantNotFoundException;
 import org.example.moneysplitter.rest.exception.PartyNotFoundException;
 import org.example.moneysplitter.rest.model.Party;
 import org.example.moneysplitter.rest.model.PartyParticipant;
@@ -29,21 +28,17 @@ public class PartyServiceImpl implements PartyService {
     private final ProportionCalculatorFactory proportionCalculatorFactory;
 
     @Override
-    public Party findById(UUID id) {
-        return partyDao.findById(id).orElseThrow(PartyNotFoundException::new);
+    public Party findPartyById(UUID id) {
+        return partyDao.findPartyById(id).orElseThrow(PartyNotFoundException::new);
     }
 
     @Override
-    public Party save(Party party) {
-        return partyDao.save(party);
+    public Party saveParty(Party party) {
+        return partyDao.saveParty(party);
     }
 
     @Override
     public PartyParticipant saveParticipant(PartyParticipant participant) {
-        if (participant.getId() != null && !partyDao.existsParticipantById(participant.getId())) {
-            throw new ParticipantNotFoundException();
-        }
-
         return partyDao.saveParticipant(participant);
     }
 

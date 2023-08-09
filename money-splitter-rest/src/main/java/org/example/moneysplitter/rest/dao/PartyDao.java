@@ -11,9 +11,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PartyDao {
-    Optional<Party> findById(UUID id);
+    Optional<Party> findPartyById(UUID id);
 
-    Party save(Party party);
+    Party saveParty(Party party);
 
     boolean existsParticipantById(UUID participantId);
 

@@ -1,39 +1,20 @@
 package org.example.moneysplitter.rest.mapper;
 
-import lombok.experimental.UtilityClass;
 import org.example.moneysplitter.rest.dao.postgresql.entity.PartyEntity;
+import org.example.moneysplitter.rest.dto.party.CreatePartyRequestDto;
 import org.example.moneysplitter.rest.dto.party.PartyDto;
 import org.example.moneysplitter.rest.model.Party;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@UtilityClass
-public class PartyMapper {
-    public PartyDto toDto(Party party) {
-        return PartyDto
-                .builder()
-                .id(party.getId().toString())
-                .name(party.getName())
-                .description(party.getDescription())
-                .totalAmount(party.getTotalAmount())
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface PartyMapper {
+    PartyDto toDto(Party party);
 
-    public PartyEntity toEntity(Party party) {
-        return PartyEntity
-                .builder()
-                .id(party.getId())
-                .name(party.getName())
-                .description(party.getDescription())
-                .totalAmount(party.getTotalAmount())
-                .build();
-    }
+    PartyEntity toEntity(Party party);
 
-    public Party fromEntity(PartyEntity partyEntity) {
-        return Party
-                .builder()
-                .id(partyEntity.getId())
-                .name(partyEntity.getName())
-                .description(partyEntity.getDescription())
-                .totalAmount(partyEntity.getTotalAmount())
-                .build();
-    }
+    Party fromEntity(PartyEntity partyEntity);
+
+    @Mapping(target = "totalAmount", constant = "0")
+    Party fromCreateRequest(CreatePartyRequestDto requestDto);
 }

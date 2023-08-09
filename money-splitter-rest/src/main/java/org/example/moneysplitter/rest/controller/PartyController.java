@@ -1,12 +1,10 @@
 package org.example.moneysplitter.rest.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.moneysplitter.rest.dto.participant.ParticipantDto;
 import org.example.moneysplitter.rest.dto.spending.SpendingDto;
-import org.example.moneysplitter.rest.dto.participant.PartyParticipantDto;
-import org.example.moneysplitter.rest.dto.participant.UpdatePartyParticipantRequestDto;
 import org.example.moneysplitter.rest.dto.party.CreatePartyRequestDto;
 import org.example.moneysplitter.rest.dto.party.PartyDto;
-import org.example.moneysplitter.rest.dto.spending.UpdateSpendingRequestDto;
 import org.example.moneysplitter.rest.dto.transaction.TransactionDto;
 import org.example.moneysplitter.rest.dto.transaction.UpdateTransactionStatusRequestDto;
 import org.example.moneysplitter.rest.mapper.*;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/parties")
@@ -32,42 +29,49 @@ import java.util.stream.Collectors;
 public class PartyController {
     private final PartyService partyService;
     private final PartyMapper partyMapper;
+    private final ParticipantMapper participantMapper;
+    private final TransactionMapper transactionMapper;
+    private final SpendingMapper spendingMapper;
 
     @GetMapping(value = "/{partyId}")
     public PartyDto getPartyById(@PathVariable UUID partyId) {
-        return partyMapper.toDto(partyService.findById(partyId));
+        return partyMapper.toDto(partyService.findPartyById(partyId));
     }
 
     @PostMapping
     public PartyDto createParty(@Valid @RequestBody CreatePartyRequestDto partyRequestDto) {
         Party party = partyMapper.fromCreateRequest(partyRequestDto);
-        return partyMapper.toDto(partyService.save(party));
+        return partyMapper.toDto(partyService.saveParty(party));
     }
 
-    @PutMapping(value = "/{partyId}/participants")
-    public ResponseEntity<PartyParticipantDto> putParticipant(
+    @PutMapping(value = "/{partyId}/participants/{participantId}")
+    public ResponseEntity<ParticipantDto> updateParticipant(
             @PathVariable UUID partyId,
-            @Valid @RequestBody UpdatePartyParticipantRequestDto participantDto
+            @PathVariable UUID participantId,
+            @Valid @RequestBody ParticipantDto participantDto
     ) {
-        PartyParticipant participant = PartyParticipant
-                .builder()
-                .id(participantDto.getId())
-                .name(participantDto.getName())
-                .partyId(partyId)
-                .build();
-
-        PartyParticipant savedParticipant = partyService.saveParticipant(participant);
-
-        HttpStatus status;
-        if (participantDto.getId() == null) {
-            status = HttpStatus.CREATED;
-        } else {
-            status = HttpStatus.OK;
-        }
+        PartyParticipant participant = participantMapper
+                .fromDto(participantDto.withId(participantId))
+                .withPartyId(partyId);
+        participant = partyService.saveParticipant(participant);
 
         return ResponseEntity
-                .status(status)
-                .body(ParticipantMapper.toDto(savedParticipant));
+                .status(HttpStatus.OK)
+                .body(participantMapper.toDto(participant));
+    }
+
+    @PostMapping(value = "/{partyId}/participants")
+    public ResponseEntity<ParticipantDto> createParticipant(
+            @PathVariable UUID partyId,
+            @Valid @RequestBody ParticipantDto participantDto
+    ) {
+        PartyParticipant participant = participantMapper
+                .fromDto(participantDto)
+                .withPartyId(partyId);
+        participant = partyService.saveParticipant(participant);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(participantMapper.toDto(participant));
     }
 
     @DeleteMapping(value = "/{partyId}/participants/{participantId}")
@@ -81,19 +85,22 @@ public class PartyController {
 
     @GetMapping(value = "/{partyId}/spendings")
     public List<SpendingDto> getSpendings(@PathVariable UUID partyId) {
-        return partyService.findSpendingsByPartyId(partyId)
-                .stream()
-                .map(SpendingMapper::toDto)
-                .collect(Collectors.toUnmodifiableList());
+//        return partyService.findSpendingsByPartyId(partyId)
+//                .stream()
+//                .map(SpendingMapper::toDto)
+//                .collect(Collectors.toUnmodifiableList());
+        return spendingMapper.toDto(partyService.findSpendingsByPartyId(partyId));
     }
 
-    @PutMapping(value = "/{partyId}/spendings")
-    public SpendingDto putSpending(
+    @PostMapping(value = "/{partyId}/spendings")
+    public SpendingDto createSpending(
             @PathVariable UUID partyId,
-            @RequestBody UpdateSpendingRequestDto request
+            @RequestBody SpendingDto request
     ) {
-        PartySpending spending = SpendingMapper.fromRequestDto(request).withPartyId(partyId);
-        return SpendingMapper.toDto(partyService.saveSpending(spending));
+//        PartySpending spending = SpendingMapper1.fromRequestDto(request).withPartyId(partyId);
+//        return SpendingMapper1.toDto(partyService.saveSpending(spending));
+        PartySpending spending = spendingMapper.fromDto(request).withPartyId(partyId);
+        return spendingMapper.toDto(partyService.saveSpending(spending));
     }
 
     @DeleteMapping(value = "/{partyId}/spendings/{spendingId}")
@@ -107,10 +114,7 @@ public class PartyController {
 
     @GetMapping(value = "/{partyId}/transactions")
     public List<TransactionDto> getTransactions(@PathVariable UUID partyId) {
-        return partyService.findTransactionsByPartyId(partyId)
-                .stream()
-                .map(TransactionMapper::toDto)
-                .collect(Collectors.toUnmodifiableList());
+        return transactionMapper.toDto(partyService.findTransactionsByPartyId(partyId));
     }
 
     @PatchMapping(value = "/{partyId}/transactions/{transactionId}")

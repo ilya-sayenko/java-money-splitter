@@ -1,32 +1,27 @@
 package org.example.moneysplitter.rest.mapper;
 
-import lombok.experimental.UtilityClass;
 import org.example.moneysplitter.rest.dao.postgresql.entity.TransactionEntity;
 import org.example.moneysplitter.rest.dto.transaction.TransactionDto;
 import org.example.moneysplitter.rest.model.PartyTransaction;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@UtilityClass
-public class TransactionMapper {
-    public TransactionDto toDto(PartyTransaction party) {
-        return TransactionDto
-                .builder()
-                .id(party.getId())
-                .payer(party.getPayerId())
-                .payee(party.getPayeeId())
-                .amount(party.getAmount())
-                .status(party.getStatus().name())
-                .build();
-    }
+import java.util.List;
 
-    public PartyTransaction fromEntity(TransactionEntity entity) {
-        return PartyTransaction
-                .builder()
-                .id(entity.getId())
-                .partyId(entity.getParty().getId())
-                .payerId(entity.getPayer().getId())
-                .payeeId(entity.getPayee().getId())
-                .amount(entity.getAmount())
-                .status(PartyTransaction.Status.valueOf(entity.getStatus().name()))
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface TransactionMapper {
+    @Mapping(source = "payerId", target = "payer")
+    @Mapping(source = "payeeId", target = "payee")
+    TransactionDto toDto(PartyTransaction party);
+
+    @Mapping(source = "payerId", target = "payer")
+    @Mapping(source = "payeeId", target = "payee")
+    List<TransactionDto> toDto(List<PartyTransaction> parties);
+
+//    @Mapping(source = "status", )
+    PartyTransaction fromEntity(TransactionEntity entity);
+
+    List<PartyTransaction> fromEntity(List<TransactionEntity> entities);
+
+    List<TransactionEntity> toEntity(List<PartyTransaction> entities);
 }

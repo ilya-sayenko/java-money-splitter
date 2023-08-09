@@ -22,13 +22,11 @@ public class SpendingEntity {
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "party_party_id")
-    PartyEntity party;
+    @Column(name = "party_party_id")
+    UUID partyId;
 
-    @ManyToOne
-    @JoinColumn(name = "prnt_prnt_id")
-    PartyParticipantEntity payer;
+    @Column(name = "prnt_prnt_id")
+    UUID payerId;
 
     @Column(name = "name")
     String name;

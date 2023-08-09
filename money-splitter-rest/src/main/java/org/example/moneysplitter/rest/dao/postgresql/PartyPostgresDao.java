@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.moneysplitter.rest.dao.PartyDao;
 import org.example.moneysplitter.rest.dao.postgresql.entity.*;
 import org.example.moneysplitter.rest.dao.postgresql.repository.*;
-import org.example.moneysplitter.rest.mapper.ParticipantMapper;
-import org.example.moneysplitter.rest.mapper.PartyMapper;
-import org.example.moneysplitter.rest.mapper.SpendingMapper;
+import org.example.moneysplitter.rest.mapper.*;
 import org.example.moneysplitter.rest.model.Party;
 import org.example.moneysplitter.rest.model.PartyParticipant;
 import org.example.moneysplitter.rest.model.PartySpending;
@@ -28,17 +26,20 @@ public class PartyPostgresDao implements PartyDao {
     private final PartyRepository partyRepository;
     private final PartyMapper partyMapper;
     private final PartyParticipantRepository participantRepository;
+    private final ParticipantMapper participantMapper;
     private final SpendingRepository spendingRepository;
+    private final SpendingMapper spendingMapper;
     private final ProportionRepository proportionRepository;
     private final TransactionRepository transactionRepository;
+    private final TransactionMapper transactionMapper;
 
     @Override
-    public Optional<Party> findById(UUID id) {
+    public Optional<Party> findPartyById(UUID id) {
         return partyRepository.findById(id).map(partyMapper::fromEntity);
     }
 
     @Override
-    public Party save(Party party) {
+    public Party saveParty(Party party) {
         PartyEntity partyEntity = partyMapper.toEntity(party);
         partyRepository.save(partyEntity);
 
@@ -52,16 +53,17 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public PartyParticipant saveParticipant(PartyParticipant participant) {
-        PartyParticipantEntity participantEntity = PartyParticipantEntity
-                .builder()
-                .id(participant.getId())
-                .name(participant.getName())
-                .party(partyRepository.getReferenceById(participant.getPartyId()))
-                .build();
+//        ParticipantEntity participantEntity = ParticipantEntity
+//                .builder()
+//                .id(participant.getId())
+//                .name(participant.getName())
+//                .partyId(partyRepository.getReferenceById(participant.getPartyId()))
+//                .partyId(participant.getPartyId())
+//                .build();
 
+        ParticipantEntity participantEntity = participantMapper.toEntity(participant);
         participantRepository.save(participantEntity);
-
-        return ParticipantMapper.fromEntity(participantEntity);
+        return participantMapper.fromEntity(participantEntity);
     }
 
     @Override
@@ -74,8 +76,8 @@ public class PartyPostgresDao implements PartyDao {
     public PartySpending saveSpending(PartySpending spending) {
         SpendingEntity spendingEntity = SpendingEntity
                 .builder()
-                .party(partyRepository.getReferenceById(spending.getPartyId()))
-                .payer(participantRepository.getReferenceById(spending.getPayerId()))
+                .partyId(spending.getPartyId())
+                .payerId(spending.getPayerId())
                 .name(spending.getName())
                 .amount(spending.getAmount())
                 .splitType(SpendingEntity.SplitType.valueOf(spending.getSplitType().name()))
@@ -97,19 +99,19 @@ public class PartyPostgresDao implements PartyDao {
         proportionRepository.saveAll(proportionEntities);
         spendingEntity.setProportions(proportionEntities);
 
-        return SpendingMapper.fromEntity(spendingEntity);
+        return spendingMapper.fromEntity(spendingEntity);
     }
 
     @Override
     public Optional<PartyParticipant> findParticipantById(UUID id) {
-        return participantRepository.findById(id).map(ParticipantMapper::fromEntity);
+        return participantRepository.findById(id).map(participantMapper::fromEntity);
     }
 
     @Override
     public List<PartyParticipant> findParticipantsByPartyId(UUID partyId) {
         return participantRepository.findByPartyId(partyId)
                 .stream()
-                .map(ParticipantMapper::fromEntity)
+                .map(participantMapper::fromEntity)
                 .collect(Collectors.toList());
     }
 
@@ -124,7 +126,7 @@ public class PartyPostgresDao implements PartyDao {
 
         return spendingEntities
                 .stream()
-                .map(SpendingMapper::fromEntity)
+                .map(spendingMapper::fromEntity)
                 .collect(Collectors.toList());
     }
 
@@ -156,18 +158,18 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public void saveTransactions(List<PartyTransaction> transactions) {
-        List<TransactionEntity> entities = transactions
-                .stream()
-                .map(t -> TransactionEntity
-                        .builder()
-                        .party(partyRepository.getReferenceById(t.getPartyId()))
-                        .payer(participantRepository.getReferenceById(t.getPayerId()))
-                        .payee(participantRepository.getReferenceById(t.getPayeeId()))
-                        .amount(t.getAmount())
-                        .status(TransactionEntity.Status.valueOf(t.getStatus().name()))
-                        .build())
-                .collect(Collectors.toList());
-
+//        List<TransactionEntity> entities = transactions
+//                .stream()
+//                .map(t -> TransactionEntity
+//                        .builder()
+//                        .partyId(partyRepository.getReferenceById(t.getPartyId()))
+//                        .payerId(participantRepository.getReferenceById(t.getPayerId()))
+//                        .payeeId(participantRepository.getReferenceById(t.getPayeeId()))
+//                        .amount(t.getAmount())
+//                        .status(TransactionEntity.Status.valueOf(t.getStatus().name()))
+//                        .build())
+//                .collect(Collectors.toList());
+        List<TransactionEntity> entities = transactionMapper.toEntity(transactions);
         transactionRepository.saveAll(entities);
     }
 
@@ -178,18 +180,19 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public List<PartyTransaction> findTransactionsByPartyId(UUID partyId) {
-        return transactionRepository.findByPartyId(partyId)
-                .stream()
-                .map(e -> PartyTransaction
-                        .builder()
-                        .id(e.getId())
-                        .partyId(partyId)
-                        .payerId(e.getPayer().getId())
-                        .payeeId(e.getPayee().getId())
-                        .amount(e.getAmount())
-                        .status(PartyTransaction.Status.valueOf(e.getStatus().name()))
-                        .build())
-                .collect(Collectors.toList());
+//        return transactionRepository.findByPartyId(partyId)
+//                .stream()
+//                .map(e -> PartyTransaction
+//                        .builder()
+//                        .id(e.getId())
+//                        .partyId(partyId)
+//                        .payerId(e.getPayerId().getId())
+//                        .payeeId(e.getPayeeId().getId())
+//                        .amount(e.getAmount())
+//                        .status(PartyTransaction.Status.valueOf(e.getStatus().name()))
+//                        .build())
+//                .collect(Collectors.toList());
+        return transactionMapper.fromEntity(transactionRepository.findByPartyId(partyId));
     }
 
     @Override

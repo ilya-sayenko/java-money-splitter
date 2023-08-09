@@ -23,17 +23,14 @@ public class TransactionEntity {
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "party_party_id")
-    private PartyEntity party;
+    @Column(name = "party_party_id")
+    private UUID partyId;
 
-    @ManyToOne
-    @JoinColumn(name = "from_prnt_id")
-    private PartyParticipantEntity payer;
+    @Column(name = "from_prnt_id")
+    private UUID payerId;
 
-    @ManyToOne
-    @JoinColumn(name = "to_prnt_id")
-    private PartyParticipantEntity payee;
+    @Column(name = "to_prnt_id")
+    private UUID payeeId;
 
     @Column(name = "amount")
     private BigDecimal amount;

@@ -1,9 +1,6 @@
 package org.example.moneysplitter.rest.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -13,6 +10,7 @@ import java.util.UUID;
 @Builder
 public class PartyParticipant {
     UUID id;
+    @With
     UUID partyId;
     String name;
 }

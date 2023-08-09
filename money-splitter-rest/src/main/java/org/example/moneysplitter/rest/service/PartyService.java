@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PartyService {
-    Party findById(UUID id);
+    Party findPartyById(UUID id);
 
-    Party save(Party party);
+    Party saveParty(Party party);
 
     PartyParticipant saveParticipant(PartyParticipant participant);
 
