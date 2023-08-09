@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet id="tbl_create_spendings" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="spendings"/>
+            </not>
+        </preConditions>
+        <createTable tableName="spendings">
+            <column name="spnd_id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="party_party_id" type="uuid"/>
+            <column name="prnt_prnt_id" type="uuid"/>
+            <column name="name" type="varchar(250)"/>
+            <column name="amount" type="numeric"/>
+            <column name="sptp_sptp_id" type="integer"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="spendings"
+                baseColumnNames="party_party_id"
+                referencedTableName="parties"
+                referencedColumnNames="party_id"
+                constraintName="spendings_party_party_id_fkey"/>
+        <addForeignKeyConstraint
+                baseTableName="spendings"
+                baseColumnNames="prnt_prnt_id"
+                referencedTableName="participants"
+                referencedColumnNames="prnt_id"
+                constraintName="spendings_prnt_prnt_id_fkey"/>
+        <addForeignKeyConstraint
+                baseTableName="spendings"
+                baseColumnNames="sptp_sptp_id"
+                referencedTableName="split_types"
+                referencedColumnNames="sptp_id"
+                constraintName="spendings_sptp_sptp_id_fkey"/>
+    </changeSet>
+</databaseChangeLog>

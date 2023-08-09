@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS transactions
     CONSTRAINT transactions_party_party_id_fkey FOREIGN KEY(party_party_id) REFERENCES parties(party_id),
     CONSTRAINT transactions_from_prnt_id_fkey   FOREIGN KEY(from_prnt_id)   REFERENCES participants(prnt_id),
     CONSTRAINT transactions_to_prnt_id_fkey     FOREIGN KEY(to_prnt_id)     REFERENCES participants(prnt_id),
-    CONSTRAINT transactions_tran_tran_id_fkey   FOREIGN KEY(trst_trst_id)   REFERENCES transaction_statuses(trst_id)
+    CONSTRAINT transactions_trst_trst_id_fkey   FOREIGN KEY(trst_trst_id)   REFERENCES transaction_statuses(trst_id)
 ); 
 
 insert into split_types values

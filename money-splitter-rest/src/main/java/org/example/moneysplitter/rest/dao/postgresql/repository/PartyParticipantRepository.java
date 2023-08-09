@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface PartyParticipantRepository extends JpaRepository<ParticipantEntity, UUID> {
     @Modifying
-    @Query("delete from PartyParticipantEntity p where p.id = :participantId and p.party.id = :partyId")
+    @Query("delete from ParticipantEntity p where p.id = :participantId and p.partyId = :partyId")
     void deleteParticipantByIdAndPartyId(UUID partyId, UUID participantId);
 
 //    void deleteByIdAndPartyId(UUID id, UUID partyId);
