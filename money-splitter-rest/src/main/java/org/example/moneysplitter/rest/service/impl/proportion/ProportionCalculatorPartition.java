@@ -12,7 +12,7 @@ import java.util.UUID;
 @Component
 public class ProportionCalculatorPartition implements ProportionCalculator {
     private static final int SCALE = 6;
-    private static final RoundingMode ROUDING_MODE = RoundingMode.HALF_EVEN;
+    private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
 
     @Override
     public Map<UUID, PartySpending.Portion> calculate(PartySpending spending) {
@@ -24,9 +24,13 @@ public class ProportionCalculatorPartition implements ProportionCalculator {
                 .map(PartySpending.Portion::getPortion)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal valueForOnePortion = spending.getAmount().divide(portions, SCALE, ROUDING_MODE);
+        BigDecimal valueForOnePortion = spending.getAmount().divide(portions, SCALE, ROUNDING_MODE);
         oldProportions.forEach((key, value) ->
-                newProportions.put(key, new PartySpending.Portion(value.getPortion(), value.getPortion().multiply(valueForOnePortion))));
+                newProportions.put(key, PartySpending.Portion
+                        .builder()
+                        .portion(value.getPortion())
+                        .amount(value.getPortion().multiply(valueForOnePortion)).build())
+        );
 
         return newProportions;
     }

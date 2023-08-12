@@ -18,7 +18,8 @@ public class PartyMapperTest {
     @Test
     void shouldMapToDto() {
         Party model = new Party(UUID.randomUUID(), "Name", "Description", BigDecimal.ZERO);
-        PartyDto dto = mapper.toDto(model);
+        PartyDto dto = mapper.toDTO(model);
+
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getName(), dto.getName());
         assertEquals(model.getDescription(), dto.getDescription());
@@ -29,6 +30,7 @@ public class PartyMapperTest {
     void shouldMapToEntity() {
         Party model = new Party(UUID.randomUUID(), "Name", "Description", BigDecimal.ZERO);
         PartyEntity entity = mapper.toEntity(model);
+
         assertEquals(model.getId(), entity.getId());
         assertEquals(model.getName(), entity.getName());
         assertEquals(model.getDescription(), entity.getDescription());
@@ -39,6 +41,7 @@ public class PartyMapperTest {
     void shouldMapFromEntity() {
         PartyEntity entity = new PartyEntity(UUID.randomUUID(), "Name", "Description", BigDecimal.ZERO);
         Party model = mapper.fromEntity(entity);
+
         assertEquals(model.getId(), entity.getId());
         assertEquals(model.getName(), entity.getName());
         assertEquals(model.getDescription(), entity.getDescription());
@@ -48,7 +51,8 @@ public class PartyMapperTest {
     @Test
     void shouldMapFromCreateRequestDto() {
         CreatePartyRequestDto request = new CreatePartyRequestDto("Name", "Description");
-        Party model = mapper.fromCreateRequest(request);
+        Party model = mapper.fromCreateRequestDTO(request);
+
         assertEquals(request.getName(), model.getName());
         assertEquals(request.getDescription(), model.getDescription());
         assertEquals(BigDecimal.ZERO, model.getTotalAmount());

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.UUID;
 
-public interface PartyParticipantRepository extends JpaRepository<ParticipantEntity, UUID> {
+public interface ParticipantRepository extends JpaRepository<ParticipantEntity, UUID> {
     @Modifying
     @Query("delete from ParticipantEntity p where p.id = :participantId and p.partyId = :partyId")
     void deleteParticipantByIdAndPartyId(UUID partyId, UUID participantId);

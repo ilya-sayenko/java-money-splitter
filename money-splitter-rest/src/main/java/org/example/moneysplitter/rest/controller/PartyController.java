@@ -35,13 +35,13 @@ public class PartyController {
 
     @GetMapping(value = "/{partyId}")
     public PartyDto getPartyById(@PathVariable UUID partyId) {
-        return partyMapper.toDto(partyService.findPartyById(partyId));
+        return partyMapper.toDTO(partyService.findPartyById(partyId));
     }
 
     @PostMapping
     public PartyDto createParty(@Valid @RequestBody CreatePartyRequestDto partyRequestDto) {
-        Party party = partyMapper.fromCreateRequest(partyRequestDto);
-        return partyMapper.toDto(partyService.saveParty(party));
+        Party party = partyMapper.fromCreateRequestDTO(partyRequestDto);
+        return partyMapper.toDTO(partyService.saveParty(party));
     }
 
     @PutMapping(value = "/{partyId}/participants/{participantId}")
@@ -51,13 +51,13 @@ public class PartyController {
             @Valid @RequestBody ParticipantDto participantDto
     ) {
         PartyParticipant participant = participantMapper
-                .fromDto(participantDto.withId(participantId))
+                .fromDTO(participantDto.withId(participantId))
                 .withPartyId(partyId);
         participant = partyService.saveParticipant(participant);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(participantMapper.toDto(participant));
+                .body(participantMapper.toDTO(participant));
     }
 
     @PostMapping(value = "/{partyId}/participants")
@@ -66,12 +66,19 @@ public class PartyController {
             @Valid @RequestBody ParticipantDto participantDto
     ) {
         PartyParticipant participant = participantMapper
-                .fromDto(participantDto)
+                .fromDTO(participantDto)
                 .withPartyId(partyId);
         participant = partyService.saveParticipant(participant);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(participantMapper.toDto(participant));
+                .body(participantMapper.toDTO(participant));
+    }
+
+    @GetMapping(value = "/{partyId}/participants")
+    public ResponseEntity<List<ParticipantDto>> findParticipants(@PathVariable UUID partyId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(participantMapper.toDTOs(partyService.findParticipantsByPartyId(partyId)));
     }
 
     @DeleteMapping(value = "/{partyId}/participants/{participantId}")
@@ -89,7 +96,7 @@ public class PartyController {
 //                .stream()
 //                .map(SpendingMapper::toDto)
 //                .collect(Collectors.toUnmodifiableList());
-        return spendingMapper.toDto(partyService.findSpendingsByPartyId(partyId));
+        return spendingMapper.toDTOs(partyService.findSpendingsByPartyId(partyId));
     }
 
     @PostMapping(value = "/{partyId}/spendings")
@@ -99,8 +106,8 @@ public class PartyController {
     ) {
 //        PartySpending spending = SpendingMapper1.fromRequestDto(request).withPartyId(partyId);
 //        return SpendingMapper1.toDto(partyService.saveSpending(spending));
-        PartySpending spending = spendingMapper.fromDto(request).withPartyId(partyId);
-        return spendingMapper.toDto(partyService.saveSpending(spending));
+        PartySpending spending = spendingMapper.fromDTO(request).withPartyId(partyId);
+        return spendingMapper.toDTO(partyService.saveSpending(spending));
     }
 
     @DeleteMapping(value = "/{partyId}/spendings/{spendingId}")
@@ -114,7 +121,7 @@ public class PartyController {
 
     @GetMapping(value = "/{partyId}/transactions")
     public List<TransactionDto> getTransactions(@PathVariable UUID partyId) {
-        return transactionMapper.toDto(partyService.findTransactionsByPartyId(partyId));
+        return transactionMapper.toDTOs(partyService.findTransactionsByPartyId(partyId));
     }
 
     @PatchMapping(value = "/{partyId}/transactions/{transactionId}")

@@ -9,9 +9,13 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="insert_into_split_types" author="liquibase">
-        <sqlFile dbms="postgresql"
-                 encoding="UTF-8"
-                 path="sql/split_types.sql"
-                 relativeToChangelogFile="true"/>
+        <loadUpdateData
+                tableName="split_types"
+                file="csv/split_types.csv"
+                encoding="UTF-8"
+                relativeToChangelogFile="true"
+                separator=","
+                primaryKey="sptp_id">
+        </loadUpdateData>
     </changeSet>
 </databaseChangeLog>

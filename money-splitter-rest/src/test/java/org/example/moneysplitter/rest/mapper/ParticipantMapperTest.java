@@ -16,7 +16,8 @@ class ParticipantMapperTest {
     @Test
     void shouldMapToDto() {
         PartyParticipant model = new PartyParticipant(UUID.randomUUID(), UUID.randomUUID(), "Name");
-        ParticipantDto dto = mapper.toDto(model);
+        ParticipantDto dto = mapper.toDTO(model);
+
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getName(), dto.getName());
     }
@@ -25,6 +26,7 @@ class ParticipantMapperTest {
     void shouldMapFromEntity() {
         ParticipantEntity entity = new ParticipantEntity(UUID.randomUUID(), "Name", null);
         PartyParticipant model = mapper.fromEntity(entity);
+
         assertEquals(entity.getId(), model.getId());
         assertEquals(entity.getName(), model.getName());
     }

@@ -6,7 +6,6 @@ import org.example.moneysplitter.core.data.OutputData;
 import org.example.moneysplitter.core.model.Spending;
 import org.example.moneysplitter.core.splitter.MoneySplitter;
 import org.example.moneysplitter.rest.dao.PartyDao;
-import org.example.moneysplitter.rest.exception.IncorrectDataException;
 import org.example.moneysplitter.rest.exception.PartyNotFoundException;
 import org.example.moneysplitter.rest.model.Party;
 import org.example.moneysplitter.rest.model.PartyParticipant;
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PartyServiceImpl implements PartyService {
     private final PartyDao partyDao;
     private final ProportionCalculatorFactory proportionCalculatorFactory;
@@ -43,35 +43,34 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public void deleteParticipant(UUID partyId, UUID participantId) {
-        if (partyDao.existsSpendingsByParticipantId(participantId)) {
-            throw new IncorrectDataException("Participant has spending");
-        }
+    public List<PartyParticipant> findParticipantsByPartyId(UUID partyId) {
+        return partyDao.findParticipantsByPartyId(partyId);
+    }
 
+    @Override
+    public void deleteParticipant(UUID partyId, UUID participantId) {
         partyDao.deleteParticipant(partyId, participantId);
     }
 
     @Override
-    @Transactional
     public PartySpending saveSpending(PartySpending spending) {
-        if (!isCorrectSplit(spending)) {
-            throw new IncorrectDataException("Incorrect spending");
-        }
-
         Map<UUID, PartySpending.Portion> proportions = calculateProportions(spending);
-        PartySpending savedSpending = partyDao.saveSpending(spending.withProportions(proportions));
+        PartySpending spendingForSave = spending.withProportions(proportions);
+
+        if (spending.getSplitType().equals(PartySpending.SplitType.AMOUNT)) {
+            BigDecimal amount = proportions.values()
+                    .stream()
+                    .map(PartySpending.Portion::getAmount)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            spendingForSave = spendingForSave.withAmount(amount);
+        }
+        spendingForSave = partyDao.saveSpending(spendingForSave);
 
         UUID partyId = spending.getPartyId();
         partyDao.increasePartyAmount(partyId, spending.getAmount());
+        updateTransactions(partyId);
 
-        InputData inputData = prepareInputData(partyId);
-        OutputData outputData = MoneySplitter.split(inputData);
-
-        partyDao.deleteTransactionsByPartyId(partyId);
-        List<PartyTransaction> transactions = createTransactions(outputData, partyId);
-        partyDao.saveTransactions(transactions);
-
-        return savedSpending;
+        return spendingForSave;
     }
 
     @Override
@@ -84,6 +83,8 @@ public class PartyServiceImpl implements PartyService {
         BigDecimal amount = partyDao.findSpendingAmountById(spendingId).orElse(BigDecimal.ZERO);
         partyDao.deleteSpendingById(spendingId);
         partyDao.decreasePartyAmount(partyId, amount);
+        // todo check transactions after deleting
+//        updateTransactions(partyId);
     }
 
     @Override
@@ -96,8 +97,9 @@ public class PartyServiceImpl implements PartyService {
         partyDao.updateTransactionStatus(partyId, transactionId, status);
     }
 
-    private List<PartyTransaction> createTransactions(OutputData outputData, UUID partyId) {
-        return outputData.getTransactions()
+    private void updateTransactions(UUID partyId) {
+        OutputData outputData = MoneySplitter.split(prepareCoreInputData(partyId));
+        List<PartyTransaction> transactions = outputData.getTransactions()
                 .entrySet()
                 .stream()
                 .map(e -> PartyTransaction
@@ -109,29 +111,17 @@ public class PartyServiceImpl implements PartyService {
                         .status(PartyTransaction.Status.PENDING)
                         .build())
                 .collect(Collectors.toList());
+        partyDao.deleteTransactionsByPartyId(partyId);
+        partyDao.saveTransactions(transactions);
     }
 
-    private boolean isCorrectSplit(PartySpending spending) {
-        if (spending.getSplitType().equals(PartySpending.SplitType.AMOUNT)) {
-            BigDecimal sum = spending.getProportions().values()
-                    .stream()
-                    .map(PartySpending.Portion::getAmount)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            return sum.subtract(spending.getAmount()).compareTo(BigDecimal.valueOf(0.001)) < 1;
-        } else {
-            return true;
-        }
-    }
-
-    private InputData prepareInputData(UUID partyId) {
+    private InputData prepareCoreInputData(UUID partyId) {
         List<String> participants = partyDao.findParticipantsByPartyId(partyId)
                 .stream()
                 .map(p -> p.getId().toString())
                 .collect(Collectors.toList());
 
-        List<PartySpending> spendingsByPartyId = partyDao.findSpendingsByPartyId(partyId);
-        List<Spending> spendings = spendingsByPartyId
+        List<Spending> spendings = partyDao.findSpendingsByPartyId(partyId)
                 .stream()
                 .map(sp -> Spending
                         .builder()

@@ -20,14 +20,12 @@ public class ProportionEntity {
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "spnd_spnd_id")
     @Setter
-    private SpendingEntity spending;
+    @Column(name = "spnd_spnd_id")
+    private UUID spendingId;
 
-    @ManyToOne
-    @JoinColumn(name = "prnt_prnt_id")
-    private ParticipantEntity payer;
+    @Column(name = "prnt_prnt_id")
+    private UUID participantId;
 
     @Column(name = "proportion")
     private BigDecimal proportion;

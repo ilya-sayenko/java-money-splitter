@@ -9,12 +9,12 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface PartyMapper {
-    PartyDto toDto(Party party);
+    PartyDto toDTO(Party party);
 
     PartyEntity toEntity(Party party);
 
     Party fromEntity(PartyEntity partyEntity);
 
     @Mapping(target = "totalAmount", constant = "0")
-    Party fromCreateRequest(CreatePartyRequestDto requestDto);
+    Party fromCreateRequestDTO(CreatePartyRequestDto requestDto);
 }

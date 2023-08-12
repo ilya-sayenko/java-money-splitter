@@ -14,8 +14,10 @@ public class PartySpending {
     private UUID id;
     @With
     private UUID partyId;
+    @With
     private UUID payerId;
     private String name;
+    @With
     private BigDecimal amount;
     @With
     private SplitType splitType;
@@ -26,8 +28,10 @@ public class PartySpending {
     @AllArgsConstructor
     @Builder
     public static class Portion {
-        BigDecimal portion;
-        BigDecimal amount;
+        @Builder.Default
+        BigDecimal portion = BigDecimal.ONE;
+        @Builder.Default
+        BigDecimal amount = BigDecimal.ZERO;
     }
 
     public enum SplitType {

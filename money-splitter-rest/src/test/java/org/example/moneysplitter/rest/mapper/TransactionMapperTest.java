@@ -23,7 +23,8 @@ public class TransactionMapperTest {
                 UUID.randomUUID(),
                 BigDecimal.ZERO,
                 PartyTransaction.Status.PENDING);
-        TransactionDto dto = mapper.toDto(model);
+        TransactionDto dto = mapper.toDTO(model);
+
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getPayerId(), dto.getPayer());
         assertEquals(model.getPayeeId(), dto.getPayee());
@@ -39,7 +40,8 @@ public class TransactionMapperTest {
                 UUID.randomUUID(),
                 BigDecimal.ZERO,
                 TransactionEntity.Status.PENDING);
-        PartyTransaction model = mapper.fromEntity(entity);
+        PartyTransaction model = mapper.fromEntities(entity);
+
         assertEquals(entity.getId(), model.getId());
         assertEquals(entity.getPartyId(), model.getPartyId());
         assertEquals(entity.getPayerId(), model.getPayerId());

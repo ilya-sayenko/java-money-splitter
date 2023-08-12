@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 @Transactional
 public class PartyPostgresDao implements PartyDao {
     private final PartyRepository partyRepository;
-    private final PartyMapper partyMapper;
-    private final PartyParticipantRepository participantRepository;
-    private final ParticipantMapper participantMapper;
+    private final ParticipantRepository participantRepository;
     private final SpendingRepository spendingRepository;
-    private final SpendingMapper spendingMapper;
     private final ProportionRepository proportionRepository;
     private final TransactionRepository transactionRepository;
+    private final PartyMapper partyMapper;
+    private final ParticipantMapper participantMapper;
+    private final SpendingMapper spendingMapper;
     private final TransactionMapper transactionMapper;
 
     @Override
@@ -53,14 +53,6 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public PartyParticipant saveParticipant(PartyParticipant participant) {
-//        ParticipantEntity participantEntity = ParticipantEntity
-//                .builder()
-//                .id(participant.getId())
-//                .name(participant.getName())
-//                .partyId(partyRepository.getReferenceById(participant.getPartyId()))
-//                .partyId(participant.getPartyId())
-//                .build();
-
         ParticipantEntity participantEntity = participantMapper.toEntity(participant);
         participantRepository.save(participantEntity);
         return participantMapper.fromEntity(participantEntity);
@@ -72,32 +64,11 @@ public class PartyPostgresDao implements PartyDao {
     }
 
     @Override
-    @Transactional
     public PartySpending saveSpending(PartySpending spending) {
-        SpendingEntity spendingEntity = SpendingEntity
-                .builder()
-                .partyId(spending.getPartyId())
-                .payerId(spending.getPayerId())
-                .name(spending.getName())
-                .amount(spending.getAmount())
-                .splitType(SpendingEntity.SplitType.valueOf(spending.getSplitType().name()))
-                .build();
-
+        SpendingEntity spendingEntity = spendingMapper.toEntity(spending);
         spendingRepository.save(spendingEntity);
-
-        List<ProportionEntity> proportionEntities = spending.getProportions().entrySet()
-                .stream()
-                .map(e -> ProportionEntity
-                        .builder()
-                        .spending(spendingEntity)
-                        .payer(participantRepository.getReferenceById(e.getKey()))
-                        .proportion(e.getValue().getPortion())
-                        .amount(e.getValue().getAmount())
-                        .build())
-                .collect(Collectors.toList());
-
-        proportionRepository.saveAll(proportionEntities);
-        spendingEntity.setProportions(proportionEntities);
+        spendingEntity.getProportions().forEach(p -> p.setSpendingId(spendingEntity.getId()));
+        proportionRepository.saveAll(spendingEntity.getProportions());
 
         return spendingMapper.fromEntity(spendingEntity);
     }
@@ -118,16 +89,13 @@ public class PartyPostgresDao implements PartyDao {
     @Override
     public List<PartySpending> findSpendingsByPartyId(UUID partyId) {
         List<SpendingEntity> spendingEntities = spendingRepository.findAllByPartyId(partyId);
-        Map<SpendingEntity, List<ProportionEntity>> proportionEntities = proportionRepository.findBySpendingIn(spendingEntities)
+        Map<UUID, List<ProportionEntity>> proportionEntities = proportionRepository
+                .findBySpendingIdIn(spendingEntities.stream().map(SpendingEntity::getId).collect(Collectors.toList()))
                 .stream()
-                .collect(Collectors.groupingBy(ProportionEntity::getSpending, Collectors.toList()));
+                .collect(Collectors.groupingBy(ProportionEntity::getSpendingId, Collectors.toList()));
+        spendingEntities.forEach(s -> s.setProportions(proportionEntities.get(s.getId())));
 
-        spendingEntities.forEach(s -> s.setProportions(proportionEntities.get(s)));
-
-        return spendingEntities
-                .stream()
-                .map(spendingMapper::fromEntity)
-                .collect(Collectors.toList());
+        return spendingMapper.fromEntities(spendingEntities);
     }
 
     @Override
@@ -158,19 +126,7 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public void saveTransactions(List<PartyTransaction> transactions) {
-//        List<TransactionEntity> entities = transactions
-//                .stream()
-//                .map(t -> TransactionEntity
-//                        .builder()
-//                        .partyId(partyRepository.getReferenceById(t.getPartyId()))
-//                        .payerId(participantRepository.getReferenceById(t.getPayerId()))
-//                        .payeeId(participantRepository.getReferenceById(t.getPayeeId()))
-//                        .amount(t.getAmount())
-//                        .status(TransactionEntity.Status.valueOf(t.getStatus().name()))
-//                        .build())
-//                .collect(Collectors.toList());
-        List<TransactionEntity> entities = transactionMapper.toEntity(transactions);
-        transactionRepository.saveAll(entities);
+        transactionRepository.saveAll(transactionMapper.toEntities(transactions));
     }
 
     @Override
@@ -180,19 +136,7 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public List<PartyTransaction> findTransactionsByPartyId(UUID partyId) {
-//        return transactionRepository.findByPartyId(partyId)
-//                .stream()
-//                .map(e -> PartyTransaction
-//                        .builder()
-//                        .id(e.getId())
-//                        .partyId(partyId)
-//                        .payerId(e.getPayerId().getId())
-//                        .payeeId(e.getPayeeId().getId())
-//                        .amount(e.getAmount())
-//                        .status(PartyTransaction.Status.valueOf(e.getStatus().name()))
-//                        .build())
-//                .collect(Collectors.toList());
-        return transactionMapper.fromEntity(transactionRepository.findByPartyId(partyId));
+        return transactionMapper.fromEntities(transactionRepository.findByPartyId(partyId));
     }
 
     @Override

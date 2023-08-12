@@ -12,6 +12,9 @@ import java.util.UUID;
 public interface SpendingRepository extends JpaRepository<SpendingEntity, UUID> {
     List<SpendingEntity> findAllByPartyId(UUID partyId);
 
+    @Query("select s.id from SpendingEntity s where s.partyId = :partyId")
+    List<UUID> findSpendingIdsByPartyId(UUID partyId);
+
     @Query("select s.amount from SpendingEntity s where s.id = :id")
     Optional<BigDecimal> findAmountById(UUID id);
 

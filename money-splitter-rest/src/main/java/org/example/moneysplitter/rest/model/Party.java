@@ -15,5 +15,6 @@ public class Party {
     private String name;
     private String description;
     @With
-    private BigDecimal totalAmount;
+    @Builder.Default
+    private BigDecimal totalAmount = BigDecimal.ZERO;
 }
