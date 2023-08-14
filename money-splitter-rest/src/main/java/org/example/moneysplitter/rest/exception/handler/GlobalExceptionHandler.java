@@ -1,9 +1,6 @@
 package org.example.moneysplitter.rest.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.moneysplitter.rest.exception.IncorrectDataException;
-import org.example.moneysplitter.rest.exception.IncorrectDeleteException;
-import org.example.moneysplitter.rest.exception.ModelNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,7 +14,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.warn("Validation error");
-
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
 
         return ResponseEntity
@@ -30,46 +26,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleModelNotFoundException(ModelNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleGlobalAppException(GlobalAppException ex) {
         log.warn(ex.getMessage());
-        HttpStatus notFound = HttpStatus.NOT_FOUND;
 
         return ResponseEntity
-                .status(notFound)
+                .status(ex.getHttpStatus())
                 .body(ErrorResponse
                         .builder()
-                        .status(notFound.value())
-                        .errorCode(-1004)
-                        .errorMessage(ex.getMessage())
-                        .build());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleIncorrectDataException(IncorrectDataException ex) {
-        log.warn(ex.getMessage());
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-
-        return ResponseEntity
-                .status(badRequest)
-                .body(ErrorResponse
-                        .builder()
-                        .status(badRequest.value())
-                        .errorCode(-1005)
-                        .errorMessage(ex.getMessage())
-                        .build());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleIncorrectDeleteException(IncorrectDeleteException ex) {
-        log.warn(ex.getMessage());
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-
-        return ResponseEntity
-                .status(badRequest)
-                .body(ErrorResponse
-                        .builder()
-                        .status(badRequest.value())
-                        .errorCode(-1006)
+                        .status(ex.getHttpStatus().value())
+                        .errorCode(ex.getErrorCode())
                         .errorMessage(ex.getMessage())
                         .build());
     }
