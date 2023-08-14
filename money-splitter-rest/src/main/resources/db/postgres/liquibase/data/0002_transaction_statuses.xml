@@ -9,10 +9,6 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="insert_into_transaction_statuses" author="liquibase">
-<!--        <sqlFile dbms="postgresql"-->
-<!--                 encoding="UTF-8"-->
-<!--                 path="sql/transaction_statuses.sql"-->
-<!--                 relativeToChangelogFile="true"/>-->
         <loadUpdateData
                 tableName="transaction_statuses"
                 file="csv/transaction_statuses.csv"

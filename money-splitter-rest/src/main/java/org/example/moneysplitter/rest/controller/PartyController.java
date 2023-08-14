@@ -6,7 +6,7 @@ import org.example.moneysplitter.rest.dto.spending.SpendingDto;
 import org.example.moneysplitter.rest.dto.party.CreatePartyRequestDto;
 import org.example.moneysplitter.rest.dto.party.PartyDto;
 import org.example.moneysplitter.rest.dto.transaction.TransactionDto;
-import org.example.moneysplitter.rest.dto.transaction.UpdateTransactionStatusRequestDto;
+import org.example.moneysplitter.rest.dto.transaction.UpdateTransactionRequestDto;
 import org.example.moneysplitter.rest.mapper.*;
 import org.example.moneysplitter.rest.model.Party;
 import org.example.moneysplitter.rest.model.PartyParticipant;
@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+
+import static org.example.moneysplitter.rest.dto.transaction.UpdateTransactionRequestDto.Operation.UPDATE_STATUS;
 
 @RestController
 @RequestMapping("/parties")
@@ -69,6 +71,7 @@ public class PartyController {
                 .fromDTO(participantDto)
                 .withPartyId(partyId);
         participant = partyService.saveParticipant(participant);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(participantMapper.toDTO(participant));
@@ -92,10 +95,6 @@ public class PartyController {
 
     @GetMapping(value = "/{partyId}/spendings")
     public List<SpendingDto> getSpendings(@PathVariable UUID partyId) {
-//        return partyService.findSpendingsByPartyId(partyId)
-//                .stream()
-//                .map(SpendingMapper::toDto)
-//                .collect(Collectors.toUnmodifiableList());
         return spendingMapper.toDTOs(partyService.findSpendingsByPartyId(partyId));
     }
 
@@ -104,8 +103,6 @@ public class PartyController {
             @PathVariable UUID partyId,
             @RequestBody SpendingDto request
     ) {
-//        PartySpending spending = SpendingMapper1.fromRequestDto(request).withPartyId(partyId);
-//        return SpendingMapper1.toDto(partyService.saveSpending(spending));
         PartySpending spending = spendingMapper.fromDTO(request).withPartyId(partyId);
         return spendingMapper.toDTO(partyService.saveSpending(spending));
     }
@@ -125,11 +122,17 @@ public class PartyController {
     }
 
     @PatchMapping(value = "/{partyId}/transactions/{transactionId}")
-    public void updateTransactionStatus(
+    public ResponseEntity<Void> updateTransactionStatus(
             @PathVariable UUID partyId,
             @PathVariable UUID transactionId,
-            @RequestBody UpdateTransactionStatusRequestDto request
+            @RequestBody UpdateTransactionRequestDto request
     ) {
-        partyService.updateTransactionStatus(partyId, transactionId, PartyTransaction.Status.valueOf(request.getStatus()));
+        switch (request.getOperation()) {
+            case UPDATE_STATUS:
+                partyService.updateTransactionStatus(partyId, transactionId, PartyTransaction.Status.valueOf(request.getValue()));
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            default:
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
     }
 }

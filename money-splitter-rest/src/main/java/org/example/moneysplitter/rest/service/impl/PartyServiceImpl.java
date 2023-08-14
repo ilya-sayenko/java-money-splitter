@@ -83,8 +83,7 @@ public class PartyServiceImpl implements PartyService {
         BigDecimal amount = partyDao.findSpendingAmountById(spendingId).orElse(BigDecimal.ZERO);
         partyDao.deleteSpendingById(spendingId);
         partyDao.decreasePartyAmount(partyId, amount);
-        // todo check transactions after deleting
-//        updateTransactions(partyId);
+        updateTransactions(partyId);
     }
 
     @Override
