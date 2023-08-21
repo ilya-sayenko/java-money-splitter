@@ -1,4 +1,4 @@
-package org.example.moneysplitter.party;
+package org.example.moneysplitter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
