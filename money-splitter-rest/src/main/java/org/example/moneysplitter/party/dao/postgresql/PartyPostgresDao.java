@@ -115,16 +115,6 @@ public class PartyPostgresDao implements PartyDao {
     }
 
     @Override
-    public void increasePartyAmount(UUID partyId, BigDecimal value) {
-        partyRepository.increasePartyAmount(partyId, value);
-    }
-
-    @Override
-    public void decreasePartyAmount(UUID partyId, BigDecimal value) {
-        partyRepository.decreasePartyAmount(partyId, value);
-    }
-
-    @Override
     public void saveTransactions(List<PartyTransaction> transactions) {
         transactionRepository.saveAll(transactionMapper.toEntities(transactions));
     }

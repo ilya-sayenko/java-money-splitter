@@ -35,10 +35,6 @@ public interface PartyDao {
 
     Optional<BigDecimal> findSpendingAmountById(UUID spendingId);
 
-    void increasePartyAmount(UUID partyId, BigDecimal value);
-
-    void decreasePartyAmount(UUID partyId, BigDecimal value);
-
     void saveTransactions(List<PartyTransaction> transactions);
 
     void deleteTransactionsByPartyId(UUID partyId);
