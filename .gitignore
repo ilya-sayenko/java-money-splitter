@@ -3,6 +3,9 @@ money-splitter-rest/target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+money-splitter-console/target
+money-splitter-core/target
+money-splitter-rest/target
 
 ### STS ###
 .apt_generated

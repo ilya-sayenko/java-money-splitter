@@ -2,6 +2,7 @@ package org.example.moneysplitter.party.model;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class Party {
+public class Party implements Serializable {
     private UUID id;
     private String name;
     private String description;

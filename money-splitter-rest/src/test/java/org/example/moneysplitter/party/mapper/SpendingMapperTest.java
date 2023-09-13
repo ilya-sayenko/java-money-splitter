@@ -5,8 +5,10 @@ import org.example.moneysplitter.party.dao.postgresql.entity.SpendingEntity;
 import org.example.moneysplitter.party.dto.spending.SpendingDto;
 import org.example.moneysplitter.party.model.PartySpending;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +18,10 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
+@SpringBootTest(classes = {
+        SpendingMapperImpl.class,
+        ProportionMapperImpl.class
+})
 public class SpendingMapperTest {
     @Autowired
     private SpendingMapper mapper;

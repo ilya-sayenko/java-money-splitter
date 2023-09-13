@@ -34,7 +34,8 @@ public class SpendingEntity {
     @Column(name = "amount")
     BigDecimal amount;
 
-    @Column(name = "sptp_sptp_id")
+    @Column(name = "split_type")
+    @Enumerated(EnumType.STRING)
     SplitType splitType;
 
     @Setter

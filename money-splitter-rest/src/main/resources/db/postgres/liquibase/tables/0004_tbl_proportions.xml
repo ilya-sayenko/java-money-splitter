@@ -2,12 +2,8 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="tbl_create_proportions" author="liquibase">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -22,7 +18,6 @@
             <column name="prnt_prnt_id" type="uuid"/>
             <column name="proportion" type="numeric"/>
             <column name="amount" type="numeric"/>
-            <column name="sptp_sptp_id" type="integer"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="proportions"

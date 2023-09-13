@@ -2,12 +2,8 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="tbl_create_transactions" author="liquibase">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -22,7 +18,7 @@
             <column name="from_prnt_id" type="uuid"/>
             <column name="to_prnt_id" type="uuid"/>
             <column name="amount" type="numeric"/>
-            <column name="trst_trst_id" type="integer"/>
+            <column name="status" type="varchar(50)"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="transactions"
@@ -42,11 +38,5 @@
                 referencedTableName="participants"
                 referencedColumnNames="prnt_id"
                 constraintName="transactions_to_prnt_id_fkey"/>
-        <addForeignKeyConstraint
-                baseTableName="transactions"
-                baseColumnNames="trst_trst_id"
-                referencedTableName="transaction_statuses"
-                referencedColumnNames="trst_id"
-                constraintName="transactions_trst_trst_id_fkey"/>
     </changeSet>
 </databaseChangeLog>

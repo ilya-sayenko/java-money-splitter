@@ -1,10 +1,15 @@
 package org.example.moneysplitter.party.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.example.moneysplitter.cache.dao.CacheDao;
+import org.example.moneysplitter.cache.model.Cache;
 import org.example.moneysplitter.core.data.InputData;
 import org.example.moneysplitter.core.data.OutputData;
 import org.example.moneysplitter.core.model.Spending;
 import org.example.moneysplitter.core.splitter.MoneySplitter;
+import org.example.moneysplitter.exception.GlobalAppException;
 import org.example.moneysplitter.party.dao.PartyDao;
 import org.example.moneysplitter.party.exception.PartyNotFoundException;
 import org.example.moneysplitter.party.model.Party;
@@ -13,6 +18,7 @@ import org.example.moneysplitter.party.model.PartySpending;
 import org.example.moneysplitter.party.model.PartyTransaction;
 import org.example.moneysplitter.party.service.PartyService;
 import org.example.moneysplitter.party.service.impl.proportion.ProportionCalculatorFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +31,35 @@ import java.util.stream.Collectors;
 @Transactional
 public class PartyServiceImpl implements PartyService {
     private final PartyDao partyDao;
+    private final CacheDao cacheDao;
     private final ProportionCalculatorFactory proportionCalculatorFactory;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Party findPartyById(UUID id) {
-        return partyDao.findPartyById(id).orElseThrow(PartyNotFoundException::new);
+        Cache cache = cacheDao.findById(id).orElseThrow(PartyNotFoundException::new);
+        try {
+            return objectMapper.readValue(cache.getData(), Party.class);
+        } catch (JsonProcessingException e) {
+            throw new GlobalAppException("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR, -1007);
+        }
     }
 
     @Override
     public Party saveParty(Party party) {
-        return partyDao.saveParty(party);
+        Party savedParty = partyDao.saveParty(party);
+        try {
+            cacheDao.save(
+                    Cache.builder()
+                            .id(savedParty.getId())
+                            .type(Cache.Type.PARTY)
+                            .data(objectMapper.writeValueAsString(savedParty))
+                            .build()
+            );
+        } catch (JsonProcessingException e) {
+            throw new GlobalAppException("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR, -1007);
+        }
+        return savedParty;
     }
 
     @Override
@@ -67,8 +92,21 @@ public class PartyServiceImpl implements PartyService {
         spendingForSave = partyDao.saveSpending(spendingForSave);
 
         UUID partyId = spending.getPartyId();
-        partyDao.increasePartyAmount(partyId, spending.getAmount());
         updateTransactions(partyId);
+
+        Party party = partyDao.findPartyById(partyId).orElseThrow(PartyNotFoundException::new);
+        party = party.withTotalAmount(party.getTotalAmount().add(spendingForSave.getAmount()));
+        try {
+            cacheDao.save(
+                    Cache.builder()
+                            .id(partyId)
+                            .type(Cache.Type.PARTY)
+                            .data(objectMapper.writeValueAsString(party))
+                            .build()
+            );
+        } catch (JsonProcessingException e) {
+            throw new GlobalAppException("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR, -1007);
+        }
 
         return spendingForSave;
     }
@@ -82,7 +120,21 @@ public class PartyServiceImpl implements PartyService {
     public void deleteSpending(UUID partyId, UUID spendingId) {
         BigDecimal amount = partyDao.findSpendingAmountById(spendingId).orElse(BigDecimal.ZERO);
         partyDao.deleteSpendingById(spendingId);
-        partyDao.decreasePartyAmount(partyId, amount);
+
+        Party party = findPartyById(partyId);
+        party = party.withTotalAmount(party.getTotalAmount().subtract(amount));
+        try {
+            cacheDao.save(
+                    Cache.builder()
+                            .id(partyId)
+                            .type(Cache.Type.PARTY)
+                            .data(objectMapper.writeValueAsString(party))
+                            .build()
+            );
+        } catch (JsonProcessingException e) {
+            throw new GlobalAppException("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR, -1007);
+        }
+
         updateTransactions(partyId);
     }
 

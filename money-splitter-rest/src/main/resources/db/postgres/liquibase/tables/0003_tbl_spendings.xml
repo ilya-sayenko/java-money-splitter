@@ -2,12 +2,8 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="tbl_create_spendings" author="liquibase">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -22,7 +18,7 @@
             <column name="prnt_prnt_id" type="uuid"/>
             <column name="name" type="varchar(250)"/>
             <column name="amount" type="numeric"/>
-            <column name="sptp_sptp_id" type="integer"/>
+            <column name="split_type" type="varchar(50)"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="spendings"
@@ -36,11 +32,5 @@
                 referencedTableName="participants"
                 referencedColumnNames="prnt_id"
                 constraintName="spendings_prnt_prnt_id_fkey"/>
-        <addForeignKeyConstraint
-                baseTableName="spendings"
-                baseColumnNames="sptp_sptp_id"
-                referencedTableName="split_types"
-                referencedColumnNames="sptp_id"
-                constraintName="spendings_sptp_sptp_id_fkey"/>
     </changeSet>
 </databaseChangeLog>

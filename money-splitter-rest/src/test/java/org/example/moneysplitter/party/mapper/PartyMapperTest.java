@@ -34,18 +34,16 @@ public class PartyMapperTest {
         assertEquals(model.getId(), entity.getId());
         assertEquals(model.getName(), entity.getName());
         assertEquals(model.getDescription(), entity.getDescription());
-        assertEquals(model.getTotalAmount(), entity.getTotalAmount());
     }
 
     @Test
     void shouldMapFromEntity() {
-        PartyEntity entity = new PartyEntity(UUID.randomUUID(), "Name", "Description", BigDecimal.ZERO);
+        PartyEntity entity = new PartyEntity(UUID.randomUUID(), "Name", "Description");
         Party model = mapper.fromEntity(entity);
 
         assertEquals(model.getId(), entity.getId());
         assertEquals(model.getName(), entity.getName());
         assertEquals(model.getDescription(), entity.getDescription());
-        assertEquals(model.getTotalAmount(), entity.getTotalAmount());
     }
 
     @Test

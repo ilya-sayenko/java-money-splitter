@@ -13,21 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        log.warn("Validation error");
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-
-        return ResponseEntity
-                .status(badRequest)
-                .body(ErrorResponse.builder()
-                        .status(badRequest.value())
-                        .errorCode(-1003)
-                        .errorMessage("Validation error")
-                        .build());
+    public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException ex) {
+        return handleException(new GlobalAppException("Validation error", HttpStatus.BAD_REQUEST, -1003));
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleGlobalAppException(GlobalAppException ex) {
+    public ResponseEntity<ErrorResponse> handleException(GlobalAppException ex) {
         log.warn(ex.getMessage());
 
         return ResponseEntity

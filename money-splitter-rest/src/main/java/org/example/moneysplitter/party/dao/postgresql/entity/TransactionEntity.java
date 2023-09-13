@@ -35,7 +35,8 @@ public class TransactionEntity {
     @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name = "trst_trst_id")
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public enum Status {
