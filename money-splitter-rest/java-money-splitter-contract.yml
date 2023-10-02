@@ -1,0 +1,563 @@
+openapi: '3.0.3'
+info:
+  title: Rest kitty split
+  version: 0.0.2
+tags:
+  - name: parties
+    description: Методы для работы с коллекциями трат, объединенных в parties
+  - name: participants
+    description: Методы для работы с участниками
+  - name: spendings
+    description: Методы для работы с тратами
+  - name: transactions
+    description: Методы для работы по взаиморасчетам
+paths:
+  /parties:
+    post:
+      tags:
+        - parties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePartyRequest'
+      responses:
+        '201':
+          description: Party created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        '400':
+          description: Incorrect data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /parties/{partyId}:
+    get:
+      tags:
+        - parties
+      parameters:
+        - name: partyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /parties/{partyId}/participants:
+    put:
+      tags:
+        - participants
+      parameters:
+        - name: partyId
+          schema:
+            type: string
+          description: ID party
+          in: path
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePartyParticipantRequest'
+      responses:
+        '201':
+          description: Participant created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyParticipant'
+        '200':
+          description: Participant updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyParticipant'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Incorrect data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /parties/{partyId}/participants/{participantId}:
+    delete:
+      tags:
+        - participants
+      parameters:
+        - name: partyId
+          description: ID party
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: participantId
+          description: ID участника
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Participant deleted
+        '400':
+          description: Incorrect delete (когда у участника есть траты)
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /parties/{partyId}/spendings:
+    get:
+      parameters:
+        - name: partyId
+          schema:
+            type: string
+          required: true
+          in: path
+      tags:
+        - spendings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Spending'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      parameters:
+        - name: partyId
+          schema:
+            type: string
+          required: true
+          in: path
+      tags:
+        - spendings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSpendingRequest'
+      responses:
+        '201':
+          description: Spending created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Spending'
+        '200':
+          description: Spending updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Spending'
+        '400':
+          description: Incorrect data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /parties/{partyId}/spendings/{spendingId}:
+    delete:
+      parameters:
+        - name: partyId
+          schema:
+            type: string
+          required: true
+          in: path
+        - name: spendingId
+          schema:
+            type: string
+          required: true
+          in: path
+      tags:
+        - spendings
+      responses:
+        '204':
+          description: Participant deleted
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /parties/{partyId}/transactions:
+    get:
+      parameters:
+        - name: partyId
+          schema:
+            type: string
+          required: true
+          in: path
+      tags:
+        - transactions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /parties/{partyId}/transactions/{transactionId}:
+    patch:
+      parameters:
+        - name: partyId
+          schema:
+            type: string
+          required: true
+          in: path
+        - name: transactionId
+          schema:
+            type: string
+          required: true
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTransactionStatusRequest'
+      tags:
+        - transactions
+      responses:
+        '204':
+          description: Status changed
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Incorrect data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Party:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID в формате UUID
+        name:
+          type: string
+          description: Название party
+        description:
+          type: string
+          description: Описание party
+          default: ''
+        totalAmount:
+          type: string
+          description: Общая сумма трат
+          default: '0.0'
+    CreatePartyRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Название party
+        description:
+          type: string
+          description: Описание party
+          default: ''
+    PartyParticipant:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    UpdatePartyParticipantRequest:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Spending:
+      type: object
+      description: Описание одной покупки
+      required:
+        - id
+        - name
+        - amount
+        - split
+        - amounts
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: На что потрачены деньги
+        amount:
+          type: string
+          description: Потраченная сумма (BigDecimal)
+        split:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/EqualSplit'
+            - $ref: '#/components/schemas/AmountSplit'
+            - $ref: '#/components/schemas/PartitionSplit'
+          discriminator:
+            propertyName: splitType
+            mapping:
+              equal: '#/components/schemas/EqualSplit'
+              amount: '#/components/schemas/AmountSplit'
+              partition: '#/components/schemas/PartitionSplit'
+        amounts:
+          type: object
+          description: Ассоциативный массив с ключом – id участника, значением – суммой, потраченной на участника
+          additionalProperties:
+            type: string
+    UpdateSpendingRequest:
+      type: object
+      description: Описание одной покупки
+      required:
+        - name
+        - amount
+        - split
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: На что потрачены деньги
+        amount:
+          type: string
+          description: Потраченная сумма (BigDecimal)
+        split:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/EqualSplit'
+            - $ref: '#/components/schemas/AmountSplit'
+            - $ref: '#/components/schemas/PartitionSplit'
+          discriminator:
+            propertyName: splitType
+            mapping:
+              equal: '#/components/schemas/EqualSplit'
+              amount: '#/components/schemas/AmountSplit'
+              partition: '#/components/schemas/PartitionSplit'
+    EqualSplit:
+      type: object
+      description: Поровну поделено между всеми участниками
+      properties:
+        splitType:
+          type: string
+    AmountSplit:
+      type: object
+      description: Указана точная сумма, потраченная на каждого участника
+      properties:
+        splitType:
+          type: string
+        participants:
+          type: object
+          description: Ассоциативный массив с ключом – id участника, значением – суммой, потраченной на участника
+          additionalProperties:
+            type: string
+    PartitionSplit:
+      type: object
+      description: Указана пропорции на каждого участника
+      properties:
+        splitType:
+          type: string
+        participants:
+          type: object
+          description: Ассоциативный массив с ключом – id участника, значением – значением пропорции, потраченной на
+            участника
+          additionalProperties:
+            type: number
+            format: double
+    Transaction:
+      type: object
+      description: Взаиморасчет
+      properties:
+        id:
+          type: string
+          description: Лучше использовать id вида '{id кто должен}-{id кому должен}, потому как сущность генерится в
+            зависимости от трат'
+        payer:
+          type: string
+          description: id плательщика
+        payee:
+          type: string
+          description: id получателя
+        amount:
+          type: string
+          description: Сумма транзакции
+        status:
+          type: string
+          description: Статус транзакции
+          enum:
+            - PENDING
+            - CLOSED
+    UpdateTransactionStatusRequest:
+      type: object
+      description: Запрос на обновление статуса взаиморасчета
+      properties:
+        status:
+          type: string
+          enum:
+            - PENDING
+            - CLOSED
+          description: Новое значение статуса
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: 'Числовой код ошибки, например -1003. Необходимо, чтобы для каждой ошибки был уникальный код. Для
+           неизвестных можно сделать общий код -1'
+        errorMessage:
+          type: string
+          description: 'Текстовое описание ошибки. Важно далеко не все детали ошибки указывать в тексте, потому что 
+            именно этот текст должен видеть пользователь.'

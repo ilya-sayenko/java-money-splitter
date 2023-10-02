@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="tbl_create_cache" author="liquibase">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="cache"/>
+            </not>
+        </preConditions>
+        <createTable tableName="cache">
+            <column name="entity_id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="cache_type" type="varchar(50)"/>
+            <column name="data" type="jsonb"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
