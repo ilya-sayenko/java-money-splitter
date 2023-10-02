@@ -1,6 +1,7 @@
 package org.example.moneysplitter.party.dao.postgresql;
 
 import lombok.RequiredArgsConstructor;
+import org.example.moneysplitter.party.cache.PartyCache;
 import org.example.moneysplitter.party.dao.PartyDao;
 import org.example.moneysplitter.party.dao.postgresql.entity.*;
 import org.example.moneysplitter.party.dao.postgresql.repository.*;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class PartyPostgresDao implements PartyDao {
+    private final PartyCache partyCache;
     private final PartyRepository partyRepository;
     private final ParticipantRepository participantRepository;
     private final SpendingRepository spendingRepository;
@@ -35,13 +37,23 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public Optional<Party> findPartyById(UUID id) {
-        return partyRepository.findById(id).map(partyMapper::fromEntity);
+        final Optional<Party> cachedParty = partyCache.fetchPartyFromCache(id);
+        if (cachedParty.isPresent()) {
+            return cachedParty;
+        }
+        final Optional<Party> party = partyRepository.findById(id).map(partyMapper::fromEntity);
+        if (party.isPresent()) {
+            partyCache.putPartyToCache(party.get());
+            return party;
+        }
+        return Optional.empty();
     }
 
     @Override
     public Party saveParty(Party party) {
         PartyEntity partyEntity = partyMapper.toEntity(party);
         partyRepository.save(partyEntity);
+        partyCache.putPartyToCache(party.withId(partyEntity.getId()));
 
         return partyMapper.fromEntity(partyEntity);
     }

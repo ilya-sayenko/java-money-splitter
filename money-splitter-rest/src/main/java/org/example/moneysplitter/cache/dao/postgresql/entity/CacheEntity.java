@@ -3,10 +3,7 @@ package org.example.moneysplitter.cache.dao.postgresql.entity;
 import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Getter
@@ -22,6 +19,7 @@ public class CacheEntity {
     private UUID id;
 
     @Column(name = "cache_type")
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     @Column(name = "data", columnDefinition = "jsonb")
@@ -29,6 +27,6 @@ public class CacheEntity {
     private String data;
 
     public enum Type {
-        PARTY
+        UNKNOWN, PARTY
     }
 }

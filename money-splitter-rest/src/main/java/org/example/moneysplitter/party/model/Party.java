@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Party implements Serializable {
+    @With
     private UUID id;
     private String name;
     private String description;

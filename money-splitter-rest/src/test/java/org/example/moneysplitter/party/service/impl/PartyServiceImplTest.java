@@ -263,4 +263,25 @@ class PartyServiceImplTest {
         assertEquals(participantTwoId, transactionFromFourToTwo.getPayeeId());
         assertEquals(0, BigDecimal.valueOf(200).compareTo(transactionFromFourToTwo.getAmount()));
     }
+
+    @Test
+    void shouldChangePartyAmount() {
+        Party savedParty = partyService.saveParty(party);
+        UUID partyId = savedParty.getId();
+        PartyParticipant participantOne = partyService.saveParticipant(participant.withPartyId(partyId));
+        UUID participantOneId = participantOne.getId();
+        assertEquals(BigDecimal.ZERO, savedParty.getTotalAmount());
+        PartySpending savedSpending = partyService.saveSpending(
+                PartySpending.builder()
+                        .partyId(partyId)
+                        .payerId(participantOneId)
+                        .name("Milk")
+                        .amount(BigDecimal.valueOf(800))
+                        .splitType(PartySpending.SplitType.EQUAL)
+                        .build()
+        );
+        assertEquals(BigDecimal.valueOf(800), partyService.findPartyById(partyId).getTotalAmount());
+        partyService.deleteSpending(savedSpending.getPartyId(), savedSpending.getId());
+        assertEquals(BigDecimal.ZERO, partyService.findPartyById(partyId).getTotalAmount());
+    }
 }

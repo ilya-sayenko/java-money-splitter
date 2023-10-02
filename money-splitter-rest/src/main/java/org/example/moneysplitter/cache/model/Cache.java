@@ -9,12 +9,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cache {
+public class Cache<T> {
     private UUID id;
-    private Type type;
-    private String data;
-
-    public enum Type {
-        PARTY
-    }
+    private T data;
 }
