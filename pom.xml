@@ -13,12 +13,14 @@
         <module>money-splitter-console</module>
         <module>money-splitter-rest</module>
         <module>money-splitter-core</module>
+        <module>money-splitter-telegram-bot</module>
     </modules>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lombok.version>1.18.26</lombok.version>
     </properties>
 
     <dependencies>
@@ -26,8 +28,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
-<!--            <scope>provided</scope>-->
+            <version>${lombok.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->

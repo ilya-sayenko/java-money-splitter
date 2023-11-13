@@ -6,6 +6,7 @@ money-splitter-rest/target/
 money-splitter-console/target
 money-splitter-core/target
 money-splitter-rest/target
+money-splitter-telegram-bot/target
 
 ### STS ###
 .apt_generated
@@ -34,3 +35,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/.idea/
