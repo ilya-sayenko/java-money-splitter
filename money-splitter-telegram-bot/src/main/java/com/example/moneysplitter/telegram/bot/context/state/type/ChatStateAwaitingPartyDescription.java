@@ -18,6 +18,8 @@ public class ChatStateAwaitingPartyDescription extends ChatState {
     @Override
     public void onReceived(Update upd) {
         data.setPartyDescription(upd.getMessage().getText());
+        // todo send http or kafka message ?
+        // kafkaTemplate.send("money-splitter-topic", "new message");
     }
 
     @Override

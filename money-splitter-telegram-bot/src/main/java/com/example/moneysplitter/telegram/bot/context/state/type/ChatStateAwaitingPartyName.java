@@ -19,7 +19,7 @@ public class ChatStateAwaitingPartyName extends ChatState {
     public void onReceived(Update upd) {
         Long currentChatId = AbilityUtils.getChatId(upd);
         data.setPartyName(upd.getMessage().getText());
-        bot.silent().send("Enter party description", currentChatId);
+        bot.silent().send("Enter party description:", currentChatId);
         bot.getContext().setChatState(currentChatId, new ChatStateAwaitingPartyDescription(this));
     }
 

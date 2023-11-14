@@ -8,6 +8,7 @@ import com.example.moneysplitter.telegram.bot.context.state.type.ChatStateAwaiti
 import com.example.moneysplitter.telegram.bot.context.state.type.ChatStateStart;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
@@ -29,10 +30,17 @@ public class TelegramBot extends AbilityBot {
     @Getter
     private final Context context;
 
+    private final KafkaTemplate<Long, String> kafkaTemplate;
+
     @Autowired
-    public TelegramBot(BotConfig botConfig, Context context) {
+    public TelegramBot(
+            BotConfig botConfig,
+            Context context,
+            KafkaTemplate<Long, String> kafkaTemplate
+    ) {
         super(botConfig.getToken(), botConfig.getBotName());
         this.context = context;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
