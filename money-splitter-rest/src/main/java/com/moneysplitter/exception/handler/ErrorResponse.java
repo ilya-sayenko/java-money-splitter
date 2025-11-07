@@ -10,9 +10,11 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class ErrorResponse {
+
     @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
+
     private int status;
-    private int errorCode;
+
     private String errorMessage;
 }

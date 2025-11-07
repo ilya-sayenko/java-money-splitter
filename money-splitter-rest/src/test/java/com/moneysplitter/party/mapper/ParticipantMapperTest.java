@@ -1,22 +1,20 @@
 package com.moneysplitter.party.mapper;
 
-import org.example.moneysplitter.party.dao.postgresql.entity.ParticipantEntity;
-import org.example.moneysplitter.party.dto.participant.ParticipantDto;
-import org.example.moneysplitter.party.model.PartyParticipant;
+import com.moneysplitter.dao.postgresql.entity.ParticipantEntity;
+import com.moneysplitter.mapper.ParticipantMapper;
+import com.moneysplitter.party.model.PartyParticipant;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ParticipantMapperTest {
     private final ParticipantMapper mapper = Mappers.getMapper(ParticipantMapper.class);
 
     @Test
-    void shouldMapToDto() {
+    void shouldMapToResponse() {
         PartyParticipant model = new PartyParticipant(UUID.randomUUID(), UUID.randomUUID(), "Name");
-        ParticipantDto dto = mapper.toDTO(model);
+        ParticipantDto dto = mapper.toResponse(model);
 
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getName(), dto.getName());

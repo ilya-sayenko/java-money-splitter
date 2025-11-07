@@ -1,8 +1,8 @@
 package com.moneysplitter.party.mapper;
 
-import org.example.moneysplitter.party.dao.postgresql.entity.TransactionEntity;
-import org.example.moneysplitter.party.dto.transaction.TransactionDto;
-import org.example.moneysplitter.party.model.PartyTransaction;
+import com.moneysplitter.dao.postgresql.entity.TransactionEntity;
+import com.moneysplitter.mapper.TransactionMapper;
+import com.moneysplitter.party.model.PartyTransaction;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -15,7 +15,7 @@ public class TransactionMapperTest {
     private final TransactionMapper mapper = Mappers.getMapper(TransactionMapper.class);
 
     @Test
-    void shouldMapToDto() {
+    void shouldMapToResponse() {
         PartyTransaction model = new PartyTransaction(
                 UUID.randomUUID(),
                 UUID.randomUUID(),
@@ -23,7 +23,7 @@ public class TransactionMapperTest {
                 UUID.randomUUID(),
                 BigDecimal.ZERO,
                 PartyTransaction.Status.PENDING);
-        TransactionDto dto = mapper.toDTO(model);
+        TransactionDto dto = mapper.toResponse(model);
 
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getPayerId(), dto.getPayer());
@@ -40,7 +40,7 @@ public class TransactionMapperTest {
                 UUID.randomUUID(),
                 BigDecimal.ZERO,
                 TransactionEntity.Status.PENDING);
-        PartyTransaction model = mapper.fromEntities(entity);
+        PartyTransaction model = mapper.fromEntity(entity);
 
         assertEquals(entity.getId(), model.getId());
         assertEquals(entity.getPartyId(), model.getPartyId());

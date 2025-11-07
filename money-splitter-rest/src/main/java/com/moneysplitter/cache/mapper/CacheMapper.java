@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moneysplitter.cache.dao.postgresql.entity.CacheEntity;
 import com.moneysplitter.cache.exception.IncorrectCacheException;
 import com.moneysplitter.cache.model.Cache;
-import com.moneysplitter.party.model.Party;
+import com.moneysplitter.model.Party;
 import org.mapstruct.Mapper;
 
 import static com.moneysplitter.cache.dao.postgresql.entity.CacheEntity.Type.PARTY;

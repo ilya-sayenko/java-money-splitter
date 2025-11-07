@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException ex) {
-        return handleException(new GlobalAppException("Validation error", HttpStatus.BAD_REQUEST, -1003));
+        return handleException(new GlobalAppException("Validation error", HttpStatus.BAD_REQUEST));
     }
 
     @ExceptionHandler
@@ -26,7 +26,6 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse
                         .builder()
                         .status(ex.getHttpStatus().value())
-                        .errorCode(ex.getErrorCode())
                         .errorMessage(ex.getMessage())
                         .build());
     }

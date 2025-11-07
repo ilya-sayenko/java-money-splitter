@@ -1,14 +1,12 @@
 package com.moneysplitter.party.mapper;
 
-import org.example.moneysplitter.party.dao.postgresql.entity.ProportionEntity;
-import org.example.moneysplitter.party.dao.postgresql.entity.SpendingEntity;
-import org.example.moneysplitter.party.dto.spending.SpendingDto;
+import com.moneysplitter.dao.postgresql.entity.ProportionEntity;
+import com.moneysplitter.dao.postgresql.entity.SpendingEntity;
+import com.moneysplitter.mapper.SpendingMapper;
 import org.example.moneysplitter.party.model.PartySpending;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,7 +25,7 @@ public class SpendingMapperTest {
     private SpendingMapper mapper;
 
     @Test
-    void shouldMapEqualSplitToDto() {
+    void shouldMapEqualSplitToResponse() {
         UUID participantOneId = UUID.randomUUID();
         UUID participantTwoId = UUID.randomUUID();
         PartySpending model = PartySpending
@@ -43,7 +41,7 @@ public class SpendingMapperTest {
                         participantTwoId, PartySpending.Portion.builder().amount(BigDecimal.valueOf(50)).build()
                 ))
                 .build();
-        SpendingDto dto = mapper.toDTO(model);
+        SpendingDto dto = mapper.toResponse(model);
 
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getPayerId(), dto.getPayerId());
@@ -55,7 +53,7 @@ public class SpendingMapperTest {
     }
 
     @Test
-    void shouldMapAmountSplitToDto() {
+    void shouldMapAmountSplitToResponse() {
         UUID participantOneId = UUID.randomUUID();
         UUID participantTwoId = UUID.randomUUID();
         PartySpending model = PartySpending
@@ -71,7 +69,7 @@ public class SpendingMapperTest {
                         participantTwoId, PartySpending.Portion.builder().amount(BigDecimal.valueOf(100)).build()
                 ))
                 .build();
-        SpendingDto dto = mapper.toDTO(model);
+        SpendingDto dto = mapper.toResponse(model);
 
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getPayerId(), dto.getPayerId());
@@ -83,7 +81,7 @@ public class SpendingMapperTest {
     }
 
     @Test
-    void shouldMapPartitionSplitToDto() {
+    void shouldMapPartitionSplitToResponse() {
         UUID participantOneId = UUID.randomUUID();
         UUID participantTwoId = UUID.randomUUID();
         PartySpending model = PartySpending
@@ -99,7 +97,7 @@ public class SpendingMapperTest {
                         participantTwoId, PartySpending.Portion.builder().portion(BigDecimal.valueOf(0.5)).amount(BigDecimal.valueOf(50)).build()
                 ))
                 .build();
-        SpendingDto dto = mapper.toDTO(model);
+        SpendingDto dto = mapper.toResponse(model);
 
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getPayerId(), dto.getPayerId());
@@ -181,7 +179,7 @@ public class SpendingMapperTest {
     }
 
     @Test
-    void shouldMapFromDto() {
+    void shouldMapFromCreateRequest() {
         UUID participantOneId = UUID.randomUUID();
         UUID participantTwoId = UUID.randomUUID();
         SpendingDto dto = SpendingDto.builder()
@@ -197,7 +195,7 @@ public class SpendingMapperTest {
                                 participantTwoId, BigDecimal.valueOf(50)))
                         .build())
                 .build();
-        PartySpending model = mapper.fromDTO(dto);
+        PartySpending model = mapper.fromCreateRequest(dto);
 
         assertEquals(dto.getId(), model.getId());
         assertEquals(dto.getPayerId(), model.getPayerId());

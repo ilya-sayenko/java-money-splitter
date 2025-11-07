@@ -1,9 +1,8 @@
 package com.moneysplitter.party.mapper;
 
-import org.example.moneysplitter.party.dao.postgresql.entity.PartyEntity;
-import org.example.moneysplitter.party.dto.party.CreatePartyRequestDto;
-import org.example.moneysplitter.party.dto.party.PartyDto;
-import org.example.moneysplitter.party.model.Party;
+import com.moneysplitter.dao.postgresql.entity.PartyEntity;
+import com.moneysplitter.mapper.PartyMapper;
+import com.moneysplitter.party.model.Party;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -16,9 +15,9 @@ public class PartyMapperTest {
     private final PartyMapper mapper = Mappers.getMapper(PartyMapper.class);
 
     @Test
-    void shouldMapToDto() {
+    void shouldMapToResponse() {
         Party model = new Party(UUID.randomUUID(), "Name", "Description", BigDecimal.ZERO);
-        PartyDto dto = mapper.toDTO(model);
+        PartyDto dto = mapper.toResponse(model);
 
         assertEquals(model.getId(), dto.getId());
         assertEquals(model.getName(), dto.getName());
@@ -47,9 +46,9 @@ public class PartyMapperTest {
     }
 
     @Test
-    void shouldMapFromCreateRequestDto() {
+    void shouldMapFromCreateRequest() {
         CreatePartyRequestDto request = new CreatePartyRequestDto("Name", "Description");
-        Party model = mapper.fromCreateRequestDTO(request);
+        Party model = mapper.fromCreateRequest(request);
 
         assertEquals(request.getName(), model.getName());
         assertEquals(request.getDescription(), model.getDescription());

@@ -17,6 +17,7 @@ import java.util.UUID;
 public abstract class AbstractCachePostgresDao<T, K> implements CacheDao<T> {
 
     private final CacheRepository cacheRepository;
+
     private final CacheMapper cacheMapper;
 
     @Override
