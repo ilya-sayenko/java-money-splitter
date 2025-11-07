@@ -1,10 +1,10 @@
 package org.example.moneysplitter.party.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.moneysplitter.core.data.InputData;
-import org.example.moneysplitter.core.data.OutputData;
-import org.example.moneysplitter.core.model.Spending;
-import org.example.moneysplitter.core.splitter.MoneySplitter;
+import com.moneysplitter.core.data.InputData;
+import com.moneysplitter.core.data.OutputData;
+import com.moneysplitter.core.model.Spending;
+import com.moneysplitter.core.splitter.MoneySplitter;
 import org.example.moneysplitter.party.dao.PartyDao;
 import org.example.moneysplitter.party.exception.PartyNotFoundException;
 import org.example.moneysplitter.party.model.Party;

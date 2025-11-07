@@ -1,9 +1,9 @@
 package util;
 
-import org.example.moneysplitter.core.data.InputData;
-import org.example.moneysplitter.core.data.OutputData;
+import com.moneysplitter.core.data.InputData;
+import com.moneysplitter.core.data.OutputData;
 import org.apache.commons.lang3.tuple.Pair;
-import org.example.moneysplitter.core.model.Spending;
+import com.moneysplitter.core.model.Spending;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TestData {
+
     public static List<String> getExpectedParticipants() {
         return List.of("Pasha", "Vasya", "Petya", "Dasha");
     }

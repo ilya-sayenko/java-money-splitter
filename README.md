@@ -1,3 +1,4 @@
 # Money splitter
-Аналог [Kitty Split](https://www.kittysplit.com/ru/). Сервис для разделения совместных затрат.
+[Kitty Split](https://www.kittysplit.com/ru/) analogue. Service for splitting bills.
+
 Stack: Java, Spring Boot, PostgreSQL.

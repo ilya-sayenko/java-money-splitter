@@ -1,0 +1,20 @@
+package com.moneysplitter.core.splitter;
+
+import com.moneysplitter.core.data.InputData;
+import com.moneysplitter.core.data.OutputData;
+import org.junit.jupiter.api.Test;
+import util.TestData;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class MoneySplitterTest {
+
+    @Test
+    public void shouldSplit() {
+        InputData inputData = TestData.getTestInputData();
+        OutputData outputData = MoneySplitter.split(inputData);
+        OutputData expectedOutputData = TestData.getExpectedOutputData();
+
+        assertEquals(expectedOutputData, outputData);
+    }
+}
