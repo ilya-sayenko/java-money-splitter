@@ -9,7 +9,7 @@ public record TransactionStatusUpdateRequest(
 
         UUID id,
 
-        String status // TODO enum
+        TransactionStatus status
 ) {
 }
 

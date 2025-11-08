@@ -54,7 +54,7 @@ public class SpendingPostgresDao implements SpendingDao {
     @Override
     @Transactional
     public void deleteSpendingById(UUID spendingId) {
-        proportionRepository.deleteBySpendingId(spendingId); // TODO возможно стоит вынести в сервисный слой
+        proportionRepository.deleteBySpendingId(spendingId);
         spendingRepository.deleteById(spendingId);
     }
 

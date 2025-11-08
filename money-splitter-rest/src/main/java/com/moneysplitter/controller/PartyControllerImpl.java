@@ -49,19 +49,17 @@ public class PartyControllerImpl implements PartyController {
 
     @PostMapping
     @Override
-    public PartyResponse createParty(@Valid @RequestBody PartyCreateRequest partyCreateRequest) {
+    public UUID createParty(@Valid @RequestBody PartyCreateRequest partyCreateRequest) {
         Party party = partyMapper.fromCreateRequest(partyCreateRequest);
-        return partyMapper.toResponse(partyService.createParty(party));
+        return partyService.createParty(party);
     }
 
     @PutMapping
     @Override
-    public PartyResponse updateParty(@Valid @RequestBody PartyUpdateRequest partyUpdateRequest) {
+    public void updateParty(@Valid @RequestBody PartyUpdateRequest partyUpdateRequest) {
         PartyUpdateData updateData = partyMapper.fromUpdateRequest(partyUpdateRequest);
-        return partyMapper.toResponse(partyService.updateParty(updateData));
+        partyService.updateParty(updateData);
     }
-
-    // TODO update party
 
     @GetMapping("/{partyId}/participants")
     @Override

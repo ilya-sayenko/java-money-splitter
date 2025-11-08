@@ -1,7 +1,6 @@
 package com.moneysplitter.controller;
 
 import com.moneysplitter.controller.data.ParticipantCreateRequest;
-import com.moneysplitter.controller.data.ParticipantResponse;
 import com.moneysplitter.controller.data.ParticipantUpdateRequest;
 import com.moneysplitter.mapper.ParticipantMapper;
 import com.moneysplitter.model.ParticipantUpdateData;
@@ -30,16 +29,16 @@ public class ParticipantControllerImpl implements ParticipantController {
 
     @PutMapping
     @Override
-    public ParticipantResponse updateParticipant(@Valid @RequestBody ParticipantUpdateRequest request) {
+    public void updateParticipant(@Valid @RequestBody ParticipantUpdateRequest request) {
         ParticipantUpdateData updateData = participantMapper.fromUpdateRequest(request);
-        return participantMapper.toResponse(partyService.updateParticipant(updateData));
+        partyService.updateParticipant(updateData);
     }
 
     @PostMapping
     @Override
-    public ParticipantResponse createParticipant(@Valid @RequestBody ParticipantCreateRequest request) {
+    public UUID createParticipant(@Valid @RequestBody ParticipantCreateRequest request) {
         PartyParticipant participant = participantMapper.fromCreateRequest(request);
-        return participantMapper.toResponse(partyService.createParticipant(participant));
+        return partyService.createParticipant(participant);
     }
 
     @DeleteMapping("/{participantId}")

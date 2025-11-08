@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
@@ -24,9 +23,8 @@ import java.util.UUID;
 public class PartyEntity {
 
     @Id
-    @Column(name = "party_id")
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id")
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
     @Column(name = "name")

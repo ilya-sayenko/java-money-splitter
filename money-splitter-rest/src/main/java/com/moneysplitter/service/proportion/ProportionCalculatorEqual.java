@@ -1,9 +1,9 @@
 package com.moneysplitter.service.proportion;
 
 import com.moneysplitter.dao.ParticipantDao;
-import com.moneysplitter.dao.PartyDao;
 import com.moneysplitter.model.PartyParticipant;
 import com.moneysplitter.model.PartySpending;
+import com.moneysplitter.model.SpendingPortion;
 import com.moneysplitter.model.SplitType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class ProportionCalculatorEqual implements ProportionCalculator {
     private final ParticipantDao participantDao;
 
     @Override
-    public Map<UUID, PartySpending.Portion> calculate(PartySpending spending) {
+    public Map<UUID, SpendingPortion> calculate(PartySpending spending) {
         List<PartyParticipant> participants = participantDao.findParticipantsByPartyId(spending.getPartyId());
         BigDecimal value = spending.getAmount().divide(BigDecimal.valueOf(participants.size()), SCALE, ROUNDING_MODE);
 
@@ -34,7 +34,7 @@ public class ProportionCalculatorEqual implements ProportionCalculator {
                 .stream()
                 .collect(Collectors.toMap(
                         PartyParticipant::getId,
-                        p -> PartySpending.Portion.builder().amount(value).build()));
+                        p -> SpendingPortion.builder().amount(value).build()));
     }
 
     @Override

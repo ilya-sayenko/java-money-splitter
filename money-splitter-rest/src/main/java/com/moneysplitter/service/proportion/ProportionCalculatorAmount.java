@@ -1,6 +1,7 @@
 package com.moneysplitter.service.proportion;
 
 import com.moneysplitter.model.PartySpending;
+import com.moneysplitter.model.SpendingPortion;
 import com.moneysplitter.model.SplitType;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 public class ProportionCalculatorAmount implements ProportionCalculator {
 
     @Override
-    public Map<UUID, PartySpending.Portion> calculate(PartySpending spending) {
+    public Map<UUID, SpendingPortion> calculate(PartySpending spending) {
         return new HashMap<>(spending.getProportions());
     }
 

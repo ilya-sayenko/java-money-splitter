@@ -14,12 +14,13 @@ import java.util.List;
 @Mapper(config = MapperConfig.class, uses = ProportionMapper.class, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface SpendingMapper {
 
-    @Mapping(target = "splitType", expression = "java(SplitType.valueOf(request.split().splitType().toUpperCase()))")
-    @Mapping(target = "proportions", expression = "java(proportionMapper.fromSplitDto(request.split()))")
+    @Mapping(target = "splitType", source = "split.splitType")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "proportions", expression = "java(proportionMapper.fromSplitRequest(request.split()))")
     PartySpending fromCreateRequest(SpendingCreateRequest request);
 
-    @Mapping(target = "split", expression = "java(proportionMapper.toSplitDto(spending))")
-    @Mapping(target = "amounts", expression = "java(proportionMapper.toAmountsDto(spending))")
+    @Mapping(target = "split", expression = "java(proportionMapper.toSplitResponse(spending))")
+    @Mapping(target = "amounts", expression = "java(proportionMapper.toAmountsResponse(spending))")
     SpendingResponse toResponse(PartySpending spending);
 
     List<SpendingResponse> toResponses(List<PartySpending> spending);

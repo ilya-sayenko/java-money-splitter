@@ -7,7 +7,6 @@ import com.moneysplitter.mapper.TransactionMapper;
 import com.moneysplitter.model.PartyTransaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +26,9 @@ public class TransactionPostgresDao implements TransactionDao {
     }
 
     @Override
-    public PartyTransaction saveTransaction(PartyTransaction transaction) {
+    public void saveTransaction(PartyTransaction transaction) {
         TransactionEntity transactionEntity = transactionMapper.toEntity(transaction);
         transactionRepository.save(transactionEntity);
-
-        return transactionMapper.fromEntity(transactionEntity);
     }
 
     @Override

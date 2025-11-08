@@ -22,6 +22,7 @@ public interface ParticipantMapper {
 
     List<ParticipantResponse> toResponses(List<PartyParticipant> participant);
 
+    @Mapping(target = "id", ignore = true)
     PartyParticipant fromCreateRequest(ParticipantCreateRequest request);
 
     ParticipantUpdateData fromUpdateRequest(ParticipantUpdateRequest request);

@@ -6,25 +6,25 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="tbl_create_proportions" author="liquibase">
         <createTable tableName="proportions">
-            <column name="prop_id" type="uuid">
+            <column name="id" type="uuid">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="spnd_spnd_id" type="uuid"/>
-            <column name="prnt_prnt_id" type="uuid"/>
+            <column name="spending_id" type="uuid"/>
+            <column name="participant_id" type="uuid"/>
             <column name="proportion" type="numeric"/>
             <column name="amount" type="numeric"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="proportions"
-                baseColumnNames="prnt_prnt_id"
+                baseColumnNames="participant_id"
                 referencedTableName="participants"
-                referencedColumnNames="prnt_id"
-                constraintName="proportions_prnt_prnt_id_fkey"/>
+                referencedColumnNames="id"
+                constraintName="proportions_participant_id_fkey"/>
         <addForeignKeyConstraint
                 baseTableName="proportions"
-                baseColumnNames="spnd_spnd_id"
+                baseColumnNames="spending_id"
                 referencedTableName="spendings"
-                referencedColumnNames="spnd_id"
-                constraintName="proportions_spnd_spnd_id_fkey"/>
+                referencedColumnNames="id"
+                constraintName="proportions_spending_id_fkey"/>
     </changeSet>
 </databaseChangeLog>

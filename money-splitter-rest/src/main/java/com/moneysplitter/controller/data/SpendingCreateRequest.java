@@ -26,7 +26,7 @@ public record SpendingCreateRequest(
     @Builder
     public record Split (
 
-            String splitType,
+            SplitType splitType,
 
             @JsonInclude(JsonInclude.Include.NON_NULL)
             Map<UUID, BigDecimal> participants

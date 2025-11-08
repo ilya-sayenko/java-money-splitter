@@ -1,7 +1,6 @@
 package com.moneysplitter.controller;
 
 import com.moneysplitter.controller.data.SpendingCreateRequest;
-import com.moneysplitter.controller.data.SpendingResponse;
 import com.moneysplitter.mapper.ParticipantMapper;
 import com.moneysplitter.mapper.PartyMapper;
 import com.moneysplitter.mapper.SpendingMapper;
@@ -35,14 +34,14 @@ public class SpendingsControllerImpl implements SpendingsController {
 
     @PostMapping
     @Override
-    public SpendingResponse createSpending(@RequestBody SpendingCreateRequest request) {
+    public UUID createSpending(@RequestBody SpendingCreateRequest request) {
         PartySpending spending = spendingMapper.fromCreateRequest(request);
-        return spendingMapper.toResponse(partyService.createSpending(spending));
+        return partyService.createSpending(spending);
     }
 
     @DeleteMapping("/{spendingId}")
     @Override
     public void deleteSpendingById(@PathVariable UUID spendingId) {
-        partyService.deleteSpendingById(spendingId); // TODO проверка дочерних сущностей
+        partyService.deleteSpendingById(spendingId);
     }
 }

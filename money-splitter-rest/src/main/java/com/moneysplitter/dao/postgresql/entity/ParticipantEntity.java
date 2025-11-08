@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
@@ -22,14 +21,13 @@ import java.util.UUID;
 public class ParticipantEntity {
 
     @Id
-    @Column(name = "prnt_id")
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator") // TODO
+    @Column(name = "id")
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "party_party_id")
+    @Column(name = "party_id")
     private UUID partyId;
 }

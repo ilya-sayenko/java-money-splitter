@@ -5,6 +5,7 @@ import com.moneysplitter.controller.data.SpendingCreateRequest;
 import com.moneysplitter.controller.data.SpendingResponse;
 import com.moneysplitter.dao.postgresql.entity.ProportionEntity;
 import com.moneysplitter.model.PartySpending;
+import com.moneysplitter.model.SpendingPortion;
 import com.moneysplitter.model.SplitType;
 import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.Mapper;
@@ -19,11 +20,11 @@ import java.util.stream.Collectors;
 @Mapper(config = MapperConfig.class)
 public interface ProportionMapper {
 
-    default List<ProportionEntity> toEntities(Map<UUID, PartySpending.Portion> proportions, UUID spendingId) {
+    default List<ProportionEntity> toEntities(Map<UUID, SpendingPortion> proportions, UUID spendingId) {
          return proportions.entrySet()
                  .stream()
                  .map(entry -> {
-                     PartySpending.Portion portion = entry.getValue();
+                     SpendingPortion portion = entry.getValue();
                      return ProportionEntity
                              .builder()
                              .participantId((entry.getKey()))
@@ -35,12 +36,12 @@ public interface ProportionMapper {
                  .collect(Collectors.toList());
     }
 
-    default Map<UUID, PartySpending.Portion> fromEntities(List<ProportionEntity> proportionEntities) {
+    default Map<UUID, SpendingPortion> fromEntities(List<ProportionEntity> proportionEntities) {
         return CollectionUtils.emptyIfNull(proportionEntities)
                 .stream()
                 .collect(Collectors.toMap(
                         ProportionEntity::getParticipantId,
-                        pe -> PartySpending.Portion
+                        pe -> SpendingPortion
                                 .builder()
                                 .portion(pe.getProportion())
                                 .amount(pe.getAmount())
@@ -48,25 +49,25 @@ public interface ProportionMapper {
                 ));
     }
 
-    default Map<UUID, PartySpending.Portion> fromSplitDto(SpendingCreateRequest.Split split) {
-        Map<UUID, PartySpending.Portion> proportions = new HashMap<>();
+    default Map<UUID, SpendingPortion> fromSplitRequest(SpendingCreateRequest.Split split) {
+        Map<UUID, SpendingPortion> proportions = new HashMap<>();
         switch (split.splitType()) {
-            case "AMOUNT": // TODO enum
+            case AMOUNT:
                 proportions = split.participants().entrySet()
                         .stream()
                         .collect(Collectors.toMap(
                                 Map.Entry::getKey,
-                                e ->PartySpending.Portion.builder()
+                                e -> SpendingPortion.builder()
                                         .portion(BigDecimal.ONE)
                                         .amount(e.getValue())
                                         .build()));
                 break;
-            case "PARTITION": // TODO enum
+            case PARTITION:
                 proportions = split.participants().entrySet()
                         .stream()
                         .collect(Collectors.toMap(
                                 Map.Entry::getKey,
-                                e ->PartySpending.Portion.builder()
+                                e -> SpendingPortion.builder()
                                         .portion(e.getValue())
                                         .amount(BigDecimal.ZERO)
                                         .build()));
@@ -76,12 +77,9 @@ public interface ProportionMapper {
         return proportions;
     }
 
-    default SpendingResponse.Split toSplitDto(PartySpending spending) {
+    default SpendingResponse.Split toSplitResponse(PartySpending spending) {
         Map<UUID, BigDecimal> participants = null;
-        Map<UUID, PartySpending.Portion> proportions = spending.getProportions();
-        Map<UUID, BigDecimal> amounts = proportions.entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAmount()));
+        Map<UUID, SpendingPortion> proportions = spending.getProportions();
 
         SplitType splitType = spending.getSplitType();
         if (splitType == SplitType.PARTITION) {
@@ -97,7 +95,7 @@ public interface ProportionMapper {
                 .build();
     }
 
-    default Map<UUID, BigDecimal> toAmountsDto(PartySpending spending) {
+    default Map<UUID, BigDecimal> toAmountsResponse(PartySpending spending) {
         return spending.getProportions().entrySet()
                 .stream()
                 .collect(Collectors.toMap(

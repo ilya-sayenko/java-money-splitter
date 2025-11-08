@@ -22,11 +22,11 @@ public class PartyTransaction {
 
     private UUID payeeId;
 
+    private PartyParticipant payer;
+
+    private PartyParticipant payee;
+
     private BigDecimal amount;
 
-    private Status status;
-
-    public enum Status {
-        PENDING, CLOSED
-    }
+    private TransactionStatus status;
 }

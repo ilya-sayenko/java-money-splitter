@@ -21,7 +21,9 @@ import com.moneysplitter.model.PartyParticipant;
 import com.moneysplitter.model.PartySpending;
 import com.moneysplitter.model.PartyTransaction;
 import com.moneysplitter.model.PartyUpdateData;
+import com.moneysplitter.model.SpendingPortion;
 import com.moneysplitter.model.SplitType;
+import com.moneysplitter.model.TransactionStatus;
 import com.moneysplitter.service.proportion.ProportionCalculatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -58,27 +60,27 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public Party createParty(Party party) {
-        return partyDao.saveParty(party);
+    public UUID createParty(Party party) {
+        return partyDao.saveParty(party).getId(); // TODO добавить в кэш party?
     }
 
     @Override
-    public Party updateParty(PartyUpdateData updateData) {
-        return partyDao.findPartyById(updateData.id())
-                .map(party -> {
-                    partyMapper.updateFields(updateData, party);
-                    return partyDao.saveParty(party);
-                }).orElseThrow(() -> new ParticipantNotFoundException(updateData.id()));
+    public void updateParty(PartyUpdateData updateData) {
+         partyDao.findPartyById(updateData.id())
+                 .map(party -> {
+                     partyMapper.updateFields(updateData, party);
+                     return partyDao.saveParty(party);
+                 }).orElseThrow(() -> new ParticipantNotFoundException(updateData.id()));
     }
 
     @Override
-    public PartyParticipant createParticipant(PartyParticipant participant) {
-        return participantDao.saveParticipant(participant);
+    public UUID createParticipant(PartyParticipant participant) {
+        return participantDao.saveParticipant(participant).getId();
     }
 
     @Override
-    public PartyParticipant updateParticipant(ParticipantUpdateData participantUpdateData) {
-        return participantDao.findParticipantById(participantUpdateData.id())
+    public void updateParticipant(ParticipantUpdateData participantUpdateData) {
+        participantDao.findParticipantById(participantUpdateData.id())
                 .map(participant -> {
                     participantMapper.updateFields(participantUpdateData, participant);
                     return participantDao.saveParticipant(participant);
@@ -100,14 +102,14 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     @Transactional
-    public PartySpending createSpending(PartySpending spending) {
-        Map<UUID, PartySpending.Portion> proportions = calculateProportions(spending);
+    public UUID createSpending(PartySpending spending) {
+        Map<UUID, SpendingPortion> proportions = calculateProportions(spending);
         spending.setProportions(proportions);
 
         if (spending.getSplitType().equals(SplitType.AMOUNT)) {
             BigDecimal amount = proportions.values()
                     .stream()
-                    .map(PartySpending.Portion::getAmount)
+                    .map(SpendingPortion::getAmount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             spending.setAmount(amount);
         }
@@ -119,7 +121,7 @@ public class PartyServiceImpl implements PartyService {
 //        party.setTotalAmount(party.getTotalAmount().add(spending.getAmount()));
 //        partyDao.saveParty(party);
 
-        return spending;
+        return spending.getId();
     }
 
     @Override
@@ -146,7 +148,7 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public void updateTransactionStatus(UUID transactionId, PartyTransaction.Status status) {
+    public void updateTransactionStatus(UUID transactionId, TransactionStatus status) {
         PartyTransaction transaction = transactionDao.findTransactionById(transactionId)
                 .orElseThrow(() -> new TransactionNotFoundException(transactionId));
         transaction.setStatus(status);
@@ -165,7 +167,7 @@ public class PartyServiceImpl implements PartyService {
                         .payerId(UUID.fromString(e.getKey().getLeft()))
                         .payeeId(UUID.fromString(e.getKey().getRight()))
                         .amount(e.getValue())
-                        .status(PartyTransaction.Status.PENDING)
+                        .status(TransactionStatus.PENDING)
                         .build())
                 .collect(Collectors.toList());
         transactionDao.deleteTransactionsByPartyId(partyId);
@@ -193,7 +195,7 @@ public class PartyServiceImpl implements PartyService {
         return new InputData(participants, spendings);
     }
 
-    private Map<UUID, PartySpending.Portion> calculateProportions(PartySpending spending) {
+    private Map<UUID, SpendingPortion> calculateProportions(PartySpending spending) {
         return proportionCalculatorFactory.findCalculator(spending.getSplitType()).calculate(spending);
     }
 }

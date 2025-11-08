@@ -1,14 +1,9 @@
 package com.moneysplitter.controller;
 
 import com.moneysplitter.controller.data.TransactionStatusUpdateRequest;
-import com.moneysplitter.mapper.ParticipantMapper;
-import com.moneysplitter.mapper.PartyMapper;
-import com.moneysplitter.mapper.SpendingMapper;
-import com.moneysplitter.mapper.TransactionMapper;
-import com.moneysplitter.model.PartyTransaction;
+import com.moneysplitter.model.TransactionStatus;
 import com.moneysplitter.service.PartyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +19,6 @@ public class TransactionControllerImpl implements TransactionController {
     @PutMapping
     @Override
     public void updateTransactionStatus(@RequestBody TransactionStatusUpdateRequest request) {
-        partyService.updateTransactionStatus(request.id(), PartyTransaction.Status.valueOf(request.status()));
+        partyService.updateTransactionStatus(request.id(), TransactionStatus.valueOf(request.status().name()));
     }
 }

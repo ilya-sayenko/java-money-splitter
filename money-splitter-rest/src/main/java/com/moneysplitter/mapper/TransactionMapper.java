@@ -18,7 +18,7 @@ public interface TransactionMapper {
 
     List<TransactionResponse> toResponses(List<PartyTransaction> transactions);
 
-    PartyTransaction fromEntity(TransactionEntity entity);
+    PartyTransaction fromEntity(TransactionEntity entity); // TODO payer, payee
 
     List<PartyTransaction> fromEntity(List<TransactionEntity> entities);
 

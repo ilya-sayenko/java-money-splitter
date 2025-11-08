@@ -10,7 +10,7 @@ public interface TransactionDao {
 
     void saveTransactions(List<PartyTransaction> transactions);
 
-    PartyTransaction saveTransaction(PartyTransaction transaction);
+    void saveTransaction(PartyTransaction transaction);
 
     void deleteTransactionsByPartyId(UUID partyId);
 

@@ -6,17 +6,17 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="tbl_create_participants" author="liquibase">
         <createTable tableName="participants">
-            <column name="prnt_id" type="uuid">
+            <column name="id" type="uuid" defaultValue="gen_random_uuid()">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(250)"/>
-            <column name="party_party_id" type="uuid"/>
+            <column name="party_id" type="uuid"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="participants"
-                baseColumnNames="party_party_id"
+                baseColumnNames="party_id"
                 referencedTableName="parties"
-                referencedColumnNames="party_id"
-                constraintName="participants_party_party_id_fkey"/>
+                referencedColumnNames="id"
+                constraintName="participants_party_id_fkey"/>
     </changeSet>
 </databaseChangeLog>

@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,15 +28,14 @@ import java.util.UUID;
 public class SpendingEntity {
 
     @Id
-    @Column(name = "spnd_id")
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator") // TODO
+    @Column(name = "id")
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
-    @Column(name = "party_party_id")
+    @Column(name = "party_id")
     UUID partyId;
 
-    @Column(name = "prnt_prnt_id")
+    @Column(name = "payer_id")
     UUID payerId;
 
     @Column(name = "name")

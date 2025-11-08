@@ -1,6 +1,7 @@
 package com.moneysplitter.service.proportion;
 
 import com.moneysplitter.model.PartySpending;
+import com.moneysplitter.model.SpendingPortion;
 import com.moneysplitter.model.SplitType;
 import org.springframework.stereotype.Component;
 
@@ -18,18 +19,18 @@ public class ProportionCalculatorPartition implements ProportionCalculator {
     private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
 
     @Override
-    public Map<UUID, PartySpending.Portion> calculate(PartySpending spending) {
-        Map<UUID, PartySpending.Portion> newProportions = new HashMap<>();
-        Map<UUID, PartySpending.Portion> oldProportions = spending.getProportions();
+    public Map<UUID, SpendingPortion> calculate(PartySpending spending) {
+        Map<UUID, SpendingPortion> newProportions = new HashMap<>();
+        Map<UUID, SpendingPortion> oldProportions = spending.getProportions();
 
         BigDecimal portions = oldProportions.values()
                 .stream()
-                .map(PartySpending.Portion::getPortion)
+                .map(SpendingPortion::getPortion)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal valueForOnePortion = spending.getAmount().divide(portions, SCALE, ROUNDING_MODE);
         oldProportions.forEach((key, value) ->
-                newProportions.put(key, PartySpending.Portion
+                newProportions.put(key, SpendingPortion
                         .builder()
                         .portion(value.getPortion())
                         .amount(value.getPortion().multiply(valueForOnePortion)).build())

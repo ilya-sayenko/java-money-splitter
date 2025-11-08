@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -24,16 +23,15 @@ import java.util.UUID;
 public class ProportionEntity {
 
     @Id
-    @Column(name = "prop_id")
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id")
+    @GeneratedValue(generator = "UUID")
     private UUID id;
 
     @Setter
-    @Column(name = "spnd_spnd_id")
+    @Column(name = "spending_id")
     private UUID spendingId;
 
-    @Column(name = "prnt_prnt_id")
+    @Column(name = "participant_id")
     private UUID participantId;
 
     @Column(name = "proportion")

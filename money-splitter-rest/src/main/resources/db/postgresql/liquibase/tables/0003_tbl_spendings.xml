@@ -6,26 +6,26 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="tbl_create_spendings" author="liquibase">
         <createTable tableName="spendings">
-            <column name="spnd_id" type="uuid">
+            <column name="id" type="uuid" defaultValue="gen_random_uuid()">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="party_party_id" type="uuid"/>
-            <column name="prnt_prnt_id" type="uuid"/>
+            <column name="party_id" type="uuid"/>
+            <column name="payer_id" type="uuid"/>
             <column name="name" type="varchar(250)"/>
             <column name="amount" type="numeric"/>
             <column name="split_type" type="varchar(50)"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="spendings"
-                baseColumnNames="party_party_id"
+                baseColumnNames="party_id"
                 referencedTableName="parties"
-                referencedColumnNames="party_id"
-                constraintName="spendings_party_party_id_fkey"/>
+                referencedColumnNames="id"
+                constraintName="spendings_party_id_fkey"/>
         <addForeignKeyConstraint
                 baseTableName="spendings"
-                baseColumnNames="prnt_prnt_id"
+                baseColumnNames="payer_id"
                 referencedTableName="participants"
-                referencedColumnNames="prnt_id"
-                constraintName="spendings_prnt_prnt_id_fkey"/>
+                referencedColumnNames="id"
+                constraintName="spendings_payer_id_fkey"/>
     </changeSet>
 </databaseChangeLog>
