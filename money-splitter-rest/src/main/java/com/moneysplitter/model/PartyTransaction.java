@@ -18,10 +18,6 @@ public class PartyTransaction {
 
     private UUID partyId;
 
-    private UUID payerId;
-
-    private UUID payeeId;
-
     private PartyParticipant payer;
 
     private PartyParticipant payee;

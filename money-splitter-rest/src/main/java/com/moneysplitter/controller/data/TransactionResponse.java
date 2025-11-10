@@ -1,7 +1,6 @@
 package com.moneysplitter.controller.data;
 
 import lombok.Builder;
-import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -11,9 +10,9 @@ public record TransactionResponse(
 
         UUID id,
 
-        UUID payer,
+        ParticipantResponse payer,
 
-        UUID payee,
+        ParticipantResponse payee,
 
         BigDecimal amount,
 

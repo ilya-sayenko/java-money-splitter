@@ -6,8 +6,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,11 +17,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,27 +35,23 @@ public class SpendingEntity {
     private UUID id;
 
     @Column(name = "party_id")
-    UUID partyId;
+    private UUID partyId;
 
-    @Column(name = "payer_id")
-    UUID payerId;
+    @ManyToOne
+    @JoinColumn(name = "payer_id")
+    private ParticipantEntity payer;
 
     @Column(name = "name")
-    String name;
+    private String name;
 
     @Column(name = "amount")
-    BigDecimal amount;
+    private BigDecimal amount;
 
     @Column(name = "split_type")
     @Enumerated(EnumType.STRING)
-    SplitType splitType;
+    private SplitType splitType;
 
-    @Setter
-    @Transient
-    @Builder.Default
-    List<ProportionEntity> proportions = new ArrayList<>();
-
-    public enum SplitType {
-        EQUAL, AMOUNT, PARTITION
-    }
+    @OneToMany
+    @JoinColumn(name = "spending_id", insertable = false)
+    private Set<ProportionEntity> proportions;
 }

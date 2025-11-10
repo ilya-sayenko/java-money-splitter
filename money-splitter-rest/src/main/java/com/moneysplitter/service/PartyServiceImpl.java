@@ -21,17 +21,15 @@ import com.moneysplitter.model.PartyParticipant;
 import com.moneysplitter.model.PartySpending;
 import com.moneysplitter.model.PartyTransaction;
 import com.moneysplitter.model.PartyUpdateData;
-import com.moneysplitter.model.SpendingPortion;
+import com.moneysplitter.model.SpendingProportion;
 import com.moneysplitter.model.SplitType;
 import com.moneysplitter.model.TransactionStatus;
-import com.moneysplitter.service.proportion.ProportionCalculatorFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,8 +44,6 @@ public class PartyServiceImpl implements PartyService {
     private final SpendingDao spendingDao;
 
     private final TransactionDao transactionDao;
-
-    private final ProportionCalculatorFactory proportionCalculatorFactory;
 
     private final ParticipantMapper participantMapper;
 
@@ -97,29 +93,23 @@ public class PartyServiceImpl implements PartyService {
         if (spendingDao.existsByParticipantId(participantId)) {
             throw new IncorrectDeleteException(String.format("Spendings exists for participantId=%s", participantId));
         }
-        participantDao.deleteParticipantById(participantId); // TODO удаление дочерних сущностей
+        participantDao.deleteParticipantById(participantId);
     }
 
     @Override
     @Transactional
     public UUID createSpending(PartySpending spending) {
-        Map<UUID, SpendingPortion> proportions = calculateProportions(spending);
-        spending.setProportions(proportions);
-
+        // TODO возможно стоит добавить валидацию
         if (spending.getSplitType().equals(SplitType.AMOUNT)) {
-            BigDecimal amount = proportions.values()
+            BigDecimal amount = spending.getProportions()
                     .stream()
-                    .map(SpendingPortion::getAmount)
+                    .map(SpendingProportion::getAmount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
             spending.setAmount(amount);
         }
         spending = spendingDao.saveSpending(spending);
         UUID partyId = spending.getPartyId();
         updateTransactions(partyId);
-
-//        Party party = partyDao.findPartyById(partyId).orElseThrow(() -> new PartyNotFoundException(partyId));
-//        party.setTotalAmount(party.getTotalAmount().add(spending.getAmount()));
-//        partyDao.saveParty(party);
 
         return spending.getId();
     }
@@ -136,9 +126,6 @@ public class PartyServiceImpl implements PartyService {
                 .orElseThrow(() -> new SpendingNotFoundException(spendingId))
                 .getPartyId();
         spendingDao.deleteSpendingById(spendingId);
-//        Party party = findPartyById(partyId);
-//        partyDao.saveParty(party.withTotalAmount(party.getTotalAmount().subtract(amount)));
-
         updateTransactions(partyId);
     }
 
@@ -158,20 +145,24 @@ public class PartyServiceImpl implements PartyService {
     @Transactional
     private void updateTransactions(UUID partyId) {
         OutputData outputData = MoneySplitter.split(prepareCoreInputData(partyId));
-        List<PartyTransaction> transactions = outputData.transactions()
+        List<PartyTransaction> transactions = prepareTransactionsByCoreOutputData(partyId, outputData);
+        transactionDao.deleteTransactionsByPartyId(partyId);
+        transactionDao.saveTransactions(transactions);
+    }
+
+    private List<PartyTransaction> prepareTransactionsByCoreOutputData(UUID partyId, OutputData outputData) {
+        return outputData.transactions()
                 .entrySet()
                 .stream()
                 .map(e -> PartyTransaction
                         .builder()
                         .partyId(partyId)
-                        .payerId(UUID.fromString(e.getKey().getLeft()))
-                        .payeeId(UUID.fromString(e.getKey().getRight()))
+                        .payer(PartyParticipant.builder().id(UUID.fromString(e.getKey().getLeft())).build())
+                        .payee(PartyParticipant.builder().id(UUID.fromString(e.getKey().getRight())).build())
                         .amount(e.getValue())
                         .status(TransactionStatus.PENDING)
                         .build())
                 .collect(Collectors.toList());
-        transactionDao.deleteTransactionsByPartyId(partyId);
-        transactionDao.saveTransactions(transactions);
     }
 
     private InputData prepareCoreInputData(UUID partyId) {
@@ -182,20 +173,18 @@ public class PartyServiceImpl implements PartyService {
 
         List<Spending> spendings = spendingDao.findSpendingsByPartyId(partyId)
                 .stream()
-                .map(sp -> Spending
+                .map(partySpending -> Spending
                         .builder()
-                        .payer(sp.getPayerId().toString())
-                        .product(sp.getName())
-                        .proportions(sp.getProportions().entrySet()
+                        .payer(partySpending.getPayer().getId().toString())
+                        .product(partySpending.getName())
+                        .proportions(partySpending.getProportions()
                                 .stream()
-                                .collect(Collectors.toMap(e -> e.getKey().toString(), e -> e.getValue().getAmount())))
+                                .collect(Collectors.toMap(
+                                        proportion -> proportion.getParticipant().getId().toString(),
+                                        SpendingProportion::getAmount)))
                         .build())
                 .collect(Collectors.toList());
 
         return new InputData(participants, spendings);
-    }
-
-    private Map<UUID, SpendingPortion> calculateProportions(PartySpending spending) {
-        return proportionCalculatorFactory.findCalculator(spending.getSplitType()).calculate(spending);
     }
 }

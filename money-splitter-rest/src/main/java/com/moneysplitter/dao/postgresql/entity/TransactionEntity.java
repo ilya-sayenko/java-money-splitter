@@ -6,6 +6,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,20 +33,18 @@ public class TransactionEntity {
     @Column(name = "party_id")
     private UUID partyId;
 
-    @Column(name = "payer_id")
-    private UUID payerId;
+    @ManyToOne
+    @JoinColumn(name = "payer_id")
+    private ParticipantEntity payer;
 
-    @Column(name = "payee_id")
-    private UUID payeeId;
+    @ManyToOne
+    @JoinColumn(name = "payee_id")
+    private ParticipantEntity payee;
 
     @Column(name = "amount")
     private BigDecimal amount;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private Status status;
-
-    public enum Status {
-        PENDING, CLOSED
-    }
+    private TransactionStatus status;
 }

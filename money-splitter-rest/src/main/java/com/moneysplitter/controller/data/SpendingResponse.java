@@ -1,10 +1,9 @@
 package com.moneysplitter.controller.data;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 
 import java.math.BigDecimal;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -12,24 +11,14 @@ public record SpendingResponse (
 
         UUID id,
 
-        UUID payerId,
+        ParticipantResponse payer,
 
         String name,
 
         BigDecimal amount,
 
-        Split split,
+        SplitType splitType,
 
-        Map<UUID, BigDecimal> amounts
+        List<ProportionResponse> proportions
 ) {
-
-    @Builder
-    public record Split (
-
-            String splitType,
-
-            @JsonInclude(JsonInclude.Include.NON_NULL)
-            Map<UUID, BigDecimal> participants
-    ) {
-    }
 }

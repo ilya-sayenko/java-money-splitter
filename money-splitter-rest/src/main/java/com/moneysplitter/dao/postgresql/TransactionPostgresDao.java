@@ -38,7 +38,7 @@ public class TransactionPostgresDao implements TransactionDao {
 
     @Override
     public List<PartyTransaction> findTransactionsByPartyId(UUID partyId) {
-        return transactionMapper.fromEntity(transactionRepository.findByPartyId(partyId));
+        return transactionMapper.fromEntities(transactionRepository.findByPartyId(partyId));
     }
 
     @Override

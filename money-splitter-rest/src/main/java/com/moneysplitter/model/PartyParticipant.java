@@ -15,9 +15,9 @@ import java.util.UUID;
 @Builder
 public class PartyParticipant {
 
-    UUID id;
+    private UUID id;
 
-    UUID partyId;
+    private UUID partyId;
 
-    String name;
+    private String name;
 }

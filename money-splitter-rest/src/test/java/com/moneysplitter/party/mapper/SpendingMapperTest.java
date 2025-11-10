@@ -2,6 +2,7 @@ package com.moneysplitter.party.mapper;
 
 import com.moneysplitter.dao.postgresql.entity.ProportionEntity;
 import com.moneysplitter.dao.postgresql.entity.SpendingEntity;
+import com.moneysplitter.dao.postgresql.entity.SplitType;
 import com.moneysplitter.mapper.SpendingMapper;
 import org.example.moneysplitter.party.model.PartySpending;
 import org.junit.jupiter.api.Test;
@@ -150,7 +151,7 @@ public class SpendingMapperTest {
                 .payerId(UUID.randomUUID())
                 .name("Name")
                 .amount(BigDecimal.TEN)
-                .splitType(SpendingEntity.SplitType.AMOUNT)
+                .splitType(SplitType.AMOUNT)
                 .proportions(List.of(
                         ProportionEntity.builder()
                                 .id(UUID.randomUUID())

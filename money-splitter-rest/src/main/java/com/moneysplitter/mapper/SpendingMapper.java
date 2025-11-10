@@ -5,30 +5,38 @@ import com.moneysplitter.controller.data.SpendingCreateRequest;
 import com.moneysplitter.dao.postgresql.entity.SpendingEntity;
 import com.moneysplitter.controller.data.SpendingResponse;
 import com.moneysplitter.model.PartySpending;
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Mapper(config = MapperConfig.class, uses = ProportionMapper.class, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
-public interface SpendingMapper {
+@Mapper(config = MapperConfig.class)
+public abstract class SpendingMapper {
 
-    @Mapping(target = "splitType", source = "split.splitType")
+    @Autowired
+    protected ParticipantMapper participantMapper;
+
+    @Autowired
+    protected ProportionMapper proportionMapper;
+
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "proportions", expression = "java(proportionMapper.fromSplitRequest(request.split()))")
-    PartySpending fromCreateRequest(SpendingCreateRequest request);
+    @Mapping(target = "splitType", source = "split.splitType")
+    @Mapping(target = "payer", expression = "java(PartyParticipant.builder().id(request.payerId()).build())")
+    @Mapping(target = "proportions", expression = "java(proportionMapper.fromSplitRequest(request))")
+    public abstract PartySpending fromCreateRequest(SpendingCreateRequest request);
 
-    @Mapping(target = "split", expression = "java(proportionMapper.toSplitResponse(spending))")
-    @Mapping(target = "amounts", expression = "java(proportionMapper.toAmountsResponse(spending))")
-    SpendingResponse toResponse(PartySpending spending);
+    @Mapping(target = "payer", expression = "java(participantMapper.toResponse(spending.getPayer()))")
+    @Mapping(target = "proportions", expression = "java(proportionMapper.toResponses(spending.getProportions()))")
+    public abstract SpendingResponse toResponse(PartySpending spending);
 
-    List<SpendingResponse> toResponses(List<PartySpending> spending);
+    public abstract List<SpendingResponse> toResponses(List<PartySpending> spending);
 
-    PartySpending fromEntity(SpendingEntity spendingEntity);
+    @Mapping(target = "payer", expression = "java(participantMapper.fromEntity(spendingEntity.getPayer()))")
+    public abstract PartySpending fromEntity(SpendingEntity spendingEntity);
 
-    List<PartySpending> fromEntities(List<SpendingEntity> spendingEntity);
+    public abstract List<PartySpending> fromEntities(List<SpendingEntity> spendingEntities);
 
-    @Mapping(target = "proportions", expression = "java(proportionMapper.toEntities(spending.getProportions(), spending.getId()))")
-    SpendingEntity toEntity(PartySpending spending);
+    @Mapping(target = "proportions", expression = "java(proportionMapper.toEntities(spending.getProportions()))")
+    public abstract SpendingEntity toEntity(PartySpending spending);
 }

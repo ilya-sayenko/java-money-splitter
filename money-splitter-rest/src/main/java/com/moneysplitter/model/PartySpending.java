@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -19,7 +19,7 @@ public class PartySpending {
 
     private UUID partyId;
 
-    private UUID payerId;
+    private PartyParticipant payer;
 
     private String name;
 
@@ -27,5 +27,5 @@ public class PartySpending {
 
     private SplitType splitType;
 
-    private Map<UUID, SpendingPortion> proportions;
+    private List<SpendingProportion> proportions;
 }

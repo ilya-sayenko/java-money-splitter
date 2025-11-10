@@ -1,6 +1,7 @@
 package com.moneysplitter.party.mapper;
 
 import com.moneysplitter.dao.postgresql.entity.TransactionEntity;
+import com.moneysplitter.dao.postgresql.entity.TransactionStatus;
 import com.moneysplitter.mapper.TransactionMapper;
 import com.moneysplitter.party.model.PartyTransaction;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ public class TransactionMapperTest {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 BigDecimal.ZERO,
-                TransactionEntity.Status.PENDING);
+                TransactionStatus.PENDING);
         PartyTransaction model = mapper.fromEntity(entity);
 
         assertEquals(entity.getId(), model.getId());

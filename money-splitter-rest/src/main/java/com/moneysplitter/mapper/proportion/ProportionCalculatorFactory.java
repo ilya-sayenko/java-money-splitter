@@ -1,6 +1,6 @@
-package com.moneysplitter.service.proportion;
+package com.moneysplitter.mapper.proportion;
 
-import com.moneysplitter.model.SplitType;
+import com.moneysplitter.controller.data.SplitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

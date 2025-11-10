@@ -1,7 +1,6 @@
 package com.moneysplitter.dao.postgresql;
 
 import com.moneysplitter.dao.SpendingDao;
-import com.moneysplitter.dao.postgresql.entity.ProportionEntity;
 import com.moneysplitter.dao.postgresql.entity.SpendingEntity;
 import com.moneysplitter.dao.postgresql.repository.ProportionRepository;
 import com.moneysplitter.dao.postgresql.repository.SpendingRepository;
@@ -12,10 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -42,12 +39,6 @@ public class SpendingPostgresDao implements SpendingDao {
     @Override
     public List<PartySpending> findSpendingsByPartyId(UUID partyId) {
         List<SpendingEntity> spendingEntities = spendingRepository.findAllByPartyId(partyId);
-        Map<UUID, List<ProportionEntity>> proportionEntities = proportionRepository
-                .findBySpendingIdIn(spendingEntities.stream().map(SpendingEntity::getId).collect(Collectors.toList()))
-                .stream()
-                .collect(Collectors.groupingBy(ProportionEntity::getSpendingId, Collectors.toList()));
-        spendingEntities.forEach(s -> s.setProportions(proportionEntities.get(s.getId())));
-
         return spendingMapper.fromEntities(spendingEntities);
     }
 

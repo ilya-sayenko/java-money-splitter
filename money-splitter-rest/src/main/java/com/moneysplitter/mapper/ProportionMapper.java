@@ -1,105 +1,40 @@
 package com.moneysplitter.mapper;
 
 import com.moneysplitter.config.MapperConfig;
+import com.moneysplitter.controller.data.ProportionResponse;
 import com.moneysplitter.controller.data.SpendingCreateRequest;
-import com.moneysplitter.controller.data.SpendingResponse;
 import com.moneysplitter.dao.postgresql.entity.ProportionEntity;
-import com.moneysplitter.model.PartySpending;
-import com.moneysplitter.model.SpendingPortion;
-import com.moneysplitter.model.SplitType;
-import org.apache.commons.collections4.CollectionUtils;
+import com.moneysplitter.mapper.proportion.ProportionCalculatorFactory;
+import com.moneysplitter.model.SpendingProportion;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Mapper(config = MapperConfig.class)
-public interface ProportionMapper {
+public abstract class ProportionMapper {
 
-    default List<ProportionEntity> toEntities(Map<UUID, SpendingPortion> proportions, UUID spendingId) {
-         return proportions.entrySet()
-                 .stream()
-                 .map(entry -> {
-                     SpendingPortion portion = entry.getValue();
-                     return ProportionEntity
-                             .builder()
-                             .participantId((entry.getKey()))
-                             .spendingId(spendingId)
-                             .proportion(portion.getPortion())
-                             .amount(portion.getAmount())
-                             .build();
-                 })
-                 .collect(Collectors.toList());
+    @Autowired
+    private ProportionCalculatorFactory proportionCalculatorFactory;
+
+    @Autowired
+    protected ParticipantMapper participantMapper;
+
+    public List<SpendingProportion> fromSplitRequest(SpendingCreateRequest request) {
+        return proportionCalculatorFactory.findCalculator(request.split().splitType()).calculate(request);
     }
 
-    default Map<UUID, SpendingPortion> fromEntities(List<ProportionEntity> proportionEntities) {
-        return CollectionUtils.emptyIfNull(proportionEntities)
-                .stream()
-                .collect(Collectors.toMap(
-                        ProportionEntity::getParticipantId,
-                        pe -> SpendingPortion
-                                .builder()
-                                .portion(pe.getProportion())
-                                .amount(pe.getAmount())
-                                .build()
-                ));
-    }
+    @Mapping(target = "participant", expression = "java(participantMapper.toResponse(proportion.getParticipant()))")
+    public abstract ProportionResponse toResponse(SpendingProportion proportion);
 
-    default Map<UUID, SpendingPortion> fromSplitRequest(SpendingCreateRequest.Split split) {
-        Map<UUID, SpendingPortion> proportions = new HashMap<>();
-        switch (split.splitType()) {
-            case AMOUNT:
-                proportions = split.participants().entrySet()
-                        .stream()
-                        .collect(Collectors.toMap(
-                                Map.Entry::getKey,
-                                e -> SpendingPortion.builder()
-                                        .portion(BigDecimal.ONE)
-                                        .amount(e.getValue())
-                                        .build()));
-                break;
-            case PARTITION:
-                proportions = split.participants().entrySet()
-                        .stream()
-                        .collect(Collectors.toMap(
-                                Map.Entry::getKey,
-                                e -> SpendingPortion.builder()
-                                        .portion(e.getValue())
-                                        .amount(BigDecimal.ZERO)
-                                        .build()));
-                break;
-        }
+    public abstract List<ProportionResponse> toResponses(List<SpendingProportion> proportions);
 
-        return proportions;
-    }
+    public abstract ProportionEntity toEntity(SpendingProportion proportion);
 
-    default SpendingResponse.Split toSplitResponse(PartySpending spending) {
-        Map<UUID, BigDecimal> participants = null;
-        Map<UUID, SpendingPortion> proportions = spending.getProportions();
+    public abstract Set<ProportionEntity> toEntities(List<SpendingProportion> proportion);
 
-        SplitType splitType = spending.getSplitType();
-        if (splitType == SplitType.PARTITION) {
-            participants = proportions.entrySet()
-                    .stream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getPortion()));
-        }
-
-        return SpendingResponse.Split
-                .builder()
-                .splitType(splitType.name())
-                .participants(participants)
-                .build();
-    }
-
-    default Map<UUID, BigDecimal> toAmountsResponse(PartySpending spending) {
-        return spending.getProportions().entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        e -> e.getValue().getAmount()));
-    }
+    @Mapping(target = "participant", expression = "java(participantMapper.fromEntity(entity.getParticipant()))")
+    public abstract SpendingProportion fromEntity(ProportionEntity entity);
 }

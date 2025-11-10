@@ -6,16 +6,23 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
-public class SpendingPortion {
+public class SpendingProportion {
+
+    private UUID id;
+
+    private UUID spendingId;
+
+    private PartyParticipant participant;
 
     @Builder.Default
-    BigDecimal portion = BigDecimal.ONE;
+    private BigDecimal proportion = BigDecimal.ONE;
 
     @Builder.Default
-    BigDecimal amount = BigDecimal.ZERO;
+    private BigDecimal amount = BigDecimal.ZERO;
 }
