@@ -16,10 +16,8 @@ import java.util.Set;
 @Mapper(config = MapperConfig.class)
 public abstract class ProportionMapper {
 
-    @Autowired
     private ProportionCalculatorFactory proportionCalculatorFactory;
 
-    @Autowired
     protected ParticipantMapper participantMapper;
 
     public List<SpendingProportion> fromSplitRequest(SpendingCreateRequest request) {
@@ -37,4 +35,14 @@ public abstract class ProportionMapper {
 
     @Mapping(target = "participant", expression = "java(participantMapper.fromEntity(entity.getParticipant()))")
     public abstract SpendingProportion fromEntity(ProportionEntity entity);
+
+    @Autowired
+    public void setProportionCalculatorFactory(ProportionCalculatorFactory proportionCalculatorFactory) {
+        this.proportionCalculatorFactory = proportionCalculatorFactory;
+    }
+
+    @Autowired
+    public void setParticipantMapper(ParticipantMapper participantMapper) {
+        this.participantMapper = participantMapper;
+    }
 }

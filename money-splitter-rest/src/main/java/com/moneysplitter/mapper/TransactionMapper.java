@@ -13,7 +13,6 @@ import java.util.List;
 @Mapper(config = MapperConfig.class)
 public abstract class TransactionMapper {
 
-    @Autowired
     protected ParticipantMapper participantMapper;
 
     @Mapping(target = "payer", expression = "java(participantMapper.toResponse(transaction.getPayer()))")
@@ -33,4 +32,9 @@ public abstract class TransactionMapper {
     public abstract TransactionEntity toEntity(PartyTransaction transaction);
 
     public abstract List<TransactionEntity> toEntities(List<PartyTransaction> transactions);
+
+    @Autowired
+    public void setParticipantMapper(ParticipantMapper participantMapper) {
+        this.participantMapper = participantMapper;
+    }
 }

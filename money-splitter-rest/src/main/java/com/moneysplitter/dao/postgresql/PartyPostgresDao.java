@@ -23,22 +23,13 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public Optional<Party> findPartyById(UUID id) {
-//        final Optional<Party> cachedParty = partyCache.fetchPartyFromCache(id);
-//        if (cachedParty.isPresent()) {
-//            return cachedParty;
-//        }
-        final Optional<Party> party = partyRepository.findById(id).map(partyMapper::fromEntity);
-        if (party.isPresent()) {
-//            partyCache.putPartyToCache(party.get());
-            return party;
-        }
-        return Optional.empty();
+        return partyRepository.findById(id).map(partyMapper::fromEntity);
     }
 
     @Override
     public Party saveParty(Party party) {
         PartyEntity partyEntity = partyMapper.toEntity(party);
-        partyRepository.save(partyEntity);
+        partyEntity = partyRepository.save(partyEntity);
 
         return partyMapper.fromEntity(partyEntity);
     }

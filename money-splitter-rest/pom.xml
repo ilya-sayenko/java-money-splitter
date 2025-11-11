@@ -22,7 +22,10 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <mapstruct-spring-annotations.version>1.1.1</mapstruct-spring-annotations.version>
         <springdoc.version>2.3.0</springdoc.version>
-	</properties>
+        <instancio.version>5.5.0</instancio.version>
+        <testcontainers.postgresql.version>1.18.0</testcontainers.postgresql.version>
+        <money-splitter-core.version>2.0.0</money-splitter-core.version>
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -77,15 +80,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>2.0</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>1.18.0</version>
+			<version>${testcontainers.postgresql.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -96,16 +93,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.instancio</groupId>
+            <artifactId>instancio-core</artifactId>
+            <version>${instancio.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
-
-		<dependency>
-			<groupId>com.github.java-json-tools</groupId>
-			<artifactId>json-patch</artifactId>
-			<version>1.13</version>
-		</dependency>
 
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -116,7 +114,7 @@
 		<dependency>
 			<groupId>com.money-splitter</groupId>
 			<artifactId>money-splitter-core</artifactId>
-			<version>2.0.0</version>
+			<version>${money-splitter-core.version}</version>
 			<scope>compile</scope>
 		</dependency>
     </dependencies>

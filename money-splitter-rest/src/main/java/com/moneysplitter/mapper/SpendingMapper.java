@@ -14,10 +14,8 @@ import java.util.List;
 @Mapper(config = MapperConfig.class)
 public abstract class SpendingMapper {
 
-    @Autowired
     protected ParticipantMapper participantMapper;
 
-    @Autowired
     protected ProportionMapper proportionMapper;
 
     @Mapping(target = "id", ignore = true)
@@ -39,4 +37,14 @@ public abstract class SpendingMapper {
 
     @Mapping(target = "proportions", expression = "java(proportionMapper.toEntities(spending.getProportions()))")
     public abstract SpendingEntity toEntity(PartySpending spending);
+
+    @Autowired
+    public void setParticipantMapper(ParticipantMapper participantMapper) {
+        this.participantMapper = participantMapper;
+    }
+
+    @Autowired
+    public void setProportionMapper(ProportionMapper proportionMapper) {
+        this.proportionMapper = proportionMapper;
+    }
 }

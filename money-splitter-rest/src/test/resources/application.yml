@@ -1,14 +1,6 @@
-server:
-  port: 8080
-
 spring:
-  application:
-    name: money-splitter
   datasource:
-    driver-class-name: "org.postgresql.Driver"
-    url: "jdbc:postgresql://localhost:5432/money-splitter"
-    username: "postgres"
-    password: "postgres"
+    url: "jdbc:tc:postgresql:14:///databasename"
   liquibase:
     change-log: "classpath:db/postgresql/liquibase/changelog.xml"
   jpa:

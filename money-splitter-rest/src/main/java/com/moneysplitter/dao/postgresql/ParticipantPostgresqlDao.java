@@ -26,7 +26,7 @@ public class ParticipantPostgresqlDao implements ParticipantDao {
     @Override
     public PartyParticipant saveParticipant(PartyParticipant participant) {
         ParticipantEntity participantEntity = participantMapper.toEntity(participant);
-        participantRepository.save(participantEntity);
+        participantEntity = participantRepository.save(participantEntity);
 
         return participantMapper.fromEntity(participantEntity);
     }

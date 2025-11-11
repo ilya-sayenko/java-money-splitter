@@ -12,7 +12,7 @@ import com.moneysplitter.mapper.SpendingMapper;
 import com.moneysplitter.mapper.TransactionMapper;
 import com.moneysplitter.model.Party;
 import com.moneysplitter.model.PartyUpdateData;
-import com.moneysplitter.service.PartyService;
+import com.moneysplitter.service.SplitterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +31,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PartyControllerImpl implements PartyController {
 
-    private final PartyService partyService;
+    private final SplitterService splitterService;
 
     private final PartyMapper partyMapper;
 
@@ -44,36 +44,36 @@ public class PartyControllerImpl implements PartyController {
     @GetMapping("/{partyId}")
     @Override
     public PartyResponse getPartyById(@PathVariable UUID partyId) {
-        return partyMapper.toResponse(partyService.findPartyById(partyId));
+        return partyMapper.toResponse(splitterService.findPartyById(partyId));
     }
 
     @PostMapping
     @Override
     public UUID createParty(@Valid @RequestBody PartyCreateRequest partyCreateRequest) {
         Party party = partyMapper.fromCreateRequest(partyCreateRequest);
-        return partyService.createParty(party);
+        return splitterService.createParty(party);
     }
 
     @PutMapping
     @Override
     public void updateParty(@Valid @RequestBody PartyUpdateRequest partyUpdateRequest) {
         PartyUpdateData updateData = partyMapper.fromUpdateRequest(partyUpdateRequest);
-        partyService.updateParty(updateData);
+        splitterService.updateParty(updateData);
     }
 
     @GetMapping("/{partyId}/participants")
     @Override
     public List<ParticipantResponse> findParticipantsByPartyId(@PathVariable UUID partyId) {
-        return participantMapper.toResponses(partyService.findParticipantsByPartyId(partyId));
+        return participantMapper.toResponses(splitterService.findParticipantsByPartyId(partyId));
     }
 
     @GetMapping(value = "/{partyId}/spendings")
     public List<SpendingResponse> getSpendingsByPartyId(@PathVariable UUID partyId) {
-        return spendingMapper.toResponses(partyService.findSpendingsByPartyId(partyId));
+        return spendingMapper.toResponses(splitterService.findSpendingsByPartyId(partyId));
     }
 
     @GetMapping(value = "/{partyId}/transactions")
     public List<TransactionResponse> getTransactionsByPartyId(@PathVariable UUID partyId) {
-        return transactionMapper.toResponses(partyService.findTransactionsByPartyId(partyId));
+        return transactionMapper.toResponses(splitterService.findTransactionsByPartyId(partyId));
     }
 }

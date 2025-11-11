@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface SpendingRepository extends JpaRepository<SpendingEntity, UUID> {
 
-    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = {"proportions", "proportions.participant"})
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = {"payer", "proportions", "proportions.participant"})
     List<SpendingEntity> findAllByPartyId(UUID partyId);
 
     @Query("select s.id from SpendingEntity s where s.partyId = :partyId")

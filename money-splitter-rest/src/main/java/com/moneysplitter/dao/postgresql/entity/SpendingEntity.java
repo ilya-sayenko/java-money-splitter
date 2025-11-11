@@ -52,6 +52,6 @@ public class SpendingEntity {
     private SplitType splitType;
 
     @OneToMany
-    @JoinColumn(name = "spending_id", insertable = false)
+    @JoinColumn(name = "spending_id", updatable = false)
     private Set<ProportionEntity> proportions;
 }

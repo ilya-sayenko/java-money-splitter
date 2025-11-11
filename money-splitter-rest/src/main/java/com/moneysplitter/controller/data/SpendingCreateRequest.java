@@ -18,9 +18,7 @@ public record SpendingCreateRequest(
 
         BigDecimal amount,
 
-        Split split,
-
-        Map<UUID, BigDecimal> amounts
+        Split split
 ) {
 
     @Builder

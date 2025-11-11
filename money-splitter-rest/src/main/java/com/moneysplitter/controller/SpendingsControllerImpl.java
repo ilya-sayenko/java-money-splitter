@@ -6,7 +6,7 @@ import com.moneysplitter.mapper.PartyMapper;
 import com.moneysplitter.mapper.SpendingMapper;
 import com.moneysplitter.mapper.TransactionMapper;
 import com.moneysplitter.model.PartySpending;
-import com.moneysplitter.service.PartyService;
+import com.moneysplitter.service.SplitterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SpendingsControllerImpl implements SpendingsController {
 
-    private final PartyService partyService;
+    private final SplitterService splitterService;
 
     private final PartyMapper partyMapper;
 
@@ -36,12 +36,12 @@ public class SpendingsControllerImpl implements SpendingsController {
     @Override
     public UUID createSpending(@RequestBody SpendingCreateRequest request) {
         PartySpending spending = spendingMapper.fromCreateRequest(request);
-        return partyService.createSpending(spending);
+        return splitterService.createSpending(spending);
     }
 
     @DeleteMapping("/{spendingId}")
     @Override
     public void deleteSpendingById(@PathVariable UUID spendingId) {
-        partyService.deleteSpendingById(spendingId);
+        splitterService.deleteSpendingById(spendingId);
     }
 }

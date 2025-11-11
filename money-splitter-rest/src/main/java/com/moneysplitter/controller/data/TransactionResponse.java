@@ -16,6 +16,6 @@ public record TransactionResponse(
 
         BigDecimal amount,
 
-        String status
+        TransactionStatus status
 ) {
 }

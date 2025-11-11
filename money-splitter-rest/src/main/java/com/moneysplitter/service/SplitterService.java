@@ -11,7 +11,7 @@ import com.moneysplitter.model.TransactionStatus;
 import java.util.List;
 import java.util.UUID;
 
-public interface PartyService {
+public interface SplitterService {
 
     Party findPartyById(UUID id);
 

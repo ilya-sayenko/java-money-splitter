@@ -5,7 +5,7 @@ import com.moneysplitter.controller.data.ParticipantUpdateRequest;
 import com.moneysplitter.mapper.ParticipantMapper;
 import com.moneysplitter.model.ParticipantUpdateData;
 import com.moneysplitter.model.PartyParticipant;
-import com.moneysplitter.service.PartyService;
+import com.moneysplitter.service.SplitterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ParticipantControllerImpl implements ParticipantController {
 
-    private final PartyService partyService;
+    private final SplitterService splitterService;
 
     private final ParticipantMapper participantMapper;
 
@@ -31,19 +31,19 @@ public class ParticipantControllerImpl implements ParticipantController {
     @Override
     public void updateParticipant(@Valid @RequestBody ParticipantUpdateRequest request) {
         ParticipantUpdateData updateData = participantMapper.fromUpdateRequest(request);
-        partyService.updateParticipant(updateData);
+        splitterService.updateParticipant(updateData);
     }
 
     @PostMapping
     @Override
     public UUID createParticipant(@Valid @RequestBody ParticipantCreateRequest request) {
         PartyParticipant participant = participantMapper.fromCreateRequest(request);
-        return partyService.createParticipant(participant);
+        return splitterService.createParticipant(participant);
     }
 
     @DeleteMapping("/{participantId}")
     @Override
     public void deleteParticipantById(@PathVariable UUID participantId) {
-        partyService.deleteParticipantById(participantId);
+        splitterService.deleteParticipantById(participantId);
     }
 }

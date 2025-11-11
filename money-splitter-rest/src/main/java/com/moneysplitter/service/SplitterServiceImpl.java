@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PartyServiceImpl implements PartyService {
+public class SplitterServiceImpl implements SplitterService {
 
     private final PartyDao partyDao;
 
