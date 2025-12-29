@@ -1,0 +1,258 @@
+@use "reset";
+@use "colors";
+
+html, body {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  color: colors.$text-dark;
+  background-color: colors.$background-light;
+  font-size: 16px;
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  padding: 0 15px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+input, select, textarea {
+  font: inherit;
+}
+
+.header-main {
+  background: colors.$background-dark;
+  color: colors.$text-light;
+  padding: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-main h1 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.header-main p {
+  text-align: center;
+}
+
+.footer-main {
+  background: colors.$background-footer;
+  padding: 1.5rem;
+  color: colors.$text-footer;
+  width: 100%;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.footer-main p {
+  text-align: center;
+}
+
+.card {
+  background: colors.$white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 0.5rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid colors.$card-border-header;
+}
+
+.party-header-card p {
+  color: colors.$text-midtone;
+}
+
+.party-page-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.party-page-details {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.participants-card {
+  width: 100%;
+}
+
+.participants-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.participants-list-title {
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.participant-item {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: colors.$list-item-background;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 6px;
+  border-left: 4px solid colors.$list-item-border-left;
+}
+
+.participant-name {
+  font-weight: 600;
+}
+
+.spendings-card {
+  width: 100%;
+}
+
+.spendings-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.spendings-list-title {
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.spending-item {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: colors.$list-item-background;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 6px;
+  border-left: 4px solid colors.$list-item-border-left;
+}
+
+.spending-item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.spending-name {
+  font-weight: 600;
+}
+
+.spending-amount {
+  font-weight: 600;
+}
+
+.transactions-card {
+  color: colors.$text-summary;
+  width: 100%;
+  background: colors.$card-summary-background;
+  border: 1px solid colors.$card-summary-border;
+  border-left: 6px solid colors.$card-summary-border-left;
+}
+
+.transactions-card h2 {
+  border-bottom-color: colors.$card-summary-border-header;
+}
+
+.transactions-card-description {
+  margin-bottom: 1rem;
+}
+
+.transactions-list-title {
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.transaction-item {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: colors.$list-item-background;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 6px;
+  border-left: 4px solid colors.$list_item-summary-border-left;
+}
+
+.transaction-amount {
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input, select, textarea {
+  width: 100%;
+  padding: 0.85rem;
+  border: 1px solid colors.$form-group-border;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form-group input:focus, select:focus {
+  outline: none;
+  border-color: colors.$form-group-border-focus;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.btn {
+  color: colors.$text-light;
+  width: 100%;
+  padding: 0.85rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-main {
+  background: colors.$btn-main;
+}
+
+.btn-secondary {
+  background: colors.$btn-secondary;
+}
+
+.btn-edit {
+  margin-right: 0.5rem;
+}
