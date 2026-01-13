@@ -1,7 +1,6 @@
 package com.moneysplitter.dao.postgresql.repository;
 
 import com.moneysplitter.dao.postgresql.entity.SpendingEntity;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,7 +11,11 @@ import java.util.UUID;
 
 public interface SpendingRepository extends JpaRepository<SpendingEntity, UUID> {
 
-    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = {"payer", "proportions", "proportions.participant"})
+    @Query("""
+        SELECT s FROM SpendingEntity s
+        LEFT JOIN FETCH s.payer
+        WHERE s.partyId = :partyId
+        """)
     List<SpendingEntity> findAllByPartyId(UUID partyId);
 
     @Query("select s.id from SpendingEntity s where s.partyId = :partyId")

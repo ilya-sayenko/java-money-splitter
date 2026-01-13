@@ -31,6 +31,7 @@ public abstract class SpendingMapper {
     public abstract List<SpendingResponse> toResponses(List<PartySpending> spending);
 
     @Mapping(target = "payer", expression = "java(participantMapper.fromEntity(spendingEntity.getPayer()))")
+    @Mapping(target = "proportions", expression = "java(proportionMapper.fromEntities(spendingEntity.getProportions()))")
     public abstract PartySpending fromEntity(SpendingEntity spendingEntity);
 
     public abstract List<PartySpending> fromEntities(List<SpendingEntity> spendingEntities);

@@ -9,9 +9,19 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProportionRepository extends JpaRepository<ProportionEntity, UUID> {
+
     @Modifying
     @Query("delete from ProportionEntity p where p.spendingId = :spendingId")
     void deleteBySpendingId(UUID spendingId);
 
+    @Modifying
+//    @Query("delete from ProportionEntity p where p.participantId = :participantId")
+    void deleteByParticipantId(UUID participantId);
+
+    @Query("""
+            SELECT p FROM ProportionEntity p
+            LEFT JOIN FETCH p.participant
+            WHERE p.spendingId IN :spendingIds
+            """)
     List<ProportionEntity> findBySpendingIdIn(List<UUID> spendingIds);
 }

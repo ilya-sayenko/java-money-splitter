@@ -17,4 +17,8 @@ public interface SpendingDao {
     Optional<PartySpending> findSpendingById(UUID spendingId);
 
     boolean existsByParticipantId(UUID participantId);
+
+    void deleteProportionsBySpendingId(UUID spendingId);
+
+    void deleteProportionsByParticipantId(UUID participantId);
 }

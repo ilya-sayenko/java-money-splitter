@@ -7,14 +7,12 @@ import com.moneysplitter.mapper.PartyMapper;
 import com.moneysplitter.model.Party;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
 public class PartyPostgresDao implements PartyDao {
 
     private final PartyRepository partyRepository;

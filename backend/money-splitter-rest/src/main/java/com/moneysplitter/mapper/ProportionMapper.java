@@ -36,6 +36,8 @@ public abstract class ProportionMapper {
     @Mapping(target = "participant", expression = "java(participantMapper.fromEntity(entity.getParticipant()))")
     public abstract SpendingProportion fromEntity(ProportionEntity entity);
 
+    public abstract List<SpendingProportion> fromEntities(Set<ProportionEntity> entities);
+
     @Autowired
     public void setProportionCalculatorFactory(ProportionCalculatorFactory proportionCalculatorFactory) {
         this.proportionCalculatorFactory = proportionCalculatorFactory;

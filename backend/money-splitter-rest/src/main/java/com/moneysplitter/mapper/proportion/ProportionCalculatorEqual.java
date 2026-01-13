@@ -18,7 +18,7 @@ import static com.moneysplitter.controller.data.SplitType.EQUAL;
 @RequiredArgsConstructor
 public class ProportionCalculatorEqual implements ProportionCalculator {
 
-    private static final int SCALE = 6;
+    private static final int SCALE = 6; // TODO вынести в отдельный класс
 
     private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
 
@@ -30,13 +30,11 @@ public class ProportionCalculatorEqual implements ProportionCalculator {
         BigDecimal value = request.amount().divide(BigDecimal.valueOf(participants.size()), SCALE, ROUNDING_MODE);
 
         return participants.stream()
-                .map(participant -> {
-                    return SpendingProportion.builder()
-                            .participant(PartyParticipant.builder().id(participant.getId()).build())
-                            .proportion(BigDecimal.ONE)
-                            .amount(value)
-                            .build();
-                })
+                .map(participant -> SpendingProportion.builder()
+                        .participant(PartyParticipant.builder().id(participant.getId()).build())
+                        .proportion(BigDecimal.ONE)
+                        .amount(value)
+                        .build())
                 .toList();
     }
 

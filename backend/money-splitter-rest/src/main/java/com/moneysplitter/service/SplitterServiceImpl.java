@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,6 +37,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SplitterServiceImpl implements SplitterService {
+
+    private static final int SCALE = 6;
+
+    private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_EVEN;
 
     private final PartyDao partyDao;
 
@@ -70,8 +75,13 @@ public class SplitterServiceImpl implements SplitterService {
     }
 
     @Override
+    @Transactional
     public UUID createParticipant(PartyParticipant participant) {
-        return participantDao.saveParticipant(participant).getId();
+        UUID participantId = participantDao.saveParticipant(participant).getId();
+        recalculateProportions(participant.getPartyId());
+        recalculateTransactions(participant.getPartyId());
+
+        return participantId;
     }
 
     @Override
@@ -89,11 +99,19 @@ public class SplitterServiceImpl implements SplitterService {
     }
 
     @Override
+    @Transactional
     public void deleteParticipantById(UUID participantId) {
+        PartyParticipant partyParticipant = participantDao.findParticipantById(participantId)
+                .orElseThrow(() -> new ParticipantNotFoundException(participantId));
         if (spendingDao.existsByParticipantId(participantId)) {
             throw new IncorrectDeleteException(String.format("Spendings exists for participantId=%s", participantId));
         }
+        UUID partyId = partyParticipant.getPartyId();
+        transactionDao.deleteTransactionsByPartyId(partyId);
+        spendingDao.deleteProportionsByParticipantId(participantId);
         participantDao.deleteParticipantById(participantId);
+        recalculateProportions(partyId);
+        recalculateTransactions(partyId);
     }
 
     @Override
@@ -109,7 +127,7 @@ public class SplitterServiceImpl implements SplitterService {
         }
         spending = spendingDao.saveSpending(spending);
         UUID partyId = spending.getPartyId();
-        updateTransactions(partyId);
+        recalculateTransactions(partyId);
 
         return spending.getId();
     }
@@ -126,7 +144,7 @@ public class SplitterServiceImpl implements SplitterService {
                 .orElseThrow(() -> new SpendingNotFoundException(spendingId))
                 .getPartyId();
         spendingDao.deleteSpendingById(spendingId);
-        updateTransactions(partyId);
+        recalculateTransactions(partyId);
     }
 
     @Override
@@ -143,11 +161,34 @@ public class SplitterServiceImpl implements SplitterService {
     }
 
     @Transactional
-    private void updateTransactions(UUID partyId) {
+    private void recalculateTransactions(UUID partyId) {
         OutputData outputData = MoneySplitter.split(prepareCoreInputData(partyId));
         List<PartyTransaction> transactions = prepareTransactionsByCoreOutputData(partyId, outputData);
         transactionDao.deleteTransactionsByPartyId(partyId);
         transactionDao.saveTransactions(transactions);
+    }
+
+    @Transactional
+    private void recalculateProportions(UUID partyId) {
+        List<PartySpending> spendings = spendingDao.findSpendingsByPartyId(partyId);
+        for (PartySpending spending : spendings) {
+            if (spending.getSplitType() == SplitType.EQUAL) {
+                spendingDao.deleteProportionsBySpendingId(spending.getId());
+                List<PartyParticipant> participants = participantDao.findParticipantsByPartyId(partyId);
+                BigDecimal amount = spending.getAmount().divide(BigDecimal.valueOf(participants.size()), SCALE, ROUNDING_MODE);
+                List<SpendingProportion> proportions = participants.stream()
+                        .map(participant -> SpendingProportion.builder()
+                                .spendingId(spending.getId())
+                                .participant(participant)
+                                .proportion(BigDecimal.ONE)
+                                .amount(amount)
+                                .build())
+                        .toList();
+
+                spending.setProportions(proportions);
+                spendingDao.saveSpending(spending);
+            }
+        }
     }
 
     private List<PartyTransaction> prepareTransactionsByCoreOutputData(UUID partyId, OutputData outputData) {
@@ -171,7 +212,8 @@ public class SplitterServiceImpl implements SplitterService {
                 .map(p -> p.getId().toString())
                 .collect(Collectors.toList());
 
-        List<Spending> spendings = spendingDao.findSpendingsByPartyId(partyId)
+        List<PartySpending> spendingsByPartyId = spendingDao.findSpendingsByPartyId(partyId);
+        List<Spending> spendings = spendingsByPartyId
                 .stream()
                 .map(partySpending -> Spending
                         .builder()

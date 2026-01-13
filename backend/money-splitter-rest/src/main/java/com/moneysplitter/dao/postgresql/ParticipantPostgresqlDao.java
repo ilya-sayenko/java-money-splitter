@@ -7,7 +7,6 @@ import com.moneysplitter.mapper.ParticipantMapper;
 import com.moneysplitter.model.PartyParticipant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
 public class ParticipantPostgresqlDao implements ParticipantDao {
 
     private final ParticipantRepository participantRepository;
