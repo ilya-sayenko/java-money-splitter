@@ -6,9 +6,9 @@ spring:
     name: money-splitter
   datasource:
     driver-class-name: "org.postgresql.Driver"
-    url: "jdbc:postgresql://localhost:5432/money-splitter"
-    username: "postgres"
-    password: "postgres"
+    url: "${POSTGRES_URL:jdbc:postgresql://localhost:5432/money-splitter}"
+    username: "${POSTGRES_USER:postgres}"
+    password: "${POSTGRES_PASSWORD:postgres}"
   liquibase:
     change-log: "classpath:db/postgresql/liquibase/changelog.xml"
   jpa:
