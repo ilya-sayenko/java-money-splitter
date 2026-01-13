@@ -1,0 +1,48 @@
+version: '3.8'
+
+name: money-splitter-backend
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: money-splitter-postgres
+    environment:
+      POSTGRES_DB: money-splitter
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - money-splitter-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: money-splitter-app
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/money-splitter
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - money-splitter-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  money-splitter-network:
+    driver: bridge
