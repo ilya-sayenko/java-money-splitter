@@ -4,14 +4,17 @@
 Stack: Java, Spring Boot, PostgreSQL.
 
 ## How to use with Docker
-Start:
-
+You can run backend server with only a single command:
 ```
 docker-compose up -d
 ```
 
-Stop:
-
+Stopping all the running containers is also simple with a single command:
 ```
 docker-compose down
+```
+
+After starting you can see Swagger using url:
+```
+http://localhost:8080/swagger-ui/index.html#/
 ```

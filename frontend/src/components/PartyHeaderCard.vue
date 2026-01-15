@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  const props = defineProps<{
-    name: string,
-    description?: string
-  }>()
+  import {storeToRefs} from "pinia";
+  import {usePartyStore} from "@/stores/partyStore.ts";
+
+  const partyStore = usePartyStore();
+  const { party } = storeToRefs(partyStore);
 </script>
 
 <template>
-  <div class="card party-header-card">
-    <h2>{{ props.name }}</h2>
-    <p>Дата создания: {{ props.description }}</p>
-    <p>{{ props.description }}</p>
+  <div class="card party-header-card" v-if="party">
+    <h2>{{ party.name }}</h2>
+    <p>{{ party.description }}</p>
   </div>
 </template>
 

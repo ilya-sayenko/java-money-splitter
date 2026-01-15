@@ -4,5 +4,5 @@ export class Party {
 
   name: string;
 
-  description?: string;
+  description: string;
 }
