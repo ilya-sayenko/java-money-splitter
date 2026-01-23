@@ -14,6 +14,8 @@
             <column name="payee_id" type="uuid"/>
             <column name="amount" type="numeric"/>
             <column name="status" type="varchar(50)"/>
+            <column name="created_at" type="timestamptz"/>
+            <column name="updated_at" type="timestamptz"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="transactions"

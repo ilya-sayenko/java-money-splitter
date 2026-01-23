@@ -15,8 +15,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -54,4 +57,12 @@ public class SpendingEntity {
     @OneToMany
     @JoinColumn(name = "spending_id", updatable = false)
     private Set<ProportionEntity> proportions;
+
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private OffsetDateTime createDate;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private OffsetDateTime updateDate;
 }

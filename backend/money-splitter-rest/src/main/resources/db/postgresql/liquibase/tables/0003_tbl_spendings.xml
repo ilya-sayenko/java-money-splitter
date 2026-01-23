@@ -14,6 +14,8 @@
             <column name="name" type="varchar(250)"/>
             <column name="amount" type="numeric"/>
             <column name="split_type" type="varchar(50)"/>
+            <column name="created_at" type="timestamptz"/>
+            <column name="updated_at" type="timestamptz"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="spendings"

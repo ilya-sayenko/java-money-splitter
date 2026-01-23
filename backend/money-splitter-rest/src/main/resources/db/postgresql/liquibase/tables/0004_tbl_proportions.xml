@@ -13,6 +13,8 @@
             <column name="participant_id" type="uuid"/>
             <column name="proportion" type="numeric"/>
             <column name="amount" type="numeric"/>
+            <column name="created_at" type="timestamptz"/>
+            <column name="updated_at" type="timestamptz"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="proportions"

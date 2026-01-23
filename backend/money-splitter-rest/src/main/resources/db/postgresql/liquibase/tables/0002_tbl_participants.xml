@@ -11,6 +11,8 @@
             </column>
             <column name="name" type="varchar(250)"/>
             <column name="party_id" type="uuid"/>
+            <column name="created_at" type="timestamptz"/>
+            <column name="updated_at" type="timestamptz"/>
         </createTable>
         <addForeignKeyConstraint
                 baseTableName="participants"

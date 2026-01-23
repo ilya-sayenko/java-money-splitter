@@ -11,6 +11,8 @@
             </column>
             <column name="name" type="varchar(250)"/>
             <column name="description" type="text"/>
+            <column name="created_at" type="timestamptz"/>
+            <column name="updated_at" type="timestamptz"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

@@ -13,8 +13,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -47,4 +50,12 @@ public class TransactionEntity {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
+
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private OffsetDateTime createDate;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private OffsetDateTime updateDate;
 }
