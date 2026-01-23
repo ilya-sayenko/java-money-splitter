@@ -8,6 +8,7 @@ import com.moneysplitter.model.Party;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,5 +31,10 @@ public class PartyPostgresDao implements PartyDao {
         partyEntity = partyRepository.save(partyEntity);
 
         return partyMapper.fromEntity(partyEntity);
+    }
+
+    @Override
+    public List<Party> findAllPartyById(List<UUID> partyIds) {
+        return partyMapper.fromEntities(partyRepository.findAllById(partyIds));
     }
 }

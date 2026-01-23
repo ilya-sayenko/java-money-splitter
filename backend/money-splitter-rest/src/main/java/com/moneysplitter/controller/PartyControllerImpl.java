@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -45,6 +46,12 @@ public class PartyControllerImpl implements PartyController {
     @Override
     public PartyResponse getPartyById(@PathVariable UUID partyId) {
         return partyMapper.toResponse(splitterService.findPartyById(partyId));
+    }
+
+    @GetMapping
+    @Override
+    public List<PartyResponse> getAllPartyById(@RequestParam("ids") List<UUID> partyIds) {
+        return partyMapper.toResponses(splitterService.findAllPartyById(partyIds));
     }
 
     @PostMapping

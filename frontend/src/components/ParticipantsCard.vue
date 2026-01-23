@@ -3,16 +3,24 @@ import {computed, onMounted, ref} from "vue";
 import {usePartyStore} from "@/stores/partyStore.ts";
 import {storeToRefs} from "pinia";
 import {useRoute} from "vue-router";
-import {ParticipantCreateRequest} from "@/http/models/ParticipantCreateRequest.ts";
+import {ParticipantCreateRequest} from "@/http/data/models/ParticipantCreateRequest.ts";
+import ParticipantItem from "@/components/ParticipantItem.vue";
 
-const participantName = ref('');
 const route = useRoute();
+
 const partyId = computed(() => route.params.partyId as string);
+
 const partyStore = usePartyStore();
+
 const { participants } = storeToRefs(partyStore);
+
 const showParticipants = computed(() => {
   return participants.value && participants.value.length !== 0;
 })
+
+const participantName = ref('');
+
+const isEditParticipant = ref(false);
 
 async function createParticipant() {
   const participant = new ParticipantCreateRequest();
@@ -52,13 +60,15 @@ onMounted(async () => {
     <div v-if="showParticipants">
       <h3 class="participants-list-title">Список участников:</h3>
       <ul class="participants-list">
-        <li class="participant-item" v-for="participant in participants" :key="participant.id">
-          <span class="participant-name">{{ participant.name }}</span>
-          <div>
-<!--            <button class="btn-edit">✏️</button>-->
-            <button @click="deleteParticipantById(participant.id)">❌</button>
-          </div>
-        </li>
+        <ParticipantItem v-for="participant in participants" :participant="participant"></ParticipantItem>
+<!--        <li class="participant-item" v-for="participant in participants" :key="participant.id">-->
+<!--          <span class="participant-name" v-if="!isEditParticipant">{{ participant.name }}</span>-->
+<!--          <input class="participant-item-new-name" type="text" v-if="isEditParticipant" @blur="isEditParticipant = false"/>-->
+<!--          <div>-->
+<!--            <button class="btn-edit" @click="isEditParticipant = true">✏️</button>-->
+<!--            <button @click="deleteParticipantById(participant.id)">❌</button>-->
+<!--          </div>-->
+<!--        </li>-->
       </ul>
     </div>
   </div>

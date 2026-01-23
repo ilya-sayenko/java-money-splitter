@@ -1,17 +1,67 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
+import {useAuthStore} from "@/stores/authStore.ts";
+import {storeToRefs} from "pinia";
+import {ref} from "vue";
 
 const router = useRouter();
+const authStore = useAuthStore();
+const { isLoggedIn, user } = storeToRefs(authStore);
+const isShowUserPopup = ref(false);
 
 function routeToMainPage() {
-  router.push("/");
+  router.push('/');
+}
+
+function routeToAuthPage() {
+  router.push('/auth');
+}
+
+function routeToProfilePage() {
+  hideUserPopup();
+  router.push('/profile');
+}
+
+function toggleUserPopup() {
+  isShowUserPopup.value = !isShowUserPopup.value;
+}
+
+function showUserPopup() {
+  isShowUserPopup.value = true;
+}
+
+function hideUserPopup() {
+  isShowUserPopup.value = false;
+}
+
+function logout() {
+  authStore.logout();
+  hideUserPopup();
+  router.push('/');
 }
 </script>
 
 <template>
     <header class="header-main">
-      <h1 @click="routeToMainPage">💰 MoneySplitter</h1>
-      <p>Лёгкий способ разделить совместные затраты между друзьями</p>
+      <div class="container">
+        <div class="header-content">
+          <h2 @click="routeToMainPage">💰 MoneySplitter</h2>
+          <button class="btn btn-sign-in" @click="routeToAuthPage" v-if="!isLoggedIn">Войти</button>
+          <div v-if="isLoggedIn" class="user-section">
+            <span class="user-icon" @click="toggleUserPopup">👤</span>
+            <div
+              class="user-popup"
+              :class="{ 'active': isShowUserPopup }"
+            >
+              <div class="popup-content">
+                <div class="user-popup-name">👤 {{ user?.email }}</div>
+                <button class="btn btn-popup" @click="routeToProfilePage">Профиль</button>
+                <button class="btn btn-popup" @click="logout">Выйти</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
 </template>
 

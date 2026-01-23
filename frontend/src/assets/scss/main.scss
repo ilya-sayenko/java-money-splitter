@@ -44,18 +44,24 @@ input, select, textarea {
 .header-main {
   background: colors.$background-dark;
   color: colors.$text-light;
-  padding: 1.5rem;
+  padding: 1rem;
   margin-bottom: 0.5rem;
 }
 
-.header-main h1 {
-  margin-bottom: 1rem;
+.header-main h2 {
   text-align: center;
   cursor: pointer;
 }
 
 .header-main p {
   text-align: center;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem;
 }
 
 .footer-main {
@@ -146,6 +152,14 @@ input, select, textarea {
   justify-content: space-between;
   border-radius: 6px;
   border-left: 4px solid colors.$list-item-border-left;
+}
+
+.participant-item-new-name {
+  font-weight: 600;
+  width: 80%;
+  padding: 0.5rem;
+  border: 1px solid colors.$form-group-border;
+  border-radius: 8px;
 }
 
 .participant-name {
@@ -253,10 +267,12 @@ input, select, textarea {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
+.auth-form {
+  margin: 0 auto;
+  max-width: 600px;
+}
+
 .btn {
-  //display: block;
-  //margin-left: auto;
-  //margin-right: auto;
   color: colors.$text-light;
   width: 100%;
   padding: 0.85rem;
@@ -282,6 +298,22 @@ input, select, textarea {
 
 .btn-edit {
   margin-right: 0.5rem;
+}
+
+.btn-create-party {
+  max-width: 40%;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+}
+
+.btn-sign-in {
+  color: colors.$background-dark;
+  background: colors.$background-light;
+  width: auto;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
 }
 
 .modal-overlay {
@@ -324,3 +356,57 @@ input, select, textarea {
   font-size: 1.5rem;
 }
 
+.error {
+  font-size: 0.9rem;
+  color: colors.$text-error;
+  margin: 0.5rem;
+  text-align: center;
+}
+
+.user-section {
+  position: relative;
+}
+
+.user-icon {
+  font-size: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.user-popup {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 300px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+.user-popup.active {
+  opacity: 1;
+}
+
+//.user-popup-name {
+//  cursor: auto;
+//}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  font-size: 1rem;
+  color: colors.$text-dark;
+}
+
+.btn-popup {
+  color: colors.$text-dark
+}
+
+.btn-popup:hover {
+  background: colors.$background-light;
+}

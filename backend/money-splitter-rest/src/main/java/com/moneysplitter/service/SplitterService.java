@@ -36,4 +36,6 @@ public interface SplitterService {
     List<PartyTransaction> findTransactionsByPartyId(UUID partyId);
 
     void updateTransactionStatus(UUID transactionId, TransactionStatus status);
+
+    List<Party> findAllPartyById(List<UUID> partyIds);
 }

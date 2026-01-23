@@ -3,16 +3,23 @@ import axios, {type AxiosResponse} from "axios";
 import type {Participant} from "@/models/Participant.ts";
 import type {Spending} from "@/models/Spending.ts";
 import type {Transaction} from "@/models/Transaction.ts";
-import type {PartyCreateRequest} from "@/http/models/PartyCreateRequest.ts";
-import type {ParticipantCreateRequest} from "@/http/models/ParticipantCreateRequest.ts";
-import type {SpendingCreateRequest} from "@/http/models/SpendingCreateRequest.ts";
+import type {PartyCreateRequest} from "@/http/data/models/PartyCreateRequest.ts";
+import type {ParticipantCreateRequest} from "@/http/data/models/ParticipantCreateRequest.ts";
+import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
+import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
 
-export class MoneySplitterHttpClient {
+export class MoneySplitterHttpClient { // TODO singletone
 
   private baseUrl: string = import.meta.env.VITE_MONEY_SPLITTER_BACKEND_URL;
 
   async getPartyById(partyId: string): Promise<Party> {
     const response: AxiosResponse<Party> = await axios.get(`${this.baseUrl}/parties/${partyId}`);
+    return response.data;
+  }
+
+  async getAllPartyById(partyIds: string[]): Promise<Party[]> {
+    console.log(`${this.baseUrl}/parties?ids=${partyIds}`);
+    const response: AxiosResponse<Party[]> = await axios.get(`${this.baseUrl}/parties?ids=${partyIds}`);
     return response.data;
   }
 
@@ -39,6 +46,10 @@ export class MoneySplitterHttpClient {
   async postParticipant(participant: ParticipantCreateRequest): Promise<string> {
     const response: AxiosResponse<string> = await axios.post(`${this.baseUrl}/participants`, participant);
     return response.data;
+  }
+
+  async putParticipant(participant: ParticipantUpdateRequest): Promise<void> {
+    return await axios.put(`${this.baseUrl}/participants`, participant);
   }
 
   async postSpending(spending: SpendingCreateRequest): Promise<string> {

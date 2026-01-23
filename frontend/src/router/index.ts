@@ -5,15 +5,23 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: () => import('@/pages/PartiesPage.vue')
+      component: () => import('@/pages/MainPage.vue')
     },
     {
       path: '/parties',
-      component: () => import('@/pages/PartiesPage.vue')
+      component: () => import('@/pages/MainPage.vue')
     },
     {
       path: '/parties/:partyId',
       component: () => import('@/pages/PartyPage.vue')
+    },
+    {
+      path: '/auth',
+      component: () => import('@/pages/AuthPage.vue')
+    },
+    {
+      path: '/profile',
+      component: () => import('@/pages/ProfilePage.vue')
     }
   ],
 })

@@ -1,4 +1,4 @@
-import type {SplitRequest} from "@/http/models/SplitRequest.ts";
+import type {SplitRequest} from "@/http/data/models/SplitRequest.ts";
 
 export class SpendingCreateRequest {
 

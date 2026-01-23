@@ -160,6 +160,11 @@ public class SplitterServiceImpl implements SplitterService {
         transactionDao.saveTransaction(transaction);
     }
 
+    @Override
+    public List<Party> findAllPartyById(List<UUID> partyIds) {
+        return partyDao.findAllPartyById(partyIds);
+    }
+
     @Transactional
     private void recalculateTransactions(UUID partyId) {
         OutputData outputData = MoneySplitter.split(prepareCoreInputData(partyId));

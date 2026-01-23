@@ -3,8 +3,8 @@ import {useRoute} from "vue-router";
 import {computed, onMounted, ref} from "vue";
 import {usePartyStore} from "@/stores/partyStore.ts";
 import {storeToRefs} from "pinia";
-import {SpendingCreateRequest} from "@/http/models/SpendingCreateRequest.ts";
-import {SplitRequest} from "@/http/models/SplitRequest.ts";
+import {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
+import {SplitRequest} from "@/http/data/models/SplitRequest.ts";
 import {SplitType} from "@/models/SplitType.ts";
 
 const route = useRoute();

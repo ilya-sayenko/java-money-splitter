@@ -13,15 +13,21 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.List;
+
 @Mapper(config = MapperConfig.class)
 public interface PartyMapper {
 
     PartyResponse toResponse(Party party);
 
+    List<PartyResponse> toResponses(List<Party> parties);
+
     PartyEntity toEntity(Party party);
 
     @Mapping(target = "totalAmount", ignore = true)
     Party fromEntity(PartyEntity partyEntity);
+
+    List<Party> fromEntities(List<PartyEntity> entities);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "totalAmount", constant = "0")

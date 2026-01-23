@@ -1,13 +1,14 @@
 import {ref, watch} from 'vue'
 import {defineStore} from 'pinia'
 import type {Party} from "@/models/Party.ts";
-import {MoneySplitterHttpClient} from "@/http/MoneySplitterHttpClient.ts";
+import {MoneySplitterHttpClient} from "@/http/data/MoneySplitterHttpClient.ts";
 import type {Participant} from "@/models/Participant.ts";
 import type {Spending} from "@/models/Spending.ts";
 import type {Transaction} from "@/models/Transaction.ts";
-import type {PartyCreateRequest} from "@/http/models/PartyCreateRequest.ts";
-import type {ParticipantCreateRequest} from "@/http/models/ParticipantCreateRequest.ts";
-import type {SpendingCreateRequest} from "@/http/models/SpendingCreateRequest.ts";
+import type {PartyCreateRequest} from "@/http/data/models/PartyCreateRequest.ts";
+import type {ParticipantCreateRequest} from "@/http/data/models/ParticipantCreateRequest.ts";
+import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
+import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
 
 export const usePartyStore = defineStore('party', () => {
   const LOCAL_STORAGE_KEY = "PARTY_LOCAL_STORAGE_KEY";
@@ -40,6 +41,10 @@ export const usePartyStore = defineStore('party', () => {
 
   async function createParticipant(participant: ParticipantCreateRequest) {
     return httpClient.postParticipant(participant);
+  }
+
+  async function updateParticipant(participant: ParticipantUpdateRequest) {
+      return httpClient.putParticipant(participant);
   }
 
   async function createSpending(spending: SpendingCreateRequest) {
@@ -85,6 +90,7 @@ export const usePartyStore = defineStore('party', () => {
     createParty,
     createParticipant,
     createSpending,
+    updateParticipant,
     deleteParticipantById,
     deleteSpendingById,
     loadLocalParties,

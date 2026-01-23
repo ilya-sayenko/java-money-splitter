@@ -1,8 +1,11 @@
 <script setup>
 import {defineProps, defineEmits, ref} from 'vue';
-import {PartyCreateRequest} from "@/http/models/PartyCreateRequest.js";
+import {PartyCreateRequest} from "@/http/data/models/PartyCreateRequest.js";
 import {usePartyStore} from "@/stores/partyStore.js";
 import {useRouter} from "vue-router";
+import {UserDataHttpClient} from "@/http/user/UserDataHttpClient.js";
+import {useAuthStore} from "@/stores/authStore.js";
+import {storeToRefs} from "pinia";
 
 const props = defineProps({
   isOpened: Boolean
@@ -18,17 +21,27 @@ const partyName = ref('');
 const partyDescription = ref('');
 const partyStore = usePartyStore();
 const router = useRouter();
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
+const userDataHttpClient = new UserDataHttpClient();
 
 async function createParty() {
   const party = new PartyCreateRequest();
   party.name = partyName.value;
   party.description = partyDescription.value;
   const newPartyId = await partyStore.createParty(party);
-  partyStore.saveLocalParty({
-    id: newPartyId,
-    name: party.name,
-    description: party.description
-  });
+  let userPartyIds = await userDataHttpClient.getPartyIdsByUserId(user.value.id);
+  if (!userPartyIds) {
+    userPartyIds = [];
+  }
+  userPartyIds.push(newPartyId);
+  await userDataHttpClient.putPartyIds(user.value.id, userPartyIds);
+
+  // partyStore.saveLocalParty({
+  //   id: newPartyId,
+  //   name: party.name,
+  //   description: party.description
+  // });
   await router.push(`/parties/${newPartyId}`);
 }
 </script>
