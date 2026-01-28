@@ -23,6 +23,8 @@ public interface ParticipantMapper {
     List<ParticipantResponse> toResponses(List<PartyParticipant> participant);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createDate", ignore = true)
+    @Mapping(target = "updateDate", ignore = true)
     PartyParticipant fromCreateRequest(ParticipantCreateRequest request);
 
     ParticipantUpdateData fromUpdateRequest(ParticipantUpdateRequest request);
@@ -33,6 +35,8 @@ public interface ParticipantMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "partyId", ignore = true)
+    @Mapping(target = "createDate", ignore = true)
+    @Mapping(target = "updateDate", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFields(ParticipantUpdateData participantUpdateData, @MappingTarget PartyParticipant participantTarget);
 }

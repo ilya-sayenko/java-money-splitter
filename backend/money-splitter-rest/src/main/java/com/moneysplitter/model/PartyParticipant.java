@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -20,4 +21,8 @@ public class PartyParticipant {
     private UUID partyId;
 
     private String name;
+
+    private OffsetDateTime createDate;
+
+    private OffsetDateTime updateDate;
 }

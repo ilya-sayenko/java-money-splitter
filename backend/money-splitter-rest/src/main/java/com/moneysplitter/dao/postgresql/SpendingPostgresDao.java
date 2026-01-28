@@ -44,7 +44,7 @@ public class SpendingPostgresDao implements SpendingDao {
     @Override
     @Transactional(readOnly = true)
     public List<PartySpending> findSpendingsByPartyId(UUID partyId) {
-        List<SpendingEntity> spendingEntities = spendingRepository.findAllByPartyId(partyId);
+        List<SpendingEntity> spendingEntities = spendingRepository.findByPartyId(partyId);
 
         if (!spendingEntities.isEmpty()) {
             List<UUID> spendingIds = spendingEntities.stream()
@@ -65,6 +65,12 @@ public class SpendingPostgresDao implements SpendingDao {
         }
 
         return spendingMapper.fromEntities(spendingEntities);
+    }
+
+    @Override
+    public List<PartySpending> findAllSpendingsByPartyId(List<UUID> partyIds) {
+        List<SpendingEntity> allByPartyId = spendingRepository.findAllByPartyId(partyIds);
+        return spendingMapper.fromEntities(allByPartyId);
     }
 
     @Override

@@ -15,7 +15,7 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     void deleteByPartyId(UUID partyId);
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = {"payer", "payee"})
-    List<TransactionEntity> findByPartyId(UUID partyId);
+    List<TransactionEntity> findByPartyIdOrderByCreateDateDesc(UUID partyId);
 
     @Modifying
     @Query("update TransactionEntity set status = :status where id = :transactionId")

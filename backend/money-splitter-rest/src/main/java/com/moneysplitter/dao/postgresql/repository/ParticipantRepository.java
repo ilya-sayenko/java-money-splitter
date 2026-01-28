@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface ParticipantRepository extends JpaRepository<ParticipantEntity, UUID> {
 
-    List<ParticipantEntity> findByPartyId(UUID partyId);
+    List<ParticipantEntity> findByPartyIdOrderByCreateDateDesc(UUID partyId);
 }

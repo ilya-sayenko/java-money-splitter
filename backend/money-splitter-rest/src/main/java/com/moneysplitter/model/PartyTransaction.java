@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -25,4 +26,8 @@ public class PartyTransaction {
     private BigDecimal amount;
 
     private TransactionStatus status;
+
+    private OffsetDateTime createDate;
+
+    private OffsetDateTime updateDate;
 }

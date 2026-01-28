@@ -41,7 +41,7 @@ public class ParticipantPostgresqlDao implements ParticipantDao {
 
     @Override
     public List<PartyParticipant> findParticipantsByPartyId(UUID partyId) {
-        return participantRepository.findByPartyId(partyId)
+        return participantRepository.findByPartyIdOrderByCreateDateDesc(partyId)
                 .stream()
                 .map(participantMapper::fromEntity)
                 .collect(Collectors.toList());

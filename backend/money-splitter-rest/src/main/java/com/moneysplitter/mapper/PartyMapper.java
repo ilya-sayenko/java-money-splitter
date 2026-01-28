@@ -31,12 +31,16 @@ public interface PartyMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "totalAmount", constant = "0")
+    @Mapping(target = "createDate", ignore = true)
+    @Mapping(target = "updateDate", ignore = true)
     Party fromCreateRequest(PartyCreateRequest createRequest);
 
     PartyUpdateData fromUpdateRequest(PartyUpdateRequest updateRequest);
 
     @Mapping(target = "totalAmount", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createDate", ignore = true)
+    @Mapping(target = "updateDate", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFields(PartyUpdateData participantUpdateData, @MappingTarget Party partyTarget);
 }

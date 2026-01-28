@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,4 +29,8 @@ public class PartySpending {
     private SplitType splitType;
 
     private List<SpendingProportion> proportions;
+
+    private OffsetDateTime createDate;
+
+    private OffsetDateTime updateDate;
 }

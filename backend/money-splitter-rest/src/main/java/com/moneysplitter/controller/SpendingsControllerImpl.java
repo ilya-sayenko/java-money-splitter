@@ -1,20 +1,21 @@
 package com.moneysplitter.controller;
 
 import com.moneysplitter.controller.data.SpendingCreateRequest;
-import com.moneysplitter.mapper.ParticipantMapper;
-import com.moneysplitter.mapper.PartyMapper;
+import com.moneysplitter.controller.data.SpendingResponse;
 import com.moneysplitter.mapper.SpendingMapper;
-import com.moneysplitter.mapper.TransactionMapper;
 import com.moneysplitter.model.PartySpending;
 import com.moneysplitter.service.SplitterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,13 +25,13 @@ public class SpendingsControllerImpl implements SpendingsController {
 
     private final SplitterService splitterService;
 
-    private final PartyMapper partyMapper;
-
-    private final ParticipantMapper participantMapper;
-
-    private final TransactionMapper transactionMapper;
-
     private final SpendingMapper spendingMapper;
+
+    @GetMapping
+    @Override
+    public List<SpendingResponse> findSpendings(@RequestParam("partyIds") List<UUID> partyIds) {
+        return spendingMapper.toResponses(splitterService.findAllSpendingsByPartyId(partyIds));
+    }
 
     @PostMapping
     @Override

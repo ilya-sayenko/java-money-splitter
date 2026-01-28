@@ -138,6 +138,11 @@ public class SplitterServiceImpl implements SplitterService {
     }
 
     @Override
+    public List<PartySpending> findAllSpendingsByPartyId(List<UUID> partyIds) {
+        return spendingDao.findAllSpendingsByPartyId(partyIds);
+    }
+
+    @Override
     @Transactional
     public void deleteSpendingById(UUID spendingId) {
         UUID partyId = spendingDao.findSpendingById(spendingId)
@@ -176,10 +181,10 @@ public class SplitterServiceImpl implements SplitterService {
     @Transactional
     private void recalculateProportions(UUID partyId) {
         List<PartySpending> spendings = spendingDao.findSpendingsByPartyId(partyId);
+        List<PartyParticipant> participants = participantDao.findParticipantsByPartyId(partyId);
         for (PartySpending spending : spendings) {
             if (spending.getSplitType() == SplitType.EQUAL) {
                 spendingDao.deleteProportionsBySpendingId(spending.getId());
-                List<PartyParticipant> participants = participantDao.findParticipantsByPartyId(partyId);
                 BigDecimal amount = spending.getAmount().divide(BigDecimal.valueOf(participants.size()), SCALE, ROUNDING_MODE);
                 List<SpendingProportion> proportions = participants.stream()
                         .map(participant -> SpendingProportion.builder()

@@ -1,8 +1,10 @@
 package com.moneysplitter.controller.data;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,6 +12,8 @@ import java.util.UUID;
 public record SpendingResponse (
 
         UUID id,
+
+        UUID partyId,
 
         ParticipantResponse payer,
 
@@ -19,6 +23,12 @@ public record SpendingResponse (
 
         SplitType splitType,
 
-        List<ProportionResponse> proportions
+        List<ProportionResponse> proportions,
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING)
+        OffsetDateTime createDate,
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING)
+        OffsetDateTime updateDate
 ) {
 }

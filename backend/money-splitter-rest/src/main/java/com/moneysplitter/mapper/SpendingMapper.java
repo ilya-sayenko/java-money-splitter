@@ -22,6 +22,8 @@ public abstract class SpendingMapper {
     @Mapping(target = "splitType", source = "split.splitType")
     @Mapping(target = "payer", expression = "java(PartyParticipant.builder().id(request.payerId()).build())")
     @Mapping(target = "proportions", expression = "java(proportionMapper.fromSplitRequest(request))")
+    @Mapping(target = "createDate", ignore = true)
+    @Mapping(target = "updateDate", ignore = true)
     public abstract PartySpending fromCreateRequest(SpendingCreateRequest request);
 
     @Mapping(target = "payer", expression = "java(participantMapper.toResponse(spending.getPayer()))")

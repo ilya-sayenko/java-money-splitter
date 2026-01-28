@@ -35,6 +35,6 @@ public class PartyPostgresDao implements PartyDao {
 
     @Override
     public List<Party> findAllPartyById(List<UUID> partyIds) {
-        return partyMapper.fromEntities(partyRepository.findAllById(partyIds));
+        return partyMapper.fromEntities(partyRepository.findByIdInOrderByCreateDateDesc(partyIds));
     }
 }

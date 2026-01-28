@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -23,6 +24,10 @@ public class Party {
     private String name;
 
     private String description;
+
+    private OffsetDateTime createDate;
+
+    private OffsetDateTime updateDate;
 
     @Builder.Default
     private BigDecimal totalAmount = BigDecimal.ZERO;

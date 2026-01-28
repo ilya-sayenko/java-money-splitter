@@ -31,6 +31,8 @@ public interface SplitterService {
 
     List<PartySpending> findSpendingsByPartyId(UUID partyId);
 
+    List<PartySpending> findAllSpendingsByPartyId(List<UUID> partyIds);
+
     void deleteSpendingById(UUID spendingId);
 
     List<PartyTransaction> findTransactionsByPartyId(UUID partyId);

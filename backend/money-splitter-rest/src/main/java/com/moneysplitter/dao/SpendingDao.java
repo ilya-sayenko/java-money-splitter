@@ -12,6 +12,8 @@ public interface SpendingDao {
 
     List<PartySpending> findSpendingsByPartyId(UUID partyId);
 
+    List<PartySpending> findAllSpendingsByPartyId(List<UUID> partyIds);
+
     void deleteSpendingById(UUID spendingId);
 
     Optional<PartySpending> findSpendingById(UUID spendingId);
