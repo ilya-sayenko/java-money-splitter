@@ -8,7 +8,6 @@ const apiKey = import.meta.env.VITE_FIREBASE_API_KEY;
 const api = axios.create();
 
 export async function refreshAccessToken() {
-  debugger
   const refreshToken = Cookies.get(REFRESH_TOKEN_KEY);
   if (!refreshToken) {
     return;

@@ -108,11 +108,8 @@ async function createSpending() {
   const split = new SplitRequest();
   split.splitType = spendingSplitType.value as SplitType;
   split.participants = Object.fromEntries(proportions.entries());
-
   spending.split = split;
 
-  console.log(spending);
-  debugger
   await partyStore.createSpending(spending);
   await Promise.all([
     partyStore.loadSpendingsByPartyId(partyId.value),

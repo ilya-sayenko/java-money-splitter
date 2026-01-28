@@ -8,7 +8,7 @@ import type {ParticipantCreateRequest} from "@/http/data/models/ParticipantCreat
 import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
 import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
 
-export class MoneySplitterHttpClient { // TODO singletone
+export class MoneySplitterHttpClient {
 
   private api = axios.create();
   private baseUrl: string = import.meta.env.VITE_MONEY_SPLITTER_BACKEND_URL;
@@ -30,6 +30,11 @@ export class MoneySplitterHttpClient { // TODO singletone
 
   async getSpendingsByPartyId(partyId: string): Promise<Spending[]> {
     const response: AxiosResponse<Spending[]> = await this.api.get(`${this.baseUrl}/parties/${partyId}/spendings`);
+    return response.data;
+  }
+
+  async getAllSpendingsByPartyId(partyIds: string[]): Promise<Spending[]> {
+    const response: AxiosResponse<Spending[]> = await this.api.get(`${this.baseUrl}/spendings?partyIds=${partyIds}`);
     return response.data;
   }
 
