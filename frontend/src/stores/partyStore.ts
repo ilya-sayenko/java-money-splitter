@@ -1,7 +1,6 @@
-import {ref, watch} from 'vue'
+import {ref} from 'vue'
 import {defineStore} from 'pinia'
 import type {Party} from "@/models/Party.ts";
-import {MoneySplitterHttpClient} from "@/http/data/MoneySplitterHttpClient.ts";
 import type {Participant} from "@/models/Participant.ts";
 import type {Spending} from "@/models/Spending.ts";
 import type {Transaction} from "@/models/Transaction.ts";
@@ -9,15 +8,15 @@ import type {PartyCreateRequest} from "@/http/data/models/PartyCreateRequest.ts"
 import type {ParticipantCreateRequest} from "@/http/data/models/ParticipantCreateRequest.ts";
 import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
 import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
+import {useMoneySplitterHttpClient} from "@/http/data/useMoneySplitterHttpClient.ts";
 
 export const usePartyStore = defineStore('party', () => {
-  const LOCAL_STORAGE_KEY = "PARTY_LOCAL_STORAGE_KEY";
-  const httpClient = new MoneySplitterHttpClient();
+  const httpClient = useMoneySplitterHttpClient(); // new MoneySplitterHttpClient();
   const party = ref<Party>();
   const participants = ref<Participant[]>();
   const spendings = ref<Spending[]>();
   const transactions = ref<Transaction[]>();
-  const localParties = ref<Party[]>(loadLocalParties());
+  // const localParties = ref<Party[]>(loadLocalParties());
 
   async function loadPartyById(partyId: string) {
     party.value = await httpClient.getPartyById(partyId);
@@ -59,30 +58,30 @@ export const usePartyStore = defineStore('party', () => {
     return httpClient.deleteSpending(id);
   }
 
-  function loadLocalParties(): Party[] {
-    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+  // function loadLocalParties(): Party[] {
+  //   const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+  //
+  //   if (stored) {
+  //     return JSON.parse(stored);
+  //   }
+  //
+  //   return [];
+  // }
 
-    if (stored) {
-      return JSON.parse(stored);
-    }
-
-    return [];
-  }
-
-  function saveLocalParty(party: Party) {
-    localParties.value.push(party);
-  }
-
-  watch(localParties, (value) => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value));
-  }, { deep: true });
+  // function saveLocalParty(party: Party) {
+  //   localParties.value.push(party);
+  // }
+  //
+  // watch(localParties, (value) => {
+  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value));
+  // }, { deep: true });
 
   return {
     party,
     participants,
     spendings,
     transactions,
-    localParties,
+    // localParties,
     loadPartyById,
     loadParticipantsByPartyId,
     loadSpendingsByPartyId,
@@ -93,7 +92,7 @@ export const usePartyStore = defineStore('party', () => {
     updateParticipant,
     deleteParticipantById,
     deleteSpendingById,
-    loadLocalParties,
-    saveLocalParty
+    // loadLocalParties,
+    // saveLocalParty
   };
 })

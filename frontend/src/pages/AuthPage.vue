@@ -14,7 +14,6 @@ async function authenticate() {
   const request = new LoginRequest();
   request.email = email.value;
   request.password = password.value;
-  console.log(request);
   try {
     await authStore.login(request);
     await router.push("/");

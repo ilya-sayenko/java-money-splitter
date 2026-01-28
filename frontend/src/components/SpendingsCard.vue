@@ -6,35 +6,47 @@ import {storeToRefs} from "pinia";
 import {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
 import {SplitRequest} from "@/http/data/models/SplitRequest.ts";
 import {SplitType} from "@/models/SplitType.ts";
+import CreateSpendingModal from "@/windows/CreateSpendingModal.vue";
 
 const route = useRoute();
 const partyId = computed(() => route.params.partyId as string);
 const partyStore = usePartyStore();
 const { spendings, participants } = storeToRefs(partyStore);
+const isShowCreateSpendingModal = ref(false);
 
 const spendingName = ref('');
 const spendingAmount = ref();
 const spendingPayerId = ref('');
 
+function showCreateSpendingModal() {
+  isShowCreateSpendingModal.value = true;
+}
+
+function hideCreateSpendingModal() {
+  isShowCreateSpendingModal.value = false;
+}
+
 const showSpendings = computed(() => {
   return spendings.value && spendings.value.length !== 0;
 })
 
-async function createSpending() {
-  const spending = new SpendingCreateRequest();
-  spending.partyId = partyId.value;
-  spending.payerId = spendingPayerId.value;
-  spending.name = spendingName.value;
-  spending.amount = spendingAmount.value;
-  const split = new SplitRequest();
-  split.splitType = SplitType.EQUAL;
-  spending.split = split;
-  await partyStore.createSpending(spending);
-  await Promise.all([
-    partyStore.loadSpendingsByPartyId(partyId.value),
-    partyStore.loadTransactionsByPartyId(partyId.value)
-  ]);
-}
+// async function createSpending() {
+//   const spending = new SpendingCreateRequest();
+//   spending.partyId = partyId.value;
+//   spending.payerId = spendingPayerId.value;
+//   spending.name = spendingName.value;
+//   spending.amount = spendingAmount.value;
+//   const split = new SplitRequest();
+//   split.splitType = SplitType.EQUAL;
+//   spending.split = split;
+//   await partyStore.createSpending(spending);
+//   await Promise.all([
+//     partyStore.loadSpendingsByPartyId(partyId.value),
+//     partyStore.loadTransactionsByPartyId(partyId.value)
+//   ]);
+// }
+
+
 
 async function deleteSpendingById(id: string) {
   await partyStore.deleteSpendingById(id);
@@ -53,27 +65,28 @@ onMounted(async () => {
   <div class="card card-translated spendings-card">
     <h2>🧾 Расходы</h2>
 
-    <div class="form-group">
-      <label for="new-spending-name">За что платили?</label>
-      <input type="text" id="new-spending-name" placeholder="Например, Аренда лыж" v-model="spendingName" />
-    </div>
+<!--    <div class="form-group">-->
+<!--      <label for="new-spending-name">За что платили?</label>-->
+<!--      <input type="text" id="new-spending-name" placeholder="Например, Аренда лыж" v-model="spendingName" />-->
+<!--    </div>-->
 
-    <div class="form-group">
-      <label for="new-spending-amount">Сумма:</label>
-      <input type="text" id="new-spending-amount" placeholder="5000" v-model="spendingAmount" />
-    </div>
+<!--    <div class="form-group">-->
+<!--      <label for="new-spending-amount">Сумма:</label>-->
+<!--      <input type="text" id="new-spending-amount" placeholder="5000" v-model="spendingAmount" />-->
+<!--    </div>-->
 
-    <div class="form-group">
-      <label for="new-spending-amount">Кто платил?</label>
-      <select name="participants" id="participants" v-model="spendingPayerId">
-        <option
-          v-for="participant in participants"
-          :value="participant.id"
-        >{{ participant.name }}</option>
-      </select>
-    </div>
+<!--    <div class="form-group">-->
+<!--      <label for="new-spending-amount">Кто платил?</label>-->
+<!--      <select name="participants" id="participants" v-model="spendingPayerId">-->
+<!--        <option-->
+<!--          v-for="participant in participants"-->
+<!--          :value="participant.id"-->
+<!--        >{{ participant.name }}</option>-->
+<!--      </select>-->
+<!--    </div>-->
 
-    <button class="btn btn-main" @click="createSpending">Добавить расход</button>
+<!--    <button class="btn btn-main" @click="createSpending">Добавить расход</button>-->
+    <button class="btn btn-main" @click="showCreateSpendingModal">Добавить расход</button>
 
     <div v-if="showSpendings">
       <h3 class="spendings-list-title">Список расходов:</h3>
@@ -92,6 +105,11 @@ onMounted(async () => {
       </ul>
     </div>
   </div>
+
+  <CreateSpendingModal
+    :isOpened="isShowCreateSpendingModal"
+    @close="hideCreateSpendingModal"
+  ></CreateSpendingModal>
 </template>
 
 <style scoped>

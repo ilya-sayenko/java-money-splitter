@@ -1,16 +1,16 @@
 import {defineStore} from "pinia";
 import Cookies from 'js-cookie';
 import {ref} from "vue";
-import {AuthHttpClient} from "@/http/auth/AuthHttpClient.ts";
 import type {LoginRequest} from "@/http/auth/models/LoginRequest.ts";
 import {ProfileRequest} from "@/http/auth/models/ProfileRequest.ts";
 import {UserMapper} from "@/mappers/UserMapper.ts";
 import type {User} from "@/models/User.ts";
 import {ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY} from "@/constants/cookie.ts";
+import {useAuthHttpClient} from "@/http/auth/useAuthHttpClient.ts";
 
 export const useAuthStore = defineStore('authStore', () => {
   const isLoggedIn = ref(!!Cookies.get(ACCESS_TOKEN_KEY));
-  const authHttpClient = new AuthHttpClient();
+  const authHttpClient = useAuthHttpClient(); //new AuthHttpClient();
   const user = ref<User>();
 
   async function login(request: LoginRequest): Promise<void> {

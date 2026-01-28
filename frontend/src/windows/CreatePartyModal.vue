@@ -3,9 +3,9 @@ import {defineProps, defineEmits, ref} from 'vue';
 import {PartyCreateRequest} from "@/http/data/models/PartyCreateRequest.js";
 import {usePartyStore} from "@/stores/partyStore.js";
 import {useRouter} from "vue-router";
-import {UserDataHttpClient} from "@/http/user/UserDataHttpClient.js";
 import {useAuthStore} from "@/stores/authStore.js";
 import {storeToRefs} from "pinia";
+import {useUserDataHttpClient} from "@/http/user/useUserDataHttpClient.js";
 
 const props = defineProps({
   isOpened: Boolean
@@ -23,7 +23,7 @@ const partyStore = usePartyStore();
 const router = useRouter();
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
-const userDataHttpClient = new UserDataHttpClient();
+const userDataHttpClient = useUserDataHttpClient(); // new UserDataHttpClient();
 
 async function createParty() {
   const party = new PartyCreateRequest();

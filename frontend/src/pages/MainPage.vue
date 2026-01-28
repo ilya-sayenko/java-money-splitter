@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import CreatePartyModal from "@/windows/CreatePartyModal.vue";
-import {onMounted, ref} from "vue";
-import {useAuthStore} from "@/stores/authStore.ts";
-import UserParties from "@/components/UserParties.vue";
-import {storeToRefs} from "pinia";
-
-const authStore = useAuthStore();
-const { isLoggedIn } = storeToRefs(authStore);
+import {ref} from "vue";
 
 const isShowCreatePartyModal = ref(false);
 
@@ -17,12 +11,6 @@ function showCreatePartyModal() {
 function hideCreatePartyModal() {
   isShowCreatePartyModal.value = false;
 }
-
-onMounted(async () => {
-  if (isLoggedIn) {
-    await authStore.loadProfile();
-  }
-})
 </script>
 
 <template>
@@ -36,8 +24,6 @@ onMounted(async () => {
       class="btn btn-main btn-create-party"
       @click="showCreatePartyModal"
     >Создать событие</button>
-
-    <UserParties v-show="isLoggedIn"></UserParties>
   </div>
 </template>
 

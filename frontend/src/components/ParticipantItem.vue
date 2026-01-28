@@ -10,15 +10,11 @@ const props = defineProps<{
 }>();
 
 const isEditParticipant = ref(false);
-
 const participantNewName = ref('');
-
 const participantNewNameInput = useTemplateRef("participantNewNameInput");
 
 const route = useRoute();
-
 const partyId = computed(() => route.params.partyId as string);
-
 const partyStore = usePartyStore();
 
 async function deleteParticipantById(participantId: string) {
@@ -56,7 +52,7 @@ async function saveParticipant() {
 
 <template>
   <li class="participant-item">
-    <span class="participant-name" v-show="!isEditParticipant">{{ participant.name }}</span>
+    <span class="participant-item-name" v-show="!isEditParticipant">{{ participant.name }}</span>
     <input
         class="participant-item-new-name"
         type="text"

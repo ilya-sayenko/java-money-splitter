@@ -21,7 +21,15 @@ const router = createRouter({
     },
     {
       path: '/profile',
-      component: () => import('@/pages/ProfilePage.vue')
+      component: () => import('@/pages/UserPage.vue')
+    },
+    {
+      path: '/profile/parties',
+      component: () => import('@/pages/UserPartiesPage.vue')
+    },
+    {
+      path: '/profile/statistics',
+      component: () => import('@/pages/UserStatisticsPage.vue')
     }
   ],
 })

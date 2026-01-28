@@ -99,12 +99,53 @@ input, select, textarea {
   border-bottom: 2px solid colors.$card-border-header;
 }
 
-.party-header-card {
+.party-card {
   cursor: pointer;
 }
 
-.party-header-card p {
+.party-card p,
+.party-card span {
   color: colors.$text-midtone;
+}
+
+.party-card h2 {
+  border: none;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
+}
+
+.party-card:nth-child(3n+1) {
+  margin-left: 0;
+}
+
+.party-card:nth-child(3n+3) {
+  margin-right: 0;
+}
+
+.party-card-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.party-card-meta {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.party-card-amount {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid colors.$card-border-header;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: colors.$text-summary-light;
+}
+
+.party-header-card {
+  margin-left: 0;
+  cursor: default;
 }
 
 .party-page-content {
@@ -118,20 +159,18 @@ input, select, textarea {
   padding: 0;
 }
 
+.parties-card {
+  padding: 0.5rem;
+}
+
 .parties-grid {
   display: grid;
   grid-template-columns: auto auto auto;
 }
 
-.party-card-name {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-}
-
 .participants-card {
   width: 100%;
+  margin-left: 0;
 }
 
 .participants-list {
@@ -155,15 +194,15 @@ input, select, textarea {
 }
 
 .participant-item-new-name {
-  font-weight: 600;
   width: 80%;
   padding: 0.5rem;
   border: 1px solid colors.$form-group-border;
   border-radius: 8px;
 }
 
-.participant-name {
+.participant-item-name {
   font-weight: 600;
+  color: colors.$text-dark;
 }
 
 .spendings-card {
@@ -183,10 +222,10 @@ input, select, textarea {
 .spending-item {
   margin-top: 1rem;
   padding: 1rem;
-  background: colors.$list-item-background;
   display: flex;
   justify-content: space-between;
   border-radius: 6px;
+  background: colors.$list-item-background;
   border-left: 4px solid colors.$list-item-border-left;
 }
 
@@ -203,7 +242,37 @@ input, select, textarea {
   font-weight: 600;
 }
 
+.partitions-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.partition-data {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: colors.$list-item-background;
+  border-left: 4px solid colors.$list-item-border-left;
+}
+
+.partition-amount {
+  box-sizing: border-box;
+  max-width: 20%;
+  padding: 0 0 0.5rem 1rem;
+  border: 1px solid colors.$form-group-border;
+  border-radius: 8px;
+}
+
+.partition-participant-name {
+  display: inline-block;
+  font-weight: 600;
+}
+
 .transactions-card {
+  margin-left: 0;
   color: colors.$text-summary;
   width: 100%;
   background: colors.$card-summary-background;
@@ -253,15 +322,18 @@ input, select, textarea {
   margin-bottom: 0.5rem;
 }
 
-.form-group input, select, textarea {
+.form-group input,
+.form-group select,
+.form-group textarea {
   width: 100%;
-  padding: 0.85rem;
+  padding: 0.7rem;
   border: 1px solid colors.$form-group-border;
   border-radius: 8px;
   font-size: 1rem;
 }
 
-.form-group input:focus, select:focus {
+.form-group input:focus,
+.form-group select:focus {
   outline: none;
   border-color: colors.$form-group-border-focus;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
@@ -301,7 +373,7 @@ input, select, textarea {
 }
 
 .btn-create-party {
-  max-width: 40%;
+  width: 30%;
   margin-right: auto;
   margin-left: auto;
   display: block;
@@ -367,10 +439,16 @@ input, select, textarea {
   position: relative;
 }
 
+.user-nav-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
 .user-icon {
   font-size: 2rem;
   border-radius: 50%;
-  cursor: pointer;
+
 }
 
 .user-popup {
@@ -391,9 +469,9 @@ input, select, textarea {
   opacity: 1;
 }
 
-//.user-popup-name {
-//  cursor: auto;
-//}
+.user-popup-name {
+  text-align: center;
+}
 
 .popup-content {
   display: flex;
