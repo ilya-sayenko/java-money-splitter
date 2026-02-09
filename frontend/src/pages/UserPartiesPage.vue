@@ -4,16 +4,16 @@ import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {onMounted, ref} from "vue";
 import {useAuthStore} from "@/stores/authStore.ts";
-import type {Party} from "@/models/Party.ts";
 import {useMoneySplitterHttpClient} from "@/http/data/useMoneySplitterHttpClient.ts";
 import {useUserDataHttpClient} from "@/http/user/useUserDataHttpClient.ts";
+import type {PartyWithAggregates} from "@/models/PartyWithAggregates.ts";
 
 const router = useRouter();
-const userParties = ref<Party[]>();
+const userParties = ref<PartyWithAggregates[]>();
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
-const userDataHttpClient = useUserDataHttpClient(); //new UserDataHttpClient();
-const moneySplitterHttpClient = useMoneySplitterHttpClient();// new MoneySplitterHttpClient();
+const userDataHttpClient = useUserDataHttpClient();
+const moneySplitterHttpClient = useMoneySplitterHttpClient();
 
 function routeToPartyPage(partyId: string) {
   router.push(`/parties/${partyId}`);
@@ -21,7 +21,7 @@ function routeToPartyPage(partyId: string) {
 
 async function loadUserParties() {
   const partyIds: string[] = await userDataHttpClient.getPartyIdsByUserId(user.value!.id);
-  userParties.value = await moneySplitterHttpClient.getAllPartyById(partyIds);
+  userParties.value = await moneySplitterHttpClient.getAllPartyWithAggregatesById(partyIds);
 }
 
 onMounted(async () => {
@@ -38,9 +38,7 @@ onMounted(async () => {
       <div class="parties-grid">
         <PartyCard
           v-for="party in userParties"
-          :id="party.id"
-          :name="party.name"
-          :description="party.description"
+          :party="party"
           @click="routeToPartyPage(party.id)"
         ></PartyCard>
       </div>

@@ -252,10 +252,13 @@ input, select, textarea {
   margin-right: 0;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  //justify-content: space-between;
+  //align-items: center;
   background: colors.$list-item-background;
+  border-radius: 6px;
   border-left: 4px solid colors.$list-item-border-left;
+  margin-top: 1rem;
 }
 
 .partition-amount {
@@ -339,6 +342,43 @@ input, select, textarea {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
+.form-group input[type="checkbox"] {
+  width: 1rem;
+}
+
+.form-group-radio {
+  //display: flex;
+  //flex-direction: row;
+  margin-bottom: 1rem;
+}
+
+.form-group-radio input {
+  margin-right: 0.5rem;
+}
+
+.form-group-checkbox {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+  margin-right: 0.25rem;
+}
+
+.form-group-checkbox input[type="number"] {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid colors.$form-group-border;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.form-group-checkbox-justify {
+  justify-content: space-between;
+}
+
 .auth-form {
   margin: 0 auto;
   max-width: 600px;
@@ -369,6 +409,7 @@ input, select, textarea {
 }
 
 .btn-edit {
+  //font-size: 1.5rem;
   margin-right: 0.5rem;
 }
 
@@ -385,6 +426,11 @@ input, select, textarea {
   width: auto;
   text-align: center;
   padding: 0.5rem 1rem;
+  white-space: nowrap;
+}
+
+.btn-update-transaction {
+  width: auto;
   white-space: nowrap;
 }
 
@@ -407,9 +453,11 @@ input, select, textarea {
   border-radius: 12px;
   max-width: 500px;
   width: 90%;
+  max-height: 80vh;
   position: relative;
   transform: translateY(-20px);
   transition: all 0.3s ease;
+  overflow-y: auto;
 }
 
 .modal-content h2 {
@@ -487,4 +535,48 @@ input, select, textarea {
 
 .btn-popup:hover {
   background: colors.$background-light;
+}
+
+
+.tabs {
+  max-width: 100%;
+}
+
+.tab-input {
+  display: none;
+}
+
+.tab-label {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  margin-right: 5px;
+  border-radius: 5px 5px 0 0;
+}
+
+.tab-label:hover {
+  background: #e0e0e0;
+}
+
+.tab-content {
+  display: none;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 0 12px 12px 12px;
+  background: white;
+  margin-bottom: 1.2rem;
+}
+
+#tab1:checked ~ .tab-content-1,
+#tab2:checked ~ .tab-content-2 {
+  display: block;
+}
+
+.tab-input:checked + .tab-label {
+  background: white;
+  border-bottom: 1px solid white;
+  margin-bottom: -1px;
 }

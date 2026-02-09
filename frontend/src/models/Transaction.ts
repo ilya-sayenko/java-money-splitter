@@ -1,4 +1,5 @@
 import type {Participant} from "@/models/Participant.ts";
+import type {TransactionStatus} from "@/models/TransactionStatus.ts";
 
 export class Transaction {
 
@@ -10,5 +11,5 @@ export class Transaction {
 
   amount: number;
 
-  status: string;
+  status: TransactionStatus;
 }

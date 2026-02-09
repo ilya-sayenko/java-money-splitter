@@ -5,4 +5,6 @@ export class Party {
   name: string;
 
   description: string;
+
+  createDate: string;
 }

@@ -15,16 +15,19 @@ function hideCreatePartyModal() {
 
 <template>
   <div class="container">
-    <CreatePartyModal
-      :isOpened="isShowCreatePartyModal"
-      @close="hideCreatePartyModal"
-    ></CreatePartyModal>
+    <h2>Легкий способ разделить совместные затраты</h2>
+    <p></p>
 
     <button
       class="btn btn-main btn-create-party"
       @click="showCreatePartyModal"
     >Создать событие</button>
   </div>
+
+  <CreatePartyModal
+    :isOpened="isShowCreatePartyModal"
+    @close="hideCreatePartyModal"
+  ></CreatePartyModal>
 </template>
 
 <style scoped>

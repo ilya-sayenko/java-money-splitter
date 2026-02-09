@@ -14,7 +14,7 @@ function routeToMainPage() {
 }
 
 function routeToAuthPage() {
-  router.push('/auth');
+  router.push('/signIn');
 }
 
 function routeToUserPage() {
@@ -44,8 +44,8 @@ function hideUserPopup() {
   isShowUserPopup.value = false;
 }
 
-function logout() {
-  authStore.logout();
+function signOut() {
+  authStore.signOut();
   hideUserPopup();
   router.push('/');
 }
@@ -68,7 +68,7 @@ function logout() {
                 <button class="btn btn-popup" @click="routeToUserPage">Профиль</button>
                 <button class="btn btn-popup" @click="routeToUserPartiesPage">События</button>
                 <button class="btn btn-popup" @click="routeToUserStatisticsPage">Статистика</button>
-                <button class="btn btn-popup" @click="logout">Выйти</button>
+                <button class="btn btn-popup" @click="signOut">Выйти</button>
               </div>
             </div>
           </div>

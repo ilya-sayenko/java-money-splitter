@@ -1,14 +1,16 @@
 import axios, {type AxiosResponse} from "axios";
-import type {LoginRequest} from "@/http/auth/models/LoginRequest.ts";
-import type {LoginResponse} from "@/http/auth/models/LoginResponse.ts";
+import type {SignInRequest} from "@/http/auth/models/SignInRequest.ts";
+import type {SignInResponse} from "@/http/auth/models/SignInResponse.ts";
 import type {ProfileRequest} from "@/http/auth/models/ProfileRequest.ts";
 import type {ProfileResponse} from "@/http/auth/models/ProfileResponse.ts";
 import {requestHandleSuccess} from "@/http/utils/requestHandleSuccess.ts";
 import {requestHandleError} from "@/http/utils/requestHandleError.ts";
 import {responseHandleSuccess} from "@/http/utils/responseHandleSuccess.ts";
 import {responseHandleError} from "@/http/utils/responseHandleError.ts";
+import type {SignUpRequest} from "@/http/auth/models/SignUpRequest.ts";
+import type {SignUpResponse} from "@/http/auth/models/SignUpResponse.ts";
 
-export class AuthHttpClient { // TODO singletone
+export class AuthHttpClient {
 
   private baseUrl: string = import.meta.env.VITE_FIREBASE_URL;
 
@@ -27,9 +29,17 @@ export class AuthHttpClient { // TODO singletone
     )
   }
 
-  async login(request: LoginRequest): Promise<LoginResponse> {
-    const response: AxiosResponse<LoginResponse> = await this.api.post(
+  async signIn(request: SignInRequest): Promise<SignInResponse> {
+    const response: AxiosResponse<SignInResponse> = await this.api.post(
       `${this.baseUrl}/accounts:signInWithPassword?key=${this.apiKey}`,
+      request
+    );
+    return response.data;
+  }
+
+  async signUp(request: SignUpRequest): Promise<SignUpResponse> {
+    const response: AxiosResponse<SignInResponse> = await this.api.post(
+      `${this.baseUrl}/accounts:signUp?key=${this.apiKey}`,
       request
     );
     return response.data;

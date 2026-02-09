@@ -12,13 +12,15 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.mount('#app')
 
-const authStore = useAuthStore();
-if (Cookies.get(ACCESS_TOKEN_KEY)) {
-  authStore.loadProfile().finally(() => {
-    app.mount('#app');
-  })
-} else {
-  app.mount('#app')
-}
 
+// const authStore = useAuthStore();
+//
+// if (Cookies.get(ACCESS_TOKEN_KEY)) {
+//   authStore.loadProfile().finally(() => {
+//     app.mount('#app');
+//   })
+// } else {
+//   app.mount('#app')
+// }

@@ -1,20 +1,21 @@
 import {defineStore} from "pinia";
 import Cookies from 'js-cookie';
 import {ref} from "vue";
-import type {LoginRequest} from "@/http/auth/models/LoginRequest.ts";
+import type {SignInRequest} from "@/http/auth/models/SignInRequest.ts";
 import {ProfileRequest} from "@/http/auth/models/ProfileRequest.ts";
 import {UserMapper} from "@/mappers/UserMapper.ts";
 import type {User} from "@/models/User.ts";
 import {ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY} from "@/constants/cookie.ts";
 import {useAuthHttpClient} from "@/http/auth/useAuthHttpClient.ts";
+import type {SignUpRequest} from "@/http/auth/models/SignUpRequest.ts";
 
 export const useAuthStore = defineStore('authStore', () => {
   const isLoggedIn = ref(!!Cookies.get(ACCESS_TOKEN_KEY));
   const authHttpClient = useAuthHttpClient(); //new AuthHttpClient();
   const user = ref<User>();
 
-  async function login(request: LoginRequest): Promise<void> {
-    const response = await authHttpClient.login(request);
+  async function signIn(request: SignInRequest): Promise<void> {
+    const response = await authHttpClient.signIn(request);
     Cookies.set(ACCESS_TOKEN_KEY, response.idToken);
     Cookies.set(REFRESH_TOKEN_KEY, response.refreshToken);
     isLoggedIn.value = true;
@@ -24,10 +25,14 @@ export const useAuthStore = defineStore('authStore', () => {
     await loadProfile();
   }
 
-  function logout() {
+  function signOut() {
     Cookies.remove(ACCESS_TOKEN_KEY);
     Cookies.remove(REFRESH_TOKEN_KEY);
     isLoggedIn.value = false;
+  }
+
+  async function signUp(request: SignUpRequest): Promise<void> {
+   await authHttpClient.signUp(request);
   }
 
   async function loadProfile() {
@@ -39,8 +44,9 @@ export const useAuthStore = defineStore('authStore', () => {
 
   return {
     isLoggedIn,
-    login,
-    logout,
+    signIn,
+    signOut,
+    signUp,
     loadProfile,
     user
   };

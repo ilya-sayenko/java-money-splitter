@@ -18,6 +18,7 @@ import {useAuthStore} from "@/stores/authStore.ts";
 import {storeToRefs} from "pinia";
 import type {Spending} from "@/models/Spending.ts";
 
+ChartJS.defaults.font.family = "'Segoe UI', 'Roboto', 'sans-serif'";
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Colors)
 
 const userDataHttpClient = useUserDataHttpClient();
@@ -38,7 +39,7 @@ const chartData = computed<ChartData<'bar'>>(() => ({
 }));
 
 const chartOptions = ref<ChartOptions<'bar'>>({
-  responsive: true
+  responsive: true,
 });
 
 onMounted(async () => {

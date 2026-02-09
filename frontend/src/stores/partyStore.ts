@@ -9,8 +9,9 @@ import type {ParticipantCreateRequest} from "@/http/data/models/ParticipantCreat
 import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
 import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
 import {useMoneySplitterHttpClient} from "@/http/data/useMoneySplitterHttpClient.ts";
+import type {TransactionUpdateRequest} from "@/http/data/models/TransactionUpdateRequest.ts";
 
-export const usePartyStore = defineStore('party', () => {
+export const usePartyStore = defineStore('partyStore', () => {
   const httpClient = useMoneySplitterHttpClient(); // new MoneySplitterHttpClient();
   const party = ref<Party>();
   const participants = ref<Participant[]>();
@@ -35,19 +36,23 @@ export const usePartyStore = defineStore('party', () => {
   }
 
   async function createParty(party: PartyCreateRequest) {
-    return httpClient.postParty(party);
+    return httpClient.createParty(party);
   }
 
   async function createParticipant(participant: ParticipantCreateRequest) {
-    return httpClient.postParticipant(participant);
+    return httpClient.createParticipant(participant);
   }
 
   async function updateParticipant(participant: ParticipantUpdateRequest) {
-      return httpClient.putParticipant(participant);
+      return httpClient.updateParticipant(participant);
+  }
+
+  async function updateTransaction(transaction: TransactionUpdateRequest) {
+    return httpClient.updateTransaction(transaction);
   }
 
   async function createSpending(spending: SpendingCreateRequest) {
-    return httpClient.postSpending(spending);
+    return httpClient.createSpending(spending);
   }
 
   async function deleteParticipantById(id: string) {
@@ -90,6 +95,7 @@ export const usePartyStore = defineStore('party', () => {
     createParticipant,
     createSpending,
     updateParticipant,
+    updateTransaction,
     deleteParticipantById,
     deleteSpendingById,
     // loadLocalParties,

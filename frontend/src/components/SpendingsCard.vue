@@ -7,6 +7,7 @@ import {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts
 import {SplitRequest} from "@/http/data/models/SplitRequest.ts";
 import {SplitType} from "@/models/SplitType.ts";
 import CreateSpendingModal from "@/windows/CreateSpendingModal.vue";
+import {currencyFormat} from "@/utils/currencyFormat.ts";
 
 const route = useRoute();
 const partyId = computed(() => route.params.partyId as string);
@@ -93,12 +94,20 @@ onMounted(async () => {
       <ul class="spendings-list">
         <li class="spending-item" v-for="spending in spendings">
           <div class="spending-item-info">
-            <div class="spending-name">{{ spending.name }}</div>
-            <div>Оплатил(а): {{ spending.payer.name }}</div>
-            <div>Сумма: <span class="spending-amount">{{ spending.amount }}</span></div>
+            <div>{{ spending.payer.name }} заплатил(а) {{ currencyFormat(spending.amount) }} за {{ spending.name }}</div>
+<!--            <div class="spending-name">{{ spending.name }}</div>-->
+<!--            <div>Оплатил(а): {{ spending.payer.name }}</div>-->
+<!--            <div>Сумма: <span class="spending-amount">{{ spending.amount }}</span></div>-->
+            <div>Участники: {{ spending.splitType === SplitType.EQUAL ? 'Все' : '' }}</div>
+            <div v-if="spending.splitType !== SplitType.EQUAL">
+              <div v-for="proportion in spending.proportions">
+                {{ proportion.participant.name }}: {{ currencyFormat(proportion.amount) }}
+              </div>
+            </div>
           </div>
           <div>
 <!--            <button class="btn-edit">✏️</button>-->
+<!--            <button class="btn-edit">ℹ️</button>-->
             <button @click="deleteSpendingById(spending.id)">❌</button>
           </div>
         </li>

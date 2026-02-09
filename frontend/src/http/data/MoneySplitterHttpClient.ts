@@ -7,6 +7,10 @@ import type {PartyCreateRequest} from "@/http/data/models/PartyCreateRequest.ts"
 import type {ParticipantCreateRequest} from "@/http/data/models/ParticipantCreateRequest.ts";
 import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
 import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
+import type {PartyUpdateRequest} from "@/http/data/models/PartyUpdateRequest.ts";
+import type {TransactionUpdateRequest} from "@/http/data/models/TransactionUpdateRequest.ts";
+import {TransactionStatus} from "@/models/TransactionStatus.ts";
+import type {PartyWithAggregates} from "@/models/PartyWithAggregates.ts";
 
 export class MoneySplitterHttpClient {
 
@@ -20,6 +24,11 @@ export class MoneySplitterHttpClient {
 
   async getAllPartyById(partyIds: string[]): Promise<Party[]> {
     const response: AxiosResponse<Party[]> = await this.api.get(`${this.baseUrl}/parties?ids=${partyIds}`);
+    return response.data;
+  }
+
+  async getAllPartyWithAggregatesById(partyIds: string[]): Promise<PartyWithAggregates[]> {
+    const response: AxiosResponse<Party[]> = await this.api.get(`${this.baseUrl}/parties/aggregated?ids=${partyIds}`);
     return response.data;
   }
 
@@ -39,25 +48,33 @@ export class MoneySplitterHttpClient {
   }
 
   async getTransactionsByPartyId(partyId: string): Promise<Transaction[]> {
-    const response: AxiosResponse<Transaction[]> = await this.api.get(`${this.baseUrl}/parties/${partyId}/transactions`);
+    const response: AxiosResponse<Transaction[]> = await this.api.get<Transaction[]>(`${this.baseUrl}/parties/${partyId}/transactions`);
     return response.data;
   }
 
-  async postParty(party: PartyCreateRequest): Promise<string> {
+  async updateTransaction(request: TransactionUpdateRequest): Promise<void> {
+    return await this.api.put(`${this.baseUrl}/transactions`, request);
+  }
+
+  async createParty(party: PartyCreateRequest): Promise<string> {
     const response: AxiosResponse<string> = await this.api.post(`${this.baseUrl}/parties`, party);
     return response.data;
   }
 
-  async postParticipant(participant: ParticipantCreateRequest): Promise<string> {
+  async updateParty(party: PartyUpdateRequest): Promise<void> {
+    return await this.api.put(`${this.baseUrl}/parties`, party);
+  }
+
+  async createParticipant(participant: ParticipantCreateRequest): Promise<string> {
     const response: AxiosResponse<string> = await this.api.post(`${this.baseUrl}/participants`, participant);
     return response.data;
   }
 
-  async putParticipant(participant: ParticipantUpdateRequest): Promise<void> {
+  async updateParticipant(participant: ParticipantUpdateRequest): Promise<void> {
     return await this.api.put(`${this.baseUrl}/participants`, participant);
   }
 
-  async postSpending(spending: SpendingCreateRequest): Promise<string> {
+  async createSpending(spending: SpendingCreateRequest): Promise<string> {
     const response: AxiosResponse<string> = await this.api.post(`${this.baseUrl}/spendings`, spending);
     return response.data;
   }

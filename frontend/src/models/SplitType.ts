@@ -1,5 +1,5 @@
 export enum SplitType {
-  EQUAL,
-  AMOUNT,
-  PARTITION
+  EQUAL = 'EQUAL',
+  AMOUNT = 'AMOUNT',
+  PARTITION = 'PARTITION'
 }
