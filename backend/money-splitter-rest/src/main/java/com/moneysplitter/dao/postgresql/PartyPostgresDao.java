@@ -2,7 +2,9 @@ package com.moneysplitter.dao.postgresql;
 
 import com.moneysplitter.dao.PartyDao;
 import com.moneysplitter.dao.postgresql.entity.PartyEntity;
+import com.moneysplitter.dao.postgresql.entity.PartyWithCollectionsEntity;
 import com.moneysplitter.dao.postgresql.repository.PartyRepository;
+import com.moneysplitter.dao.postgresql.repository.PartyWithCollectionsRepository;
 import com.moneysplitter.mapper.PartyMapper;
 import com.moneysplitter.model.Party;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import java.util.UUID;
 public class PartyPostgresDao implements PartyDao {
 
     private final PartyRepository partyRepository;
+
+    private final PartyWithCollectionsRepository partyWithCollectionsRepository;
 
     private final PartyMapper partyMapper;
 
@@ -36,5 +40,10 @@ public class PartyPostgresDao implements PartyDao {
     @Override
     public List<Party> findAllPartyById(List<UUID> partyIds) {
         return partyMapper.fromEntities(partyRepository.findByIdInOrderByCreateDateDesc(partyIds));
+    }
+
+    @Override
+    public List<PartyWithCollectionsEntity> findAllPartyWithCollectionsById(List<UUID> partyIds) {
+        return partyWithCollectionsRepository.findByIdInOrderByCreateDateDesc(partyIds);
     }
 }

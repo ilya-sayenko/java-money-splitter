@@ -4,6 +4,7 @@ import com.moneysplitter.controller.data.ParticipantResponse;
 import com.moneysplitter.controller.data.PartyCreateRequest;
 import com.moneysplitter.controller.data.PartyResponse;
 import com.moneysplitter.controller.data.PartyUpdateRequest;
+import com.moneysplitter.controller.data.PartyWithAggregatesResponse;
 import com.moneysplitter.controller.data.SpendingResponse;
 import com.moneysplitter.controller.data.TransactionResponse;
 import com.moneysplitter.mapper.ParticipantMapper;
@@ -12,6 +13,7 @@ import com.moneysplitter.mapper.SpendingMapper;
 import com.moneysplitter.mapper.TransactionMapper;
 import com.moneysplitter.model.Party;
 import com.moneysplitter.model.PartyUpdateData;
+import com.moneysplitter.service.AggregatesResponseService;
 import com.moneysplitter.service.SplitterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,8 @@ import java.util.UUID;
 public class PartyControllerImpl implements PartyController {
 
     private final SplitterService splitterService;
+
+    private final AggregatesResponseService aggregatesResponseService;
 
     private final PartyMapper partyMapper;
 
@@ -82,5 +86,10 @@ public class PartyControllerImpl implements PartyController {
     @GetMapping(value = "/{partyId}/transactions")
     public List<TransactionResponse> getTransactionsByPartyId(@PathVariable UUID partyId) {
         return transactionMapper.toResponses(splitterService.findTransactionsByPartyId(partyId));
+    }
+
+    @GetMapping(value = "/aggregated")
+    public List<PartyWithAggregatesResponse> getAllAggregatedPartiesById(@RequestParam("ids") List<UUID> partyIds) {
+        return aggregatesResponseService.getAllAggregatedPartiesById(partyIds);
     }
 }

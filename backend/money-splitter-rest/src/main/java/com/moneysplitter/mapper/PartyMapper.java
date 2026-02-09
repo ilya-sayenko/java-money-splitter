@@ -1,10 +1,12 @@
 package com.moneysplitter.mapper;
 
 import com.moneysplitter.config.MapperConfig;
+import com.moneysplitter.controller.data.PartyWithAggregatesResponse;
 import com.moneysplitter.controller.data.PartyUpdateRequest;
 import com.moneysplitter.dao.postgresql.entity.PartyEntity;
 import com.moneysplitter.controller.data.PartyCreateRequest;
 import com.moneysplitter.controller.data.PartyResponse;
+import com.moneysplitter.dao.postgresql.entity.PartyWithCollectionsEntity;
 import com.moneysplitter.model.Party;
 import com.moneysplitter.model.PartyUpdateData;
 import org.mapstruct.BeanMapping;
@@ -43,4 +45,19 @@ public interface PartyMapper {
     @Mapping(target = "updateDate", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFields(PartyUpdateData participantUpdateData, @MappingTarget Party partyTarget);
+
+    @Mapping(target = "spendingsCount", expression = "java(entity.getSpendings().size())")
+    @Mapping(target = "participantsCount", expression = "java(entity.getParticipants().size())")
+    @Mapping(
+            target = "totalAmount",
+            expression = """
+                    java(entity.getSpendings()
+                            .stream()
+                            .map(com.moneysplitter.dao.postgresql.entity.SpendingEntity::getAmount)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add))
+                    """
+    )
+    PartyWithAggregatesResponse toAggregatedResponse(PartyWithCollectionsEntity entity);
+
+    List<PartyWithAggregatesResponse> toAggregatedResponses(List<PartyWithCollectionsEntity> entities);
 }

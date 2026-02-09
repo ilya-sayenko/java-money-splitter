@@ -1,5 +1,6 @@
 package com.moneysplitter.dao;
 
+import com.moneysplitter.dao.postgresql.entity.PartyWithCollectionsEntity;
 import com.moneysplitter.model.Party;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface PartyDao {
     Party saveParty(Party party);
 
     List<Party> findAllPartyById(List<UUID> partyIds);
+
+    List<PartyWithCollectionsEntity> findAllPartyWithCollectionsById(List<UUID> partyIds);
 }

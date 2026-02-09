@@ -47,10 +47,6 @@ public class PartyWithCollectionsEntity {
     @JoinColumn(name = "party_id")
     private Set<SpendingEntity> spendings;
 
-    @OneToMany
-    @JoinColumn(name = "party_id")
-    private Set<TransactionEntity> transactions;
-
     @Column(name = "created_at")
     @CreationTimestamp
     private OffsetDateTime createDate;
