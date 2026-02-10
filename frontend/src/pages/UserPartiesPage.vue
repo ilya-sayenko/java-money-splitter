@@ -7,7 +7,9 @@ import {useAuthStore} from "@/stores/authStore.ts";
 import {useMoneySplitterHttpClient} from "@/http/data/useMoneySplitterHttpClient.ts";
 import {useUserDataHttpClient} from "@/http/user/useUserDataHttpClient.ts";
 import type {PartyWithAggregates} from "@/models/PartyWithAggregates.ts";
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n();
 const router = useRouter();
 const userParties = ref<PartyWithAggregates[]>();
 const authStore = useAuthStore();
@@ -34,7 +36,7 @@ onMounted(async () => {
 <template>
   <div class="container">
     <div class="card">
-      <h2>📅 Мои события</h2>
+      <h2>📅 {{ t('headers.myParties') }}</h2>
       <div class="parties-grid">
         <PartyCard
           v-for="party in userParties"

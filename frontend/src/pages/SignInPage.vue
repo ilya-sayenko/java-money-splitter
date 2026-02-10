@@ -3,7 +3,9 @@ import {ref} from "vue";
 import {SignInRequest} from "@/http/auth/models/SignInRequest.ts";
 import {useAuthStore} from "@/stores/authStore.ts";
 import {useRouter} from "vue-router";
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n();
 const email = ref('');
 const password = ref('');
 const errorText = ref('');
@@ -30,21 +32,21 @@ async function signIn() {
 <template>
   <div class="container">
     <div class="card auth-form">
-      <h2>Авторизация</h2>
+      <h2>{{ t('headers.authorization') }}</h2>
       <form @submit.prevent="signIn">
         <div class="form-group">
-          <label for="email">Email *</label>
+          <label for="email">{{ t('labels.email') }} *</label>
           <input type="text" id="email" v-model="email">
         </div>
         <div class="form-group">
-          <label for="password">Пароль *</label>
+          <label for="password">{{ t('labels.password') }} *</label>
           <input type="password" id="password" v-model="password">
         </div>
         <p class="error" v-if="errorText">{{ errorText }}</p>
         <div class="form-group">
-          <button class="btn btn-main" type="submit">Войти</button>
+          <button class="btn btn-main" type="submit">{{ t('buttons.signIn') }}</button>
         </div>
-        <button class="btn btn-secondary" type="button" @click="routeToSignUpPage">Регистрация</button>
+        <button class="btn btn-secondary" type="button" @click="routeToSignUpPage">{{ t('buttons.signUp') }}</button>
       </form>
     </div>
   </div>

@@ -11,7 +11,7 @@ import type {SignUpRequest} from "@/http/auth/models/SignUpRequest.ts";
 
 export const useAuthStore = defineStore('authStore', () => {
   const isLoggedIn = ref(!!Cookies.get(ACCESS_TOKEN_KEY));
-  const authHttpClient = useAuthHttpClient(); //new AuthHttpClient();
+  const authHttpClient = useAuthHttpClient();
   const user = ref<User>();
 
   async function signIn(request: SignInRequest): Promise<void> {

@@ -6,6 +6,7 @@ import {useRouter} from "vue-router";
 import {useAuthStore} from "@/stores/authStore.js";
 import {storeToRefs} from "pinia";
 import {useUserDataHttpClient} from "@/http/user/useUserDataHttpClient.js";
+import {useI18n} from "vue-i18n";
 
 defineProps<{
   isOpened: boolean
@@ -19,6 +20,7 @@ const closeModal = () => {
   emits('close');
 };
 
+const { t } = useI18n();
 const partyName = ref('');
 const partyDescription = ref('');
 const partyStore = usePartyStore();
@@ -52,19 +54,19 @@ async function createParty() {
   <div v-if="isOpened" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <button class="modal-close-button" @click="closeModal">×</button>
-      <h2>Создать событие</h2>
+      <h2>{{ t('headers.createParty') }}</h2>
 
       <div class="form-group">
-        <label for="new-party-name">Название</label>
+        <label for="new-party-name">{{ t('labels.name') }}</label>
         <input type="text" id="new-party-name" v-model="partyName" />
       </div>
 
       <div class="form-group">
-        <label for="new-party-description">Описание</label>
+        <label for="new-party-description">{{ t('labels.description') }}</label>
         <textarea id="new-party-description" v-model="partyDescription" />
       </div>
 
-      <button class="btn btn-main" @click="createParty">Создать событие</button>
+      <button class="btn btn-main" @click="createParty">{{ t('buttons.createParty') }}</button>
     </div>
   </div>
 </template>

@@ -17,10 +17,12 @@ import {useUserDataHttpClient} from "@/http/user/useUserDataHttpClient.ts";
 import {useAuthStore} from "@/stores/authStore.ts";
 import {storeToRefs} from "pinia";
 import type {Spending} from "@/models/Spending.ts";
+import {useI18n} from "vue-i18n";
 
 ChartJS.defaults.font.family = "'Segoe UI', 'Roboto', 'sans-serif'";
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, Colors)
 
+const { t } = useI18n();
 const userDataHttpClient = useUserDataHttpClient();
 const moneySplitterHttpClient = useMoneySplitterHttpClient();
 const authStore = useAuthStore();
@@ -32,7 +34,7 @@ const chartData = computed<ChartData<'bar'>>(() => ({
   labels: [...spendingsData.keys()],
   datasets: [
     {
-      label: 'Сумма всех расходов',
+      label: t('statisticsPage.sum'),
       data: [...spendingsData.values()],
     },
   ],
@@ -57,7 +59,7 @@ watch(spendings, (newSpendings) => {
 <template>
   <div class="container">
     <div class="card">
-      <h2>Статистика участников по расходам</h2>
+      <h2>{{ t('headers.statistics') }}</h2>
       <Bar
         id="my-chart-id"
         :options="chartOptions"

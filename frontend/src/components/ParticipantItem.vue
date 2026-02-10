@@ -18,6 +18,7 @@ const partyId = computed(() => route.params.partyId as string);
 const partyStore = usePartyStore();
 
 async function deleteParticipantById(participantId: string) {
+  // TODO check before deleting
   await partyStore.deleteParticipantById(participantId);
   await Promise.all([
     partyStore.loadSpendingsByPartyId(partyId.value),

@@ -4,7 +4,9 @@ import {useAuthStore} from "@/stores/authStore.ts";
 import {useRouter} from "vue-router";
 import {SignUpRequest} from "@/http/auth/models/SignUpRequest.ts";
 import type {ErrorResponse} from "@/http/auth/models/ErrorResponse.ts";
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n();
 const name = ref('')
 const email = ref('');
 const password = ref('');
@@ -46,7 +48,7 @@ async function signUp() {
         </div>
         <p class="error" v-if="errorText">{{ errorText }}</p>
         <div class="form-group">
-          <button class="btn btn-main" type="submit">Зарегистрироваться</button>
+          <button class="btn btn-main" type="submit">{{ t('buttons.signUp') }}</button>
         </div>
       </form>
     </div>

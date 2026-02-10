@@ -7,7 +7,9 @@ import {TransactionStatus} from "@/models/TransactionStatus.ts";
 import type {Transaction} from "@/models/Transaction.ts";
 import {TransactionUpdateRequest} from "@/http/data/models/TransactionUpdateRequest.ts";
 import {currencyFormat} from "@/utils/currencyFormat.ts";
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n();
 const route = useRoute();
 const partyId = computed(() => route.params.partyId as string);
 const partyStore = usePartyStore();
@@ -43,11 +45,11 @@ onMounted(async () => {
 
 <template>
   <div class="card card-translated transactions-card">
-    <h2>🧮 Кто кому должен?</h2>
-    <p class="transactions-card-description">Здесь будет показан расчёт задолженностей.</p>
+    <h2>🧮 {{ t('headers.transactions') }}</h2>
+    <p class="transactions-card-description">{{ t('transactionsCard.description') }}</p>
 
     <div v-if="showTransactions">
-      <h3 class="transactions-list-title">Для погашения долгов нужно сделать переводы:</h3>
+      <h3 class="transactions-list-title">{{ t('transactionsCard.debts') }}</h3>
 
       <ul class="spendings-list">
         <li class="transaction-item" v-for="transaction in transactions" :key="transaction.id">

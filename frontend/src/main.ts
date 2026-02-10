@@ -4,23 +4,12 @@ import { createPinia } from 'pinia'
 import '@/assets/scss/main.scss'
 import App from './App.vue'
 import router from './router'
-import {useAuthStore} from "@/stores/authStore.ts";
-import {ACCESS_TOKEN_KEY} from "@/constants/cookie.ts";
-import Cookies from "js-cookie";
+import {i18n} from "@/i18n/i18n.ts";
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(i18n)
 app.mount('#app')
 
-
-// const authStore = useAuthStore();
-//
-// if (Cookies.get(ACCESS_TOKEN_KEY)) {
-//   authStore.loadProfile().finally(() => {
-//     app.mount('#app');
-//   })
-// } else {
-//   app.mount('#app')
-// }

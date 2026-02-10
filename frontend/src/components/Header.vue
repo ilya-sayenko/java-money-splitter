@@ -3,7 +3,9 @@ import {useRouter} from "vue-router";
 import {useAuthStore} from "@/stores/authStore.ts";
 import {storeToRefs} from "pinia";
 import {ref} from "vue";
+import {useI18n} from "vue-i18n";
 
+const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
 const { isLoggedIn, user } = storeToRefs(authStore);
@@ -13,11 +15,11 @@ function routeToMainPage() {
   router.push('/');
 }
 
-function routeToAuthPage() {
+function routeToSignInPage() {
   router.push('/signIn');
 }
 
-function routeToUserPage() {
+function routeToProfilePage() {
   hideUserPopup();
   router.push('/profile');
 }
@@ -36,10 +38,6 @@ function toggleUserPopup() {
   isShowUserPopup.value = !isShowUserPopup.value;
 }
 
-function showUserPopup() {
-  isShowUserPopup.value = true;
-}
-
 function hideUserPopup() {
   isShowUserPopup.value = false;
 }
@@ -56,7 +54,7 @@ function signOut() {
       <div class="container">
         <div class="header-content">
           <h2 @click="routeToMainPage">💰 MoneySplitter</h2>
-          <button class="btn btn-sign-in" @click="routeToAuthPage" v-if="!isLoggedIn">Войти</button>
+          <button class="btn btn-sign-in" @click="routeToSignInPage" v-if="!isLoggedIn">{{ t('buttons.signIn') }}</button>
           <div v-if="isLoggedIn" class="user-section">
             <div class="user-nav-item" @click="toggleUserPopup">
               <span>{{ user?.email }}</span>
@@ -65,10 +63,10 @@ function signOut() {
             <div class="user-popup" :class="{ 'active': isShowUserPopup }">
               <div class="popup-content">
                 <div class="user-popup-name">{{ user?.email }}</div>
-                <button class="btn btn-popup" @click="routeToUserPage">Профиль</button>
-                <button class="btn btn-popup" @click="routeToUserPartiesPage">События</button>
-                <button class="btn btn-popup" @click="routeToUserStatisticsPage">Статистика</button>
-                <button class="btn btn-popup" @click="signOut">Выйти</button>
+                <button class="btn btn-popup" @click="routeToProfilePage">{{ t('userPopup.profile') }}</button>
+                <button class="btn btn-popup" @click="routeToUserPartiesPage">{{ t('userPopup.events') }}</button>
+                <button class="btn btn-popup" @click="routeToUserStatisticsPage">{{ t('userPopup.statistics') }}</button>
+                <button class="btn btn-popup" @click="signOut">{{ t('userPopup.signOut') }}</button>
               </div>
             </div>
           </div>
