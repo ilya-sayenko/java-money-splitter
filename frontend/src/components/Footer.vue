@@ -13,5 +13,18 @@ const currentYear = new Date().getFullYear();
   </footer>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@use "@/assets/scss/colors.scss";
+
+.footer-main {
+  background: colors.$background-footer;
+  padding: 1.5rem;
+  color: colors.$text-footer;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.footer-main p {
+  text-align: center;
+}
 </style>

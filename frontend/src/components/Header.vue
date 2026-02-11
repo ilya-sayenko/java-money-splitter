@@ -75,5 +75,38 @@ function signOut() {
     </header>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@use "@/assets/scss/colors.scss";
+
+.header-main {
+  background: colors.$background-dark;
+  color: colors.$text-light;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-main h2 {
+  text-align: center;
+  cursor: pointer;
+}
+
+.header-main p {
+  text-align: center;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem;
+}
+
+.btn-sign-in {
+  color: colors.$background-dark;
+  background: colors.$background-light;
+  width: auto;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+}
 </style>

@@ -10,6 +10,7 @@ import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateReque
 import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
 import {useMoneySplitterHttpClient} from "@/http/data/useMoneySplitterHttpClient.ts";
 import type {TransactionUpdateRequest} from "@/http/data/models/TransactionUpdateRequest.ts";
+import type {PartyUpdateRequest} from "@/http/data/models/PartyUpdateRequest.ts";
 
 export const usePartyStore = defineStore('partyStore', () => {
   const httpClient = useMoneySplitterHttpClient(); // new MoneySplitterHttpClient();
@@ -41,6 +42,10 @@ export const usePartyStore = defineStore('partyStore', () => {
 
   async function createParticipant(participant: ParticipantCreateRequest) {
     return httpClient.createParticipant(participant);
+  }
+
+  async function updateParty(party: PartyUpdateRequest) {
+    return httpClient.updateParty(party);
   }
 
   async function updateParticipant(participant: ParticipantUpdateRequest) {
@@ -94,6 +99,7 @@ export const usePartyStore = defineStore('partyStore', () => {
     createParty,
     createParticipant,
     createSpending,
+    updateParty,
     updateParticipant,
     updateTransaction,
     deleteParticipantById,

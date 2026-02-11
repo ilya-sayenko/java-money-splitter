@@ -39,13 +39,13 @@ onMounted(async () => {
   <div class="card card-translated participants-card">
     <h2>👥 {{ t('headers.participants') }}</h2>
     <div class="form-group">
-      <label for="new-participant">{{ t('labels.participantName') }}</label>
-      <input type="text" id="new-participant" placeholder="Андрей" v-model="participantName" />
+      <label for="new-participant">{{ t('labels.participantName') }}:</label>
+      <input type="text" id="new-participant" v-model="participantName" />
     </div>
     <button class="btn btn-main" @click="createParticipant">{{ t('buttons.addParticipant') }}</button>
 
     <div v-if="showParticipants">
-      <h3 class="participants-list-title">{{ t('participantsCard.list') }}</h3>
+      <h3 class="participants-list-title">{{ t('participantsCard.list') }}:</h3>
       <ul class="participants-list">
         <ParticipantItem v-for="participant in participants" :participant="participant"></ParticipantItem>
       </ul>

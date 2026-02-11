@@ -5,10 +5,9 @@ import {usePartyStore} from "@/stores/partyStore.ts";
 import {storeToRefs} from "pinia";
 import {SplitType} from "@/models/SplitType.ts";
 import CreateSpendingModal from "@/windows/CreateSpendingModal.vue";
-import {currencyFormat} from "@/utils/currencyFormat.ts";
 import {useI18n} from "vue-i18n";
 
-const { t } = useI18n();
+const { t, n } = useI18n();
 const route = useRoute();
 const partyId = computed(() => route.params.partyId as string);
 const partyStore = usePartyStore();
@@ -46,7 +45,7 @@ onMounted(async () => {
     <button class="btn btn-main" @click="showCreateSpendingModal">{{ t('buttons.addSpending') }}</button>
 
     <div v-if="showSpendings" class="spendings-list-wrap">
-      <h3 class="spendings-list-title">{{ t('spendingsCard.list') }}</h3>
+      <h3 class="spendings-list-title">{{ t('spendingsCard.list') }}:</h3>
       <ul class="spendings-list">
         <li class="spending-item" v-for="spending in spendings" :key="spending.id">
           <div class="spending-main">
@@ -56,31 +55,31 @@ onMounted(async () => {
                   class="pill"
                   :class="spending.splitType === SplitType.EQUAL ? 'pill--good' : 'pill--warn'"
                 >
-                  {{ spending.splitType === SplitType.EQUAL ? 'Поровну' : 'Пропорции' }}
+                  {{ spending.splitType === SplitType.EQUAL ? t('splitType.equal') : t('splitType.amount') }}
                 </span>
                 <span class="spending-name">{{ spending.name }}</span>
               </div>
-              <div class="spending-amount">{{ currencyFormat(spending.amount) }}</div>
+              <div class="spending-amount">{{ n(spending.amount, 'currency') }}</div>
             </div>
 
             <div class="spending-meta">
               <span class="meta-item">
-                <span class="meta-label">Плательщик</span>
+                <span class="meta-label">{{ t('labels.payer') }}</span>
                 <span class="meta-value">{{ spending.payer.name }}</span>
               </span>
               <span class="meta-dot">•</span>
               <span class="meta-item">
-                <span class="meta-label">Участники</span>
-                <span class="meta-value">{{ spending.splitType === SplitType.EQUAL ? 'Все' : 'Выбраны' }}</span>
+                <span class="meta-label">{{ t('labels.participants') }}</span>
+                <span class="meta-value">{{ spending.splitType === SplitType.EQUAL ? t('labels.all') : t('labels.selected') }}</span>
               </span>
             </div>
 
             <div v-if="spending.splitType !== SplitType.EQUAL" class="proportions">
-              <div class="proportions-title">Доли:</div>
+              <div class="proportions-title">{{ t('labels.proportions') }}:</div>
               <div class="chips">
                 <div class="chip" v-for="proportion in spending.proportions" :key="proportion.participant.id">
                   <span class="chip-name">{{ proportion.participant.name }}</span>
-                  <span class="chip-amount">{{ currencyFormat(proportion.amount) }}</span>
+                  <span class="chip-amount">{{ n(proportion.amount, 'currency') }}</span>
                 </div>
               </div>
             </div>
@@ -89,12 +88,6 @@ onMounted(async () => {
           <button class="icon-btn" title="Удалить расход" @click="deleteSpendingById(spending.id)">❌</button>
         </li>
       </ul>
-    </div>
-
-    <div v-else class="empty-state">
-      <div class="empty-state__title">Пока нет расходов</div>
-      <div class="empty-state__desc">Добавьте первый расход — и мы посчитаем, кто кому должен.</div>
-      <button class="btn btn-main" @click="showCreateSpendingModal">Добавить расход</button>
     </div>
   </div>
 

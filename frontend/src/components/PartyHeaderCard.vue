@@ -15,6 +15,9 @@
   </div>
 </template>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.party-header-card {
+  margin-left: 0;
+  cursor: default;
+}
 </style>

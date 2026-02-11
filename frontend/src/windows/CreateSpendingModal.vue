@@ -6,7 +6,6 @@ import {storeToRefs} from "pinia";
 import {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.js";
 import {SplitRequest} from "@/http/data/models/SplitRequest.js";
 import {SplitType} from "@/models/SplitType.js";
-import {currencyFormat} from "@/utils/currencyFormat.ts";
 import {useI18n} from "vue-i18n";
 
 const props = defineProps<{
@@ -17,7 +16,7 @@ const emits = defineEmits<{
   (e: 'close'): void
 }>();
 
-const { t } = useI18n();
+const { t, n } = useI18n();
 const route = useRoute();
 const partyId = computed(() => route.params.partyId as string);
 
@@ -146,7 +145,7 @@ async function createSpending() {
     <div v-show="isOpened" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <button class="modal-close-button" @click="closeModal">×</button>
-        <h2>Создать расход</h2>
+        <h2>{{ t('headers.createSpending') }}</h2>
 
         <div class="form-group">
           <label for="participants">{{ t('labels.payer') }}</label>
@@ -160,8 +159,8 @@ async function createSpending() {
         </div>
 
         <div class="form-group">
-          <label for="new-spending-name">{{ t('labels.spendingName') }}:</label>
-          <input type="text" id="new-spending-name" placeholder="Например, Аренда лыж" v-model="spendingName" />
+          <label for="new-spending-name">{{ t('labels.spendingName') }}</label>
+          <input type="text" id="new-spending-name" v-model="spendingName" />
         </div>
 
         <div class="form-group">
@@ -180,7 +179,7 @@ async function createSpending() {
               updateSpendingSplitType(SplitType.EQUAL);
             "
           >
-          <label for="equal">Разделить поровну между всеми</label>
+          <label for="equal">{{ t('radio.equal') }}</label>
         </div>
 
         <div class="form-group-radio">
@@ -194,7 +193,7 @@ async function createSpending() {
               updateSpendingSplitType(SplitType.AMOUNT)
             "
           >
-          <label for="notEqual">Разделить по-другому</label><br>
+          <label for="notEqual">{{ t('radio.notEqual') }}</label><br>
         </div>
 
 
@@ -207,7 +206,7 @@ async function createSpending() {
             checked
             @click="updateSpendingSplitType(SplitType.AMOUNT)"
           >
-          <label for="tab1" class="tab-label">{{ t('labels.amount') }}</label>
+          <label for="tab1" class="tab-label">{{ t('splitType.amount') }}</label>
 
           <input
             type="radio"
@@ -216,7 +215,7 @@ async function createSpending() {
             class="tab-input"
             @click="updateSpendingSplitType(SplitType.PARTITION)"
           >
-          <label for="tab2" class="tab-label">В пропорции</label>
+          <label for="tab2" class="tab-label">{{ t('splitType.partition') }}</label>
 
           <div class="tab-content tab-content-1">
             <ul id="new-spending-partitions">
@@ -255,14 +254,14 @@ async function createSpending() {
                       type="number"
                       v-model="proportions[participant.id]"
                     />
-                    <span>= {{ currencyFormat(proportionsPartitionsAmount[participant.id] || 0) }}</span>
+                    <span>= {{ n(proportionsPartitionsAmount[participant.id] || 0, 'currency') }}</span>
                   </div>
                 </div>
               </li>
             </ul>
           </div>
         </div>
-        <button class="btn btn-main" @click="createSpending">Добавить расход</button>
+        <button class="btn btn-main" @click="createSpending">{{ t('buttons.addSpending') }}</button>
       </div>
     </div>
   </Teleport>

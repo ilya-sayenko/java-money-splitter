@@ -22,14 +22,10 @@ function hideCreatePartyModal() {
       <section class="hero">
         <div class="hero-text">
           <h1 class="hero-title">
-            Легкий способ разделить
-            <span class="accent">совместные расходы</span>
+            {{ t('mainPage.title') }}
+            <span class="accent">{{ t('mainPage.titleAccent') }}</span>
           </h1>
-          <p class="hero-subtitle">
-            Планируете поездку, вечеринку или квартирные траты?
-            Создайте событие, фиксируйте покупки и сервис посчитает,
-            кто кому и сколько должен.
-          </p>
+          <p class="hero-subtitle">{{ t('mainPage.heroSubtitle') }}</p>
 
           <div class="hero-actions">
             <button
@@ -38,49 +34,39 @@ function hideCreatePartyModal() {
             >
               {{ t("buttons.createParty") }}
             </button>
-            <p class="hero-note">
-              Не нужно таблиц и сложных формул — только участники и их траты.
-            </p>
+
+            <p class="hero-note">{{ t('mainPage.heroNote') }}</p>
           </div>
         </div>
 
         <div class="hero-card">
           <div class="hero-card-row">
             <span class="dot dot--green"></span>
-            <span>Вы отмечаете, кто платит и за что</span>
+            <span>{{ t('mainPage.heroCardRow1') }}</span>
           </div>
           <div class="hero-card-row">
             <span class="dot dot--violet"></span>
-            <span>Сервис делит сумму поровну или по долям</span>
+            <span>{{ t('mainPage.heroCardRow2') }}</span>
           </div>
           <div class="hero-card-row">
             <span class="dot dot--blue"></span>
-            <span>В итоге — понятный список, кто кому должен</span>
+            <span>{{ t('mainPage.heroCardRow3') }}</span>
           </div>
         </div>
       </section>
 
       <section class="features">
         <div class="feature">
-          <h3>События и участники</h3>
-          <p>
-            Создавайте отдельные события под поездки, вечеринки, ремонты и любые
-            общие затраты. Добавляйте участников и следите за их балансом.
-          </p>
+          <h3>{{ t('mainPage.featureTitle1') }}</h3>
+          <p>{{ t('mainPage.featureDescription1') }}</p>
         </div>
         <div class="feature">
-          <h3>Удобный учет расходов</h3>
-          <p>
-            Фиксируйте покупки в пару кликов: кто заплатил, сумму и тип разделения —
-            поровну или по индивидуальным долям.
-          </p>
+          <h3>{{ t('mainPage.featureTitle2') }}</h3>
+          <p>{{ t('mainPage.featureDescription2') }}</p>
         </div>
         <div class="feature">
-          <h3>Прозрачные расчёты</h3>
-          <p>
-            Сервис считает, кто в итоге должен и кому. Вам остаётся только
-            договориться о переводах, без споров и «кто платил за что».
-          </p>
+          <h3>{{ t('mainPage.featureTitle3') }}</h3>
+          <p>{{ t('mainPage.featureDescription3') }}</p>
         </div>
       </section>
     </div>

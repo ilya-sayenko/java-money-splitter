@@ -9,7 +9,6 @@ import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateReque
 import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
 import type {PartyUpdateRequest} from "@/http/data/models/PartyUpdateRequest.ts";
 import type {TransactionUpdateRequest} from "@/http/data/models/TransactionUpdateRequest.ts";
-import {TransactionStatus} from "@/models/TransactionStatus.ts";
 import type {PartyWithAggregates} from "@/models/PartyWithAggregates.ts";
 
 export class MoneySplitterHttpClient {
@@ -28,7 +27,7 @@ export class MoneySplitterHttpClient {
   }
 
   async getAllPartyWithAggregatesById(partyIds: string[]): Promise<PartyWithAggregates[]> {
-    const response: AxiosResponse<Party[]> = await this.api.get(`${this.baseUrl}/parties/aggregated?ids=${partyIds}`);
+    const response: AxiosResponse<PartyWithAggregates[]> = await this.api.get(`${this.baseUrl}/parties/aggregated?ids=${partyIds}`);
     return response.data;
   }
 

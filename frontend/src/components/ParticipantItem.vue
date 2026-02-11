@@ -63,8 +63,8 @@ async function saveParticipant() {
         @keyup.enter="saveParticipant()"
         v-model="participantNewName"
     />
-    <div>
-      <button class="btn-edit" @click="editParticipant">✏️</button>
+    <div class="btn-edit-delete">
+      <button @click="editParticipant">✏️</button>
       <button @click="deleteParticipantById(participant.id)">❌</button>
     </div>
   </li>
