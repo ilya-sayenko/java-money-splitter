@@ -11,11 +11,13 @@ const { t, n } = useI18n();
 const route = useRoute();
 const partyId = computed(() => route.params.partyId as string);
 const partyStore = usePartyStore();
-const { spendings } = storeToRefs(partyStore);
+const { participants, spendings } = storeToRefs(partyStore);
 const isShowCreateSpendingModal = ref(false);
 
 function showCreateSpendingModal() {
-  isShowCreateSpendingModal.value = true;
+  if (participants.value && participants.value.length > 0) {
+    isShowCreateSpendingModal.value = true;
+  }
 }
 
 function onCloseCreateSpendingModal() {

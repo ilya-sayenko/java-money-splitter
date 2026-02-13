@@ -1,5 +1,6 @@
 export class SignUpRequest {
-  name: string;
+
+  displayName: string;
 
   email: string;
 

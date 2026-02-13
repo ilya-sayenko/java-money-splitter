@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from 'vue';
+import {computed, reactive} from 'vue';
 import {PartyCreateRequest} from "@/http/data/models/PartyCreateRequest.js";
 import {usePartyStore} from "@/stores/partyStore.js";
 import {useRouter} from "vue-router";
@@ -7,6 +7,9 @@ import {useAuthStore} from "@/stores/authStore.js";
 import {storeToRefs} from "pinia";
 import {useUserDataHttpClient} from "@/http/user/useUserDataHttpClient.js";
 import {useI18n} from "vue-i18n";
+import useVuelidate from "@vuelidate/core";
+import {helpers, required} from "@vuelidate/validators";
+import {errorMessage} from "@/utils/errorMessage.ts";
 
 defineProps<{
   isOpened: boolean
@@ -21,18 +24,36 @@ const closeModal = () => {
 };
 
 const { t } = useI18n();
-const partyName = ref('');
-const partyDescription = ref('');
 const partyStore = usePartyStore();
 const router = useRouter();
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 const userDataHttpClient = useUserDataHttpClient();
 
+const formState = reactive({
+  partyName: '',
+  partyDescription: ''
+})
+
+const rules = computed(() => ({
+  partyName: {
+    required: helpers.withMessage(t('errors.nameRequired'), required)
+  },
+  partyDescription: {}
+}));
+
+const v$ = useVuelidate(rules, formState);
+
 async function createParty() {
+  const isFormValid = await v$.value.$validate();
+
+  if (!isFormValid) {
+    return;
+  }
+
   const party = new PartyCreateRequest();
-  party.name = partyName.value;
-  party.description = partyDescription.value;
+  party.name = formState.partyName;
+  party.description = formState.partyDescription;
   const newPartyId = await partyStore.createParty(party);
 
   if (user.value) {
@@ -57,12 +78,13 @@ async function createParty() {
 
         <div class="form-group">
           <label for="new-party-name">{{ t('labels.name') }}</label>
-          <input type="text" id="new-party-name" v-model="partyName" />
+          <input type="text" id="new-party-name" v-model="formState.partyName" @input="v$.partyName.$reset()" />
+          <small class="error" v-if="v$.partyName.$error">{{ errorMessage(v$.partyName.$errors) }}</small>
         </div>
 
         <div class="form-group">
           <label for="new-party-description">{{ t('labels.description') }}</label>
-          <textarea id="new-party-description" v-model="partyDescription" />
+          <textarea id="new-party-description" v-model="formState.partyDescription" />
         </div>
 
         <button class="btn btn-main" @click="createParty">{{ t('buttons.createParty') }}</button>

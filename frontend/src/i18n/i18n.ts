@@ -138,7 +138,8 @@ export const i18n = createI18n({
         passwordRequired: 'Password is required',
         passwordIncorrect: 'Min length of password is 6',
         participantNameRequired: 'Participant name is required',
-        participantNameUnique: 'Participant name is already exists'
+        participantNameUnique: 'Participant name is already exists',
+        nameRequired: 'Name is required'
       }
     },
 
@@ -257,7 +258,8 @@ export const i18n = createI18n({
         passwordRequired: 'Пароль обязателен',
         passwordIncorrect: 'Пароль должен быть минимум 6 символов',
         participantNameRequired: 'Имя участника не может быть пустым',
-        participantNameUnique: 'Участник с таким именем уже существует'
+        participantNameUnique: 'Участник с таким именем уже существует',
+        nameRequired: 'Имя обязательно'
       }
     }
   }

@@ -25,7 +25,7 @@ const rules = computed(() => ({
   },
   password: {
     required: helpers.withMessage(t('errors.passwordRequired'), required),
-    minLength: helpers.withMessage(t('Пароль должен быть минимум 6 символов'), minLength(6))
+    minLength: helpers.withMessage(t('errors.passwordIncorrect'), minLength(6))
   }
 }));
 
@@ -67,7 +67,7 @@ async function signIn() {
             type="text"
             id="email"
             v-model="formState.email"
-            @input="v$.email.$reset"
+            @input="v$.email.$reset()"
           />
           <small class="error" v-if="v$.email.$error">{{ errorMessage(v$.email.$errors) }}</small>
         </div>
@@ -78,7 +78,7 @@ async function signIn() {
             type="password"
             id="password"
             v-model="formState.password"
-            @input="v$.password.$reset"
+            @input="v$.password.$reset()"
           />
           <small class="error" v-if="v$.password.$error">{{ errorMessage(v$.password.$errors) }}</small>
         </div>
