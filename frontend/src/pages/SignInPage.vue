@@ -4,7 +4,7 @@ import {SignInRequest} from "@/http/auth/models/SignInRequest.ts";
 import {useAuthStore} from "@/stores/authStore.ts";
 import {useRouter} from "vue-router";
 import {useI18n} from "vue-i18n";
-import useVuelidate, {type ErrorObject} from "@vuelidate/core";
+import useVuelidate from "@vuelidate/core";
 import {email, helpers, minLength, required} from "@vuelidate/validators";
 import {errorMessage} from "@/utils/errorMessage.ts";
 
