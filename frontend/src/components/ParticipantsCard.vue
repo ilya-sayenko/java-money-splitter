@@ -28,7 +28,7 @@ const rules = computed(() => ({
       (value: string) => !participants.value || !participants.value.map(p => p.name).includes(value)
     )
   }
-}))
+}));
 
 const v$ = useVuelidate(rules, formState);
 
@@ -50,7 +50,7 @@ async function createParticipant() {
   await Promise.all([
     partyStore.loadParticipantsByPartyId(partyId.value),
     partyStore.loadTransactionsByPartyId(partyId.value)
-  ])
+  ]);
 
   formState.participantName = '';
   v$.value.$reset();
