@@ -23,10 +23,10 @@ const formState = reactive({
 const rules = computed(() => ({
   participantName: {
     required: helpers.withMessage(t('errors.participantNameRequired'), required),
-    unique: helpers.withMessage(t('errors.participantNameUnique'),
-      (value: string) => {
-        return !participants.value || !participants.value.map(p => p.name).includes(value)
-      })
+    unique: helpers.withMessage(
+      t('errors.participantNameUnique'),
+      (value: string) => !participants.value || !participants.value.map(p => p.name).includes(value)
+    )
   }
 }))
 
@@ -66,7 +66,7 @@ onMounted(async () => {
     <h2>👥 {{ t('headers.participants') }}</h2>
     <div class="form-group">
       <label for="new-participant">{{ t('labels.participantName') }}:</label>
-      <input type="text" id="new-participant" v-model="formState.participantName" @input="v$.participantName.$reset" />
+      <input type="text" id="new-participant" v-model="formState.participantName" @input="v$.participantName.$reset()" />
       <small class="error" v-if="v$.participantName.$error">{{ errorMessage(v$.participantName.$errors) }}</small>
     </div>
     <button class="btn btn-main" @click="createParticipant">{{ t('buttons.addParticipant') }}</button>
