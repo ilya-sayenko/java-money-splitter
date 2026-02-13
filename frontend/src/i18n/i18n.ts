@@ -136,7 +136,9 @@ export const i18n = createI18n({
         emailRequired: 'E-mail is required',
         emailIncorrect: 'E-mail is incorrect',
         passwordRequired: 'Password is required',
-        passwordIncorrect: 'Min length of password is 6'
+        passwordIncorrect: 'Min length of password is 6',
+        participantNameRequired: 'Participant name is required',
+        participantNameUnique: 'Participant name is already exists'
       }
     },
 
@@ -253,7 +255,9 @@ export const i18n = createI18n({
         emailRequired: 'E-mail обязателен',
         emailIncorrect: 'Введите корректный e-mail',
         passwordRequired: 'Пароль обязателен',
-        passwordIncorrect: 'Пароль должен быть минимум 6 символов'
+        passwordIncorrect: 'Пароль должен быть минимум 6 символов',
+        participantNameRequired: 'Имя участника не может быть пустым',
+        participantNameUnique: 'Участник с таким именем уже существует'
       }
     }
   }

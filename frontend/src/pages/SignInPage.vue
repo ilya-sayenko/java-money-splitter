@@ -6,13 +6,14 @@ import {useRouter} from "vue-router";
 import {useI18n} from "vue-i18n";
 import useVuelidate, {type ErrorObject} from "@vuelidate/core";
 import {email, helpers, minLength, required} from "@vuelidate/validators";
+import {errorMessage} from "@/utils/errorMessage.ts";
 
 const { t } = useI18n();
 const errorText = ref('');
 const authStore = useAuthStore();
 const router = useRouter();
 
-const state = reactive({
+const formState = reactive({
   email: '',
   password: ''
 });
@@ -28,18 +29,10 @@ const rules = computed(() => ({
   }
 }));
 
-const v$ = useVuelidate(rules, state);
+const v$ = useVuelidate(rules, formState);
 
 function routeToSignUpPage() {
   router.push({ name: 'SignUp' });
-}
-
-function errorMessage(errors: ErrorObject[]) {
-  if (errors.length > 0) {
-    return errors[0] ? errors[0].$message : '';
-  }
-
-  return '';
 }
 
 async function signIn() {
@@ -50,8 +43,8 @@ async function signIn() {
   }
 
   const request = new SignInRequest();
-  request.email = state.email;
-  request.password = state.password;
+  request.email = formState.email;
+  request.password = formState.password;
 
   try {
     await authStore.signIn(request);
@@ -73,7 +66,7 @@ async function signIn() {
           <input
             type="text"
             id="email"
-            v-model="state.email"
+            v-model="formState.email"
             @input="v$.email.$reset"
           />
           <small class="error" v-if="v$.email.$error">{{ errorMessage(v$.email.$errors) }}</small>
@@ -84,7 +77,7 @@ async function signIn() {
           <input
             type="password"
             id="password"
-            v-model="state.password"
+            v-model="formState.password"
             @input="v$.password.$reset"
           />
           <small class="error" v-if="v$.password.$error">{{ errorMessage(v$.password.$errors) }}</small>
