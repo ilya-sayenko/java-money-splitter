@@ -9,7 +9,6 @@ export async function responseHandleError(axiosError: AxiosError) {
   if (axiosError.response && [400, 401].includes(axiosError.response.status)) {
     try {
       const responseRefresh = await refreshAccessToken();
-      debugger
       if (responseRefresh) {
         Cookies.set(ACCESS_TOKEN_KEY, responseRefresh.id_token);
       }

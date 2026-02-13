@@ -11,7 +11,7 @@ function showCreatePartyModal() {
   isShowCreatePartyModal.value = true;
 }
 
-function hideCreatePartyModal() {
+function onCloseCreatePartyModal() {
   isShowCreatePartyModal.value = false;
 }
 </script>
@@ -74,7 +74,7 @@ function hideCreatePartyModal() {
 
   <CreatePartyModal
     :isOpened="isShowCreatePartyModal"
-    @close="hideCreatePartyModal"
+    @close="onCloseCreatePartyModal"
   ></CreatePartyModal>
 </template>
 

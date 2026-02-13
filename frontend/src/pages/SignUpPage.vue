@@ -21,7 +21,7 @@ async function signUp() {
   request.password = password.value;
   try {
     await authStore.signUp(request);
-    await router.push("/");
+    await router.push({ name: 'Main' });
   } catch(error) {
     const errorResponse: ErrorResponse = error.response.data;
     errorText.value = errorResponse.error.message; // TODO get message by code

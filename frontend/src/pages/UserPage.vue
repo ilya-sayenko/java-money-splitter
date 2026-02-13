@@ -30,7 +30,7 @@ async function reloadProfile() {
 
 function signOut() {
   authStore.signOut();
-  router.push({name: 'Main'});
+  router.push({ name: 'Main' });
 }
 
 function routeToParties() {

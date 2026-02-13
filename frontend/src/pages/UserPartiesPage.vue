@@ -21,7 +21,7 @@ function showCreatePartyModal() {
   isShowCreatePartyModal.value = true;
 }
 
-function hideCreatePartyModal() {
+function onCloseCreatePartyModal() {
   isShowCreatePartyModal.value = false;
 }
 
@@ -57,7 +57,7 @@ onMounted(async () => {
 
   <CreatePartyModal
     :is-opened="isShowCreatePartyModal"
-    @close="hideCreatePartyModal"
+    @close="onCloseCreatePartyModal"
   ></CreatePartyModal>
 </template>
 

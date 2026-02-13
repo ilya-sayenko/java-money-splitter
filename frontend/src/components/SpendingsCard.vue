@@ -18,7 +18,7 @@ function showCreateSpendingModal() {
   isShowCreateSpendingModal.value = true;
 }
 
-function hideCreateSpendingModal() {
+function onCloseCreateSpendingModal() {
   isShowCreateSpendingModal.value = false;
 }
 
@@ -85,7 +85,7 @@ onMounted(async () => {
             </div>
           </div>
 
-          <button class="icon-btn" title="Удалить расход" @click="deleteSpendingById(spending.id)">❌</button>
+          <button class="icon-btn" :title="t('titles.deleteSpending')" @click="deleteSpendingById(spending.id)">❌</button>
         </li>
       </ul>
     </div>
@@ -93,7 +93,7 @@ onMounted(async () => {
 
   <CreateSpendingModal
     :isOpened="isShowCreateSpendingModal"
-    @close="hideCreateSpendingModal"
+    @close="onCloseCreateSpendingModal"
   ></CreateSpendingModal>
 </template>
 

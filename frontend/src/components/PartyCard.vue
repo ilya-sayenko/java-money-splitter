@@ -24,7 +24,10 @@ function showDeletePartyModal() {
   isShowDeletePartyModal.value = true;
 }
 
-function hideDeletePartyModal() {
+function onCloseDeletePartyModal(result: boolean) {
+  if (result) {
+    emits('reloadParties');
+  }
   isShowDeletePartyModal.value = false;
 }
 
@@ -32,7 +35,8 @@ function showUpdatePartyModal() {
   isShowUpdatePartyModal.value = true;
 }
 
-function hideUpdatePartyModal() {
+function onCloseUpdatePartyModal() {
+  emits('reloadParties');
   isShowUpdatePartyModal.value = false;
 }
 
@@ -49,8 +53,8 @@ function routeToPartyPage(partyId: string) {
         @click="routeToPartyPage(party.id)"
       >{{ party.name }}</h2>
       <div class="btn-edit-delete">
-        <button @click="showUpdatePartyModal">✏️</button>
-        <button @click="showDeletePartyModal">❌</button>
+        <button :title="t('titles.editParty')" @click="showUpdatePartyModal">✏️</button>
+        <button :title="t('titles.deleteParty')" @click="showDeletePartyModal">❌</button>
       </div>
     </div>
 
@@ -68,20 +72,19 @@ function routeToPartyPage(partyId: string) {
   <DeletePartyModal
     :is-opened="isShowDeletePartyModal"
     :partyId="party.id"
-    @close="hideDeletePartyModal"
-    @reloadParties="emits('reloadParties')"
+    @close="onCloseDeletePartyModal"
   ></DeletePartyModal>
 
   <UpdatePartyModal
     :is-opened="isShowUpdatePartyModal"
     :party="party"
-    @close="hideUpdatePartyModal"
-    @reloadParties="emits('reloadParties')"
+    @close="onCloseUpdatePartyModal"
   ></UpdatePartyModal>
 </template>
 
 <style lang="scss" scoped>
 @use "@/assets/scss/colors.scss";
+
 .party-card {
 
   p, span {

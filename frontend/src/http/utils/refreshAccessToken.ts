@@ -9,7 +9,6 @@ const api = axios.create();
 
 export async function refreshAccessToken() {
   const refreshToken = Cookies.get(REFRESH_TOKEN_KEY);
-  debugger
   if (!refreshToken) {
     return;
   }

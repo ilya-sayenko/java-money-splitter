@@ -384,6 +384,10 @@ input, select, textarea {
   text-align: center;
 }
 
+.invalid {
+  border-color: colors.$text-error;
+}
+
 .user-section {
   position: relative;
 }
@@ -482,3 +486,4 @@ input, select, textarea {
   border-bottom: 1px solid white;
   margin-bottom: -1px;
 }
+

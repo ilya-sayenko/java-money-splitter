@@ -4,11 +4,13 @@ import {computed, nextTick, ref, useTemplateRef} from "vue";
 import {usePartyStore} from "@/stores/partyStore.ts";
 import {useRoute} from "vue-router";
 import {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
+import {useI18n} from "vue-i18n";
 
 const props = defineProps<{
   participant: Participant;
 }>();
 
+const { t } = useI18n();
 const isEditParticipant = ref(false);
 const participantNewName = ref('');
 const participantNewNameInput = useTemplateRef("participantNewNameInput");
@@ -64,8 +66,8 @@ async function saveParticipant() {
         v-model="participantNewName"
     />
     <div class="btn-edit-delete">
-      <button @click="editParticipant">✏️</button>
-      <button @click="deleteParticipantById(participant.id)">❌</button>
+      <button :title="t('titles.editParticipant')" @click="editParticipant">✏️</button>
+      <button :title="t('titles.deleteParticipant')" @click="deleteParticipantById(participant.id)">❌</button>
     </div>
   </li>
 </template>

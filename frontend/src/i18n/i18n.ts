@@ -66,6 +66,14 @@ export const i18n = createI18n({
         selected: 'Selected',
         proportions: 'Proportions'
       },
+      titles: {
+        deleteParty: 'Delete party',
+        editParty: 'Edit party',
+        deleteSpending: 'Delete spending',
+        editSpending: 'Edit spending',
+        deleteParticipant: 'Delete participant',
+        editParticipant: 'Edit participant'
+      },
       userPopup: {
         profile: 'Profile',
         events: 'My parties',
@@ -123,6 +131,12 @@ export const i18n = createI18n({
         or individual shares.`,
         featureDescription3: `The service calculates who ultimately owes what. All you have to do is agree on transfers,
         without disputes or "who paid for what".`,
+      },
+      errors: {
+        emailRequired: 'E-mail is required',
+        emailIncorrect: 'E-mail is incorrect',
+        passwordRequired: 'Password is required',
+        passwordIncorrect: 'Min length of password is 6'
       }
     },
 
@@ -144,8 +158,8 @@ export const i18n = createI18n({
         signUp: 'Зарегистрироваться',
         createParty: 'Создать событие',
         updateParty: 'Обновить событие',
-        update: 'Update',
-        signOut: 'Sign Out',
+        update: 'Обновить',
+        signOut: 'Выйти',
         addParticipant: 'Добавить участника',
         addSpending: 'Добавить расход',
         yes: 'Да',
@@ -168,6 +182,14 @@ export const i18n = createI18n({
         all: 'Все',
         selected: 'Выбраны',
         proportions: 'Доли'
+      },
+      titles: {
+        deleteParty: 'Удалить событие',
+        editParty: 'Редактировать событие',
+        deleteSpending: 'Удалить расход',
+        editSpending: 'Редактировать расход',
+        deleteParticipant: 'Удалить участника',
+        editParticipant: 'Редактировать участника'
       },
       userPopup: {
         profile: 'Профиль',
@@ -226,6 +248,12 @@ export const i18n = createI18n({
         индивидуальным долям.`,
         featureDescription3: `Сервис считает, кто в итоге должен и кому. Вам остаётся только договориться о переводах, 
         без споров и «кто платил за что».`,
+      },
+      errors: {
+        emailRequired: 'E-mail обязателен',
+        emailIncorrect: 'Введите корректный e-mail',
+        passwordRequired: 'Пароль обязателен',
+        passwordIncorrect: 'Пароль должен быть минимум 6 символов'
       }
     }
   }

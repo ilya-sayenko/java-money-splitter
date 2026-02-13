@@ -12,26 +12,26 @@ const { isLoggedIn, user } = storeToRefs(authStore);
 const isShowUserPopup = ref(false);
 
 function routeToMainPage() {
-  router.push('/');
+  router.push({ name: 'Main' });
 }
 
 function routeToSignInPage() {
-  router.push('/signIn');
+  router.push({ name: 'SignIn' });
 }
 
 function routeToProfilePage() {
   hideUserPopup();
-  router.push('/profile');
+  router.push({ name: 'Profile' });
 }
 
 function routeToUserPartiesPage() {
   hideUserPopup();
-  router.push('/profile/parties');
+  router.push({ name: 'ProfileParties' });
 }
 
 function routeToUserStatisticsPage() {
   hideUserPopup();
-  router.push('/profile/statistics');
+  router.push({ name: 'ProfileStatistics' });
 }
 
 function toggleUserPopup() {

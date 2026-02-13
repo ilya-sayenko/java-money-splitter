@@ -10,16 +10,11 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: 'close'): void,
-  (e: 'reloadParties'): void,
+  (e: 'close', result: boolean): void
 }>();
 
-const closeModal = () => {
-  emits('close');
-};
-
-const reloadParties = () => {
-  emits('reloadParties');
+const closeModal = (result: boolean) => {
+  emits('close', result);
 };
 
 const { t } = useI18n();
@@ -34,8 +29,7 @@ async function deleteParty() {
   }
   const filteredPartyIds = userPartyIds.filter(id => id !== props.partyId);
   await userDataHttpClient.putPartyIds(user.value!.id, filteredPartyIds);
-  closeModal();
-  reloadParties();
+  closeModal(true);
 }
 </script>
 
@@ -50,7 +44,7 @@ async function deleteParty() {
 
         <div class="buttons-container">
           <button class="btn btn-main" @click="deleteParty">{{ t('buttons.yes') }}</button>
-          <button class="btn btn-main" @click="closeModal">{{ t('buttons.no') }}</button>
+          <button class="btn btn-main" @click="closeModal(false)">{{ t('buttons.no') }}</button>
         </div>
       </div>
     </div>
