@@ -130,7 +130,7 @@ export const i18n = createI18n({
         featureDescription2: `Record purchases in a couple of clicks: who paid, the amount, and the split type—equal 
         or individual shares.`,
         featureDescription3: `The service calculates who ultimately owes what. All you have to do is agree on transfers,
-        without disputes or "who paid for what".`,
+        without disputes or "who paid for what".`
       },
       errors: {
         emailRequired: 'E-mail is required',
@@ -139,7 +139,13 @@ export const i18n = createI18n({
         passwordIncorrect: 'Min length of password is 6',
         participantNameRequired: 'Participant name is required',
         participantNameUnique: 'Participant name is already exists',
-        nameRequired: 'Name is required'
+        nameRequired: 'Name is required',
+        payerRequired: 'Payer is required',
+        spendingNameRequired: 'Spending name is required',
+        amountRequired: 'Amount is required',
+        amountDecimal: 'Amount have to be decimal',
+        splitTypeRequired: 'Split type is required',
+        incorrectProportion: 'Incorrect proportion'
       }
     },
 
@@ -259,7 +265,13 @@ export const i18n = createI18n({
         passwordIncorrect: 'Пароль должен быть минимум 6 символов',
         participantNameRequired: 'Имя участника не может быть пустым',
         participantNameUnique: 'Участник с таким именем уже существует',
-        nameRequired: 'Имя обязательно'
+        nameRequired: 'Имя обязательно',
+        payerRequired: 'Выберете плательщика',
+        spendingNameRequired: 'Введите название расхода',
+        amountRequired: 'Введите сумму',
+        amountDecimal: 'Введите корректное значение',
+        splitTypeRequired: 'Выберите тип расхода',
+        incorrectProportion: 'Введите корректное значение'
       }
     }
   }
