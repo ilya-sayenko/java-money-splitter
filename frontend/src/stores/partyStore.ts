@@ -13,12 +13,11 @@ import type {TransactionUpdateRequest} from "@/http/data/models/TransactionUpdat
 import type {PartyUpdateRequest} from "@/http/data/models/PartyUpdateRequest.ts";
 
 export const usePartyStore = defineStore('partyStore', () => {
-  const httpClient = useMoneySplitterHttpClient(); // new MoneySplitterHttpClient();
+  const httpClient = useMoneySplitterHttpClient();
   const party = ref<Party>();
   const participants = ref<Participant[]>();
   const spendings = ref<Spending[]>();
   const transactions = ref<Transaction[]>();
-  // const localParties = ref<Party[]>(loadLocalParties());
 
   async function loadPartyById(partyId: string) {
     party.value = await httpClient.getPartyById(partyId);
@@ -68,30 +67,11 @@ export const usePartyStore = defineStore('partyStore', () => {
     return httpClient.deleteSpending(id);
   }
 
-  // function loadLocalParties(): Party[] {
-  //   const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-  //
-  //   if (stored) {
-  //     return JSON.parse(stored);
-  //   }
-  //
-  //   return [];
-  // }
-
-  // function saveLocalParty(party: Party) {
-  //   localParties.value.push(party);
-  // }
-  //
-  // watch(localParties, (value) => {
-  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value));
-  // }, { deep: true });
-
   return {
     party,
     participants,
     spendings,
     transactions,
-    // localParties,
     loadPartyById,
     loadParticipantsByPartyId,
     loadSpendingsByPartyId,
@@ -103,8 +83,6 @@ export const usePartyStore = defineStore('partyStore', () => {
     updateParticipant,
     updateTransaction,
     deleteParticipantById,
-    deleteSpendingById,
-    // loadLocalParties,
-    // saveLocalParty
+    deleteSpendingById
   };
 })
