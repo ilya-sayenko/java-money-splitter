@@ -9,6 +9,9 @@ import {helpers, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import {storeToRefs} from "pinia";
 import {errorMessage} from "@/utils/errorMessage.ts";
+import type {Spending} from "@/models/Spending.ts";
+import type {Proportion} from "@/models/Proportion.ts";
+import {SplitType} from "@/models/SplitType.ts";
 
 const props = defineProps<{
   participant: Participant;
@@ -21,7 +24,8 @@ const participantNewNameInput = useTemplateRef("participantNewNameInput");
 const route = useRoute();
 const partyId = computed(() => route.params.partyId as string);
 const partyStore = usePartyStore();
-const { participants } = storeToRefs(partyStore);
+const { participants, spendings } = storeToRefs(partyStore);
+const isCouldNotBeDeleted = ref(false);
 
 const formState = reactive({
   participantNewName: ''
@@ -39,8 +43,34 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, formState, { $stopPropagation: true });
 
+function isDeletable(participantId: string) {
+  for (let spending: Spending of spendings.value) {
+    if (spending.payer.id === participantId) {
+      return false;
+    }
+
+    if (spending.splitType !== SplitType.EQUAL) {
+      for (let proportion: Proportion of spending.proportions) {
+        if (proportion.participant.id === participantId) {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
 async function deleteParticipantById(participantId: string) {
-  // TODO check before deleting
+  if (!isDeletable(participantId)) {
+    isCouldNotBeDeleted.value = true;
+    setTimeout(() => {
+      isCouldNotBeDeleted.value = false;
+    }, 3000);
+
+    return;
+  }
+
   await partyStore.deleteParticipantById(participantId);
   await Promise.all([
     partyStore.loadSpendingsByPartyId(partyId.value),
@@ -88,7 +118,10 @@ async function saveParticipant() {
 
 <template>
   <li class="participant-item">
-    <span class="participant-item-name" v-show="!isEditParticipant">{{ participant.name }}</span>
+    <div class="participant-name">
+      <span class="participant-item-name" v-show="!isEditParticipant">{{ participant.name }}</span>
+      <small class="error error-left" v-if="isCouldNotBeDeleted">{{ t('errors.participantDelete') }}</small>
+    </div>
 
     <div v-show="isEditParticipant" class="edit-participant">
       <input
@@ -105,7 +138,7 @@ async function saveParticipant() {
 
     <div class="btn-edit-delete">
       <button :title="t('titles.editParticipant')" @click="editParticipant">✏️</button>
-      <button :title="t('titles.deleteParticipant')" @click="deleteParticipantById(participant.id)">❌</button>
+      <button :title="t('titles.deleteParticipant')" class="tooltip" @click="deleteParticipantById(participant.id)">❌</button>
     </div>
   </li>
 </template>
@@ -114,5 +147,14 @@ async function saveParticipant() {
 .edit-participant {
   display: flex;
   flex-direction: column;
+}
+
+.participant-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-left {
+  text-align: left;
 }
 </style>

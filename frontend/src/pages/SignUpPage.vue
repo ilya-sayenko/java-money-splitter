@@ -52,7 +52,15 @@ async function signUp() {
     await router.push({ name: 'Main' });
   } catch(error) {
     const errorResponse: ErrorResponse = error.response.data;
-    errorText.value = errorResponse.error.message; // TODO get message by code
+    errorText.value = getMessage(errorResponse.error.message);
+  }
+}
+
+function getMessage(messageCode: string) {
+  if (messageCode === "EMAIL_EXISTS") {
+    return t('errors.emailExists');
+  } else {
+    return t('errors.registrationError');
   }
 }
 </script>

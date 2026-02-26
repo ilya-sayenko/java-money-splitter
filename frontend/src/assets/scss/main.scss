@@ -94,11 +94,11 @@ input, select, textarea {
 }
 
 .participant-item {
+  display: flex;
+  justify-content: space-between;
   margin-top: 1rem;
   padding: 1rem;
   background: colors.$list-item-background;
-  display: flex;
-  justify-content: space-between;
   border-radius: 6px;
   border-left: 4px solid colors.$list-item-border-left;
 }
