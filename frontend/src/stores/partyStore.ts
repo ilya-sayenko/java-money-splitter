@@ -1,0 +1,88 @@
+import {ref} from 'vue'
+import {defineStore} from 'pinia'
+import type {Party} from "@/models/Party.ts";
+import type {Participant} from "@/models/Participant.ts";
+import type {Spending} from "@/models/Spending.ts";
+import type {Transaction} from "@/models/Transaction.ts";
+import type {PartyCreateRequest} from "@/http/data/models/PartyCreateRequest.ts";
+import type {ParticipantCreateRequest} from "@/http/data/models/ParticipantCreateRequest.ts";
+import type {SpendingCreateRequest} from "@/http/data/models/SpendingCreateRequest.ts";
+import type {ParticipantUpdateRequest} from "@/http/data/models/ParticipantUpdateRequest.ts";
+import {useMoneySplitterHttpClient} from "@/http/data/useMoneySplitterHttpClient.ts";
+import type {TransactionUpdateRequest} from "@/http/data/models/TransactionUpdateRequest.ts";
+import type {PartyUpdateRequest} from "@/http/data/models/PartyUpdateRequest.ts";
+
+export const usePartyStore = defineStore('partyStore', () => {
+  const httpClient = useMoneySplitterHttpClient();
+  const party = ref<Party>();
+  const participants = ref<Participant[]>();
+  const spendings = ref<Spending[]>();
+  const transactions = ref<Transaction[]>();
+
+  async function loadPartyById(partyId: string) {
+    party.value = await httpClient.getPartyById(partyId);
+  }
+
+  async function loadParticipantsByPartyId(partyId: string) {
+    participants.value = await httpClient.getParticipantsByPartyId(partyId);
+  }
+
+  async function loadSpendingsByPartyId(partyId: string) {
+    spendings.value = await httpClient.getSpendingsByPartyId(partyId);
+  }
+
+  async function loadTransactionsByPartyId(partyId: string) {
+    transactions.value = await httpClient.getTransactionsByPartyId(partyId);
+  }
+
+  async function createParty(party: PartyCreateRequest) {
+    return httpClient.createParty(party);
+  }
+
+  async function createParticipant(participant: ParticipantCreateRequest) {
+    return httpClient.createParticipant(participant);
+  }
+
+  async function updateParty(party: PartyUpdateRequest) {
+    return httpClient.updateParty(party);
+  }
+
+  async function updateParticipant(participant: ParticipantUpdateRequest) {
+      return httpClient.updateParticipant(participant);
+  }
+
+  async function updateTransaction(transaction: TransactionUpdateRequest) {
+    return httpClient.updateTransaction(transaction);
+  }
+
+  async function createSpending(spending: SpendingCreateRequest) {
+    return httpClient.createSpending(spending);
+  }
+
+  async function deleteParticipantById(id: string) {
+    return httpClient.deleteParticipant(id);
+  }
+
+  async function deleteSpendingById(id: string) {
+    return httpClient.deleteSpending(id);
+  }
+
+  return {
+    party,
+    participants,
+    spendings,
+    transactions,
+    loadPartyById,
+    loadParticipantsByPartyId,
+    loadSpendingsByPartyId,
+    loadTransactionsByPartyId,
+    createParty,
+    createParticipant,
+    createSpending,
+    updateParty,
+    updateParticipant,
+    updateTransaction,
+    deleteParticipantById,
+    deleteSpendingById
+  };
+})

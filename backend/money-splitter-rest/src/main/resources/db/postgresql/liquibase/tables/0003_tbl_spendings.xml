@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="tbl_create_spendings" author="liquibase">
+        <createTable tableName="spendings">
+            <column name="id" type="uuid" defaultValue="gen_random_uuid()">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="party_id" type="uuid"/>
+            <column name="payer_id" type="uuid"/>
+            <column name="name" type="varchar(250)"/>
+            <column name="amount" type="numeric"/>
+            <column name="split_type" type="varchar(50)"/>
+            <column name="created_at" type="timestamptz"/>
+            <column name="updated_at" type="timestamptz"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="spendings"
+                baseColumnNames="party_id"
+                referencedTableName="parties"
+                referencedColumnNames="id"
+                constraintName="spendings_party_id_fkey"/>
+        <addForeignKeyConstraint
+                baseTableName="spendings"
+                baseColumnNames="payer_id"
+                referencedTableName="participants"
+                referencedColumnNames="id"
+                constraintName="spendings_payer_id_fkey"/>
+    </changeSet>
+</databaseChangeLog>

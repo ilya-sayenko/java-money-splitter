@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="tbl_create_proportions" author="liquibase">
+        <createTable tableName="proportions">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="spending_id" type="uuid"/>
+            <column name="participant_id" type="uuid"/>
+            <column name="proportion" type="numeric"/>
+            <column name="amount" type="numeric"/>
+            <column name="created_at" type="timestamptz"/>
+            <column name="updated_at" type="timestamptz"/>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="proportions"
+                baseColumnNames="participant_id"
+                referencedTableName="participants"
+                referencedColumnNames="id"
+                constraintName="proportions_participant_id_fkey"/>
+        <addForeignKeyConstraint
+                baseTableName="proportions"
+                baseColumnNames="spending_id"
+                referencedTableName="spendings"
+                referencedColumnNames="id"
+                constraintName="proportions_spending_id_fkey"/>
+    </changeSet>
+</databaseChangeLog>
